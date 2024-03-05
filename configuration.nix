@@ -105,6 +105,7 @@
     fzf
     lazygit
     jq
+    nebula
     squashfsTools
   ];
 
