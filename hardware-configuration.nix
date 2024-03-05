@@ -18,6 +18,12 @@
       fsType = "ext4";
     };
 
+  fileSystems."/home/drew/disk_test/mnt" = 
+  { device = "/home/drew/disk_test/to_squash.sqsh";
+    fsType = "squashfs";
+    options = [ "loop" ];
+  };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/303b2641-9f29-4eff-8802-2938ab69eb5d"; }
     ];
