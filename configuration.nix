@@ -104,7 +104,6 @@
     git
     fzf
     lazygit
-    jq
     squashfsTools
   ];
 
