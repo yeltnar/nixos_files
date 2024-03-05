@@ -103,9 +103,8 @@
     tmux
     git
     fzf
-    squashfsTools
     lazygit
-    jq
+    squashfsTools
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
