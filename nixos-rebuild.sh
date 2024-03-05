@@ -16,7 +16,18 @@ set -e
 pushd ~/dotfiles/nixos/
 
 # Edit your config
-$EDITOR configuration.nix
+if [ -z $file ]; then
+	echo 'file is empty'
+	file="configuration.nix";
+fi
+echo "file is $file";
+
+if [ -e "$file" ]; then
+	$EDITOR configuration.nix; 
+else
+	echo "file is not found";
+	exit;
+fi
 
 # Autoformat your nix files
 # alejandra . >/dev/null
