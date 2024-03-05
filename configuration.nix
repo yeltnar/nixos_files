@@ -5,6 +5,9 @@
 { config, pkgs, ... }:
 
 {
+  imports = [
+    /home/drew/dotfiles/nixos/hardware-configuration.nix  
+  ];
 
   # Bootloader.
   boot.loader.grub.enable = true;
