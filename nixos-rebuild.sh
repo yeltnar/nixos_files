@@ -23,7 +23,7 @@ fi
 echo "file is $file";
 
 if [ -e "$file" ]; then
-	$EDITOR configuration.nix; 
+	$EDITOR "$file"; 
 else
 	echo "file is not found";
 	exit;
