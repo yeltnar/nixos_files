@@ -106,6 +106,8 @@
     lazygit
     jq
     nebula
+    ffmpeg
+    nodejs_20
     squashfsTools
   ];
 
