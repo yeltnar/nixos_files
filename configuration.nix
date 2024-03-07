@@ -152,16 +152,31 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
 
-  system.activationScripts.build_time_tmp = { text = 
+  system.activationScripts.setup_bash_profile = { text = 
+    ''
+    text_to_add='if [ -f ~/.bashrc ]; then . ~/.bashrc; fi'
+    text_to_check='# bashrc_load_done # text showing the .bashrc loading is added to profile';
+
+    # create if not there 
+    if [ ! -e ~/.bash_profile ]; then
+      touch ~/.bash_profile;
+    fi
+
+    test_str=$(cat ~/.bash_profile | grep "$text_to_check");
+    # echo $text_to_check;
+    # echo $test_str;
+
+    if [ -z "$test_str" ]; then
+      echo "$text_to_check" >> ~/.bash_profile;
+      echo "$text_to_add" >> ~/.bash_profile;
+    fi
+    '';
+  };
+
+  system.activationScripts.build_time = { text = 
     ''
     date > /tmp/last_nixos_build_date;
     '';
   };
-
-  # system.activationScripts = { build_time_tmp.text = 
-  #  ''
-  #  date > /tmp/last_nixos_build_date;
-  #  '';
-  #};
 
 }
