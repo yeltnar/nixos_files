@@ -108,6 +108,7 @@
     ffmpeg
     nodejs_20
     xclip
+    dig
     squashfsTools
   ];
 
