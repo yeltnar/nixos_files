@@ -7,7 +7,7 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      /home/drew/dotfiles/nixos/configuration.nix
+      /etc/nixos/hardware-configuration.nix
+      /home/drew/playin/nixos_files/configuration.nix
     ];
 }

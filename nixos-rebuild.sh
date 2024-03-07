@@ -13,7 +13,8 @@
 set -e
 
 # cd to your config dir
-pushd ~/dotfiles/nixos/
+nix_cfg_dir="/home/drew/playin/nixos_files";
+pushd "$nix_cfg_dir";
 
 # Edit your config
 if [ -z $file ]; then

@@ -107,6 +107,7 @@
     nebula
     ffmpeg
     nodejs_20
+    xclip
     squashfsTools
   ];
 
@@ -139,5 +140,11 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
+
+  system.activationScripts = { build_time_tmp.text = 
+    ''
+    date > /tmp/last_nixos_build_date;
+    '';
+  };
 
 }
