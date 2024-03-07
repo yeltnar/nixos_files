@@ -160,18 +160,20 @@
     text_to_check='# bashrc_load_done # text showing the .bashrc loading is added to profile';
 
     # create if not there 
-    if [ ! -e ~/.bash_profile ]; then
-      touch ~/.bash_profile;
+    if [ ! -e /home/drew/.bash_profile ]; then
+      touch /home/drew/.bash_profile;
     fi
 
-    test_str=$(cat ~/.bash_profile | grep "$text_to_check");
+    test_str=$(cat /home/drew/.bash_profile | grep "$text_to_check");
     # echo $text_to_check;
     # echo $test_str;
 
     if [ -z "$test_str" ]; then
-      echo "$text_to_check" >> ~/.bash_profile;
-      echo "$text_to_add" >> ~/.bash_profile;
+      echo "$text_to_check" >> /home/drew/.bash_profile;
+      echo "$text_to_add" >> /home/drew/.bash_profile;
     fi
+    
+    date > /tmp/testing_info_2;
     '';
   };
 
