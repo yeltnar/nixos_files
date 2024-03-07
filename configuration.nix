@@ -154,6 +154,8 @@
 
   system.activationScripts.setup_bash_profile = { text = 
     ''
+    date > /tmp/testing_info;
+    
     text_to_add='if [ -f ~/.bashrc ]; then . ~/.bashrc; fi'
     text_to_check='# bashrc_load_done # text showing the .bashrc loading is added to profile';
 
