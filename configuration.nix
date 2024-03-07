@@ -85,6 +85,7 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       firefox
+      vscodium
     #  thunderbird
     ];
     openssh.authorizedKeys.keys = [
