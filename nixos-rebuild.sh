@@ -34,12 +34,12 @@ fi
 # alejandra . >/dev/null
 
 # Shows your changes
-git diff -U0 *.nix
+git diff -U0 *.nix includes/*.nix
 
 echo "NixOS Rebuilding..."
 
 # Rebuild, output simplified errors, log trackebacks
-sudo nixos-rebuild switch &>nixos-switch.log || (cat nixos-switch.log | grep --color error && false)
+sudo nixos-rebuild switch &>nixos-switch.log || (cat nixos-switch.log && false)
 
 # Get current generation metadata
 current=$(nixos-rebuild list-generations | grep current)

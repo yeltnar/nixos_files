@@ -108,6 +108,7 @@
     neovim
     tmux
     git
+    alejandra
     fzf
     lazygit
     jq
