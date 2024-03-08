@@ -3,8 +3,8 @@
   pkgs,
   ...
 }: {
-  systemd.services.git_clone_test = {
-    description = "git_clone_test";
+  systemd.services.time-until-git-repo = {
+    description = "time-until-git-repo";
     wants = ["basic.target"];
     after = ["basic.target" "network.target"];
     wantedBy = ["multi-user.target"];
