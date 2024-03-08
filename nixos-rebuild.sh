@@ -31,7 +31,9 @@ else
 fi
 
 # Autoformat your nix files
-alejandra . >/dev/null
+if [ ! -z $(command -v alejandra) ]; then
+  alejandra . >/dev/null
+fi
 
 # Shows your changes
 git diff -U0 *.nix includes/*.nix
