@@ -6,7 +6,8 @@
   systemd.services.time-until-git-repo = {
     description = "time-until-git-repo";
     wants = ["basic.target"];
-    after = ["basic.target" "network.target"];
+    requires = ["network-online.target"];
+    after = ["basic.target" "network-online.target"];
     wantedBy = ["multi-user.target"];
     unitConfig = {
       ConditionPathExists = "!/tmp/time-until";
