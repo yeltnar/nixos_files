@@ -1,12 +1,13 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
-    # /home/drew/dotfiles/nixos/hardware-configuration.nix  
+    # /home/drew/dotfiles/nixos/hardware-configuration.nix
     ./includes/time-until.nix
   ];
 
@@ -83,11 +84,11 @@
   users.users.drew = {
     isNormalUser = true;
     description = "drew";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = ["networkmanager" "wheel"];
     packages = with pkgs; [
       firefox
       vscodium
-    #  thunderbird
+      #  thunderbird
     ];
     openssh.authorizedKeys.keys = [
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC9rjHOtb0r+kqUQA/AtZlTN9LNo/l8fDFjfjoHpF0pzx4i8N4S0765o1FEU2wbrGGhxO9iaibsWNv6ZnCtrRuqKHzV+laoDInbpOtB4Zj3qV3JRp6ANM1ct+YOQ1DDrMSFCUdTySxE3mztJ7OlCRBFMVDrQCNLFYY+ujTxEL2FzYGAUblvVHA+A4U9GTYildULTb/O9VMCVKSYc4InaBtKdlkIngIJr+ZbfWucqNP1G+OgY7wGe4/XTDqkEswgttyEpkcbXhQXZCbb7MzyqP3wwjCHLCfgkh1GDJ1R9Bzuu2BrGcTq30dRXgPTMrmhIGwScqmfIK23Y+Hxy827TQoxlccfT8i1tfWAG1ISkDlluiTM4vJdZOI9aKfkC83fCp/gfJeWwMsYIJkxQcT9IJN136ZVY/BbyymxEQPMro2jD7jvFVnkR+us7Mv0qDMQBFTaFSqEYqGaNXGf7y1JHGL2hKtfS0g7RGWwPmZwKFbTtYNRvNwROyDUoXqiolbtJZs="
@@ -127,7 +128,7 @@
   #   enable = true;
   #   enableSSHSupport = true;
   # };
-  
+
   programs.neovim.enable = true;
   programs.neovim.defaultEditor = true;
 
@@ -167,54 +168,53 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
 
-  system.activationScripts.setup_bash_profile = { text = 
-    ''
-    date > /tmp/testing_info;
-    
-    text_to_add='if [ -f ~/.bashrc ]; then . ~/.bashrc; fi'
-    text_to_check='# bashrc_load_done # text showing the .bashrc loading is added to profile';
+  system.activationScripts.setup_bash_profile = {
+    text = ''
+      date > /tmp/testing_info;
 
-    # create if not there 
-    if [ ! -e /home/drew/.bash_profile ]; then
-      touch /home/drew/.bash_profile;
-    fi
+      text_to_add='if [ -f ~/.bashrc ]; then . ~/.bashrc; fi'
+      text_to_check='# bashrc_load_done # text showing the .bashrc loading is added to profile';
 
-    test_str=$(cat /home/drew/.bash_profile | grep "$text_to_check");
-    # echo $text_to_check;
-    # echo $test_str;
+      # create if not there
+      if [ ! -e /home/drew/.bash_profile ]; then
+        touch /home/drew/.bash_profile;
+      fi
 
-    if [ -z "$test_str" ]; then
-      echo "$text_to_check" >> /home/drew/.bash_profile;
-      echo "$text_to_add" >> /home/drew/.bash_profile;
-    fi
-    
-    date > /tmp/testing_info_2;
+      test_str=$(cat /home/drew/.bash_profile | grep "$text_to_check");
+      # echo $text_to_check;
+      # echo $test_str;
+
+      if [ -z "$test_str" ]; then
+        echo "$text_to_check" >> /home/drew/.bash_profile;
+        echo "$text_to_add" >> /home/drew/.bash_profile;
+      fi
+
+      date > /tmp/testing_info_2;
     '';
   };
 
-  system.activationScripts.code_symlink = { text = 
-    ''
-    text_to_add='alias code="codium"';
-    text_to_check='# code_alias_done';
+  system.activationScripts.code_symlink = {
+    text = ''
+      text_to_add='alias code="codium"';
+      text_to_check='# code_alias_done';
 
-    # create if not there 
-    if [ ! -e /home/drew/.bash_profile ]; then
-      touch /home/drew/.bash_profile;
-    fi
+      # create if not there
+      if [ ! -e /home/drew/.bash_profile ]; then
+        touch /home/drew/.bash_profile;
+      fi
 
-    test_str=$(cat /home/drew/.bash_profile | grep "$text_to_check");
+      test_str=$(cat /home/drew/.bash_profile | grep "$text_to_check");
 
-    if [ -z "$test_str" ]; then
-      echo "$text_to_check" >> /home/drew/.bash_profile;
-      echo "$text_to_add" >> /home/drew/.bash_profile;
-    fi
+      if [ -z "$test_str" ]; then
+        echo "$text_to_check" >> /home/drew/.bash_profile;
+        echo "$text_to_add" >> /home/drew/.bash_profile;
+      fi
     '';
   };
 
-  system.activationScripts.build_time = { text = 
-    ''
-    date > /tmp/last_nixos_build_date;
+  system.activationScripts.build_time = {
+    text = ''
+      date > /tmp/last_nixos_build_date;
     '';
   };
 }
-
