@@ -9,6 +9,7 @@
   imports = [
     # /home/drew/dotfiles/nixos/hardware-configuration.nix
     ./includes/time-until.nix
+    ./includes/custom_bashrc.nix
   ];
 
   # Bootloader.
