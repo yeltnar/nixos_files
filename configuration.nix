@@ -55,6 +55,12 @@
     enable = true;
   };
 
+  environment.gnome.excludePackages = with pkgs.gnome; [
+    epiphany
+    totem
+    geary
+  ];
+
   # Configure keymap in X11
   services.xserver = {
     layout = "us";
