@@ -59,6 +59,7 @@
     epiphany
     totem
     geary
+    seahorse
   ];
 
   # Configure keymap in X11
