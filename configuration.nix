@@ -98,6 +98,7 @@
     extraGroups = ["networkmanager" "wheel"];
     packages = with pkgs; [
       firefox
+      vlc
       vscodium
       #  thunderbird
     ];
