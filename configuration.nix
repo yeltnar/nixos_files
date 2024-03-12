@@ -48,6 +48,8 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
+  # disable xterm
+  services.xserver.excludePackages = [pkgs.xterm];
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
