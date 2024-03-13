@@ -11,6 +11,7 @@
     ./includes/time-until.nix
     ./includes/custom_bashrc.nix
     ./includes/dot_bashrc.nix
+    ./includes/wedding_site.nix
   ];
 
   # Bootloader.
