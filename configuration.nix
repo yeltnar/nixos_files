@@ -128,6 +128,7 @@
     fzf
     lazygit
     jq
+    file
     nebula
     ffmpeg
     nodejs_20
