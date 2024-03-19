@@ -12,6 +12,7 @@
     ./includes/custom_bashrc.nix
     ./includes/dot_bashrc.nix
     ./includes/wedding_site.nix
+    ./includes/yeltnar_dev.nix
   ];
 
   # Bootloader.
@@ -126,14 +127,11 @@
     git
     alejandra
     fzf
-    lazygit
     jq
     file
     nebula
     ffmpeg
-    nodejs_20
     xclip
-    dig
     squashfsTools
     podman-compose
   ];
