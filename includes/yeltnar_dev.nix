@@ -9,5 +9,7 @@
     lazygit
     nodejs_20
     dig
+    ansible
+    python3
   ];
 }
