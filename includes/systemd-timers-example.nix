@@ -13,6 +13,10 @@
   };
 
   systemd.services."ntfy_report_ip" = {
+    path = with pkgs; [
+      curl
+      git
+    ];
     script = ''
       env;
       command -v curl
