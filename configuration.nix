@@ -13,7 +13,7 @@
     ./includes/dot_bashrc.nix
     ./includes/wedding_site.nix
     ./includes/yeltnar_dev.nix
-    ./includes/cron_example.nix
+    ./includes/systemd-timers-example.nix
   ];
 
   # Bootloader.
@@ -58,13 +58,6 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome = {
     enable = true;
-  };
-
-  services.cron = {
-    enable = true;
-    systemCronJobs = [
-      "*/1 * * * *      drew    date >> /tmp/cron.log"
-    ];
   };
 
   environment.gnome.excludePackages = with pkgs.gnome; [
