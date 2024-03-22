@@ -13,6 +13,7 @@
     ./includes/dot_bashrc.nix
     ./includes/wedding_site.nix
     ./includes/yeltnar_dev.nix
+    ./includes/cron_example.nix
   ];
 
   # Bootloader.
