@@ -29,6 +29,7 @@
     script = ''
       # env;
       command -v curl
+      curl https://do.andbrant.com
       # mkdir -p /home/drew/cron
       # export bashrc_folder=/home/drew/playin/custom_bashrc;
       # /home/drew/playin/custom_bashrc/bin/ntfy_report_ip >/home/drew/cron/ntfy_report_ip 2>/home/drew/cron/ntfy_report_stderr
