@@ -42,7 +42,7 @@
       ConditionPathExists = "/tmp/wedding_site";
     };
     script = ''
-      podman start 1b04c16fe8c6e6fe62d99666001e4d899057def07f1237a4fed270fd5a52bf04;
+      podman-compose up -d;
     '';
     serviceConfig = {
       TimeoutStopSec = "70";
