@@ -7,7 +7,7 @@
     wantedBy = ["timers.target"];
     timerConfig = {
       OnBootSec = "5m";
-      OnUnitActiveSec = "1m";
+      OnUnitActiveSec = "30s";
       Unit = "ntfy_report_ip.service";
     };
   };
