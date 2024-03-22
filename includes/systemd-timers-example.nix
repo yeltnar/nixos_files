@@ -13,10 +13,19 @@
   };
 
   systemd.services."ntfy_report_ip" = {
+    environment =
+      config.nix.envVars
+      // {
+        inherit (config.environment.sessionVariables) NIX_PATH;
+        HOME = "/home/drew";
+      }
+      // config.networking.proxy.envVars;
+
     path = with pkgs; [
       curl
       git
     ];
+
     script = ''
       # env;
       # command -v curl
