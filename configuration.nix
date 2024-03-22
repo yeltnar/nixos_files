@@ -60,6 +60,13 @@
     enable = true;
   };
 
+  services.cron = {
+    enable = true;
+    systemCronJobs = [
+      "*/1 * * * *      drew    date >> /tmp/cron.log"
+    ];
+  };
+
   environment.gnome.excludePackages = with pkgs.gnome; [
     epiphany
     totem
