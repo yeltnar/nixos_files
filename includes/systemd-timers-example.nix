@@ -15,8 +15,7 @@
   systemd.services."hello-world" = {
     script = ''
       set -eu
-      ${pkgs.coreutils}/bin/echo "Hello World" > /tmp/hello_world.log
-      ${pkgs.coreutils}/bin/echo "Hello World"
+      ${pkgs.coreutils}/bin/echo "$(date)" > /tmp/hello_world.log
     '';
     serviceConfig = {
       Type = "oneshot";
