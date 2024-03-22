@@ -46,9 +46,12 @@
     serviceConfig = {
       TimeoutStopSec = "70";
       Restart = "on-failure";
-      ExecStart = "/run/current-system/sw/bin/podman start 1b04c16fe8c6e6fe62d99666001e4d899057def07f1237a4fed270fd5a52bf04";
-      ExecStop = "/run/current-system/sw/bin/podman stop -t 10 1b04c16fe8c6e6fe62d99666001e4d899057def07f1237a4fed270fd5a52bf04";
-      ExecStopPost = "/run/current-system/sw/bin/podman stop -t 10 1b04c16fe8c6e6fe62d99666001e4d899057def07f1237a4fed270fd5a52bf04";
+      script = ''
+        podman start 1b04c16fe8c6e6fe62d99666001e4d899057def07f1237a4fed270fd5a52bf04;
+      '';
+      # ExecStart = "/run/current-system/sw/bin/podman start 1b04c16fe8c6e6fe62d99666001e4d899057def07f1237a4fed270fd5a52bf04";
+      # ExecStop = "/run/current-system/sw/bin/podman stop -t 10 1b04c16fe8c6e6fe62d99666001e4d899057def07f1237a4fed270fd5a52bf04";
+      # ExecStopPost = "/run/current-system/sw/bin/podman stop -t 10 1b04c16fe8c6e6fe62d99666001e4d899057def07f1237a4fed270fd5a52bf04";
       # PIDFile = "/run/user/1000/containers/overlay-containers/1b04c16fe8c6e6fe62d99666001e4d899057def07f1237a4fed270fd5a52bf04/userdata/conmon.pid";
       Type = "forking";
 
