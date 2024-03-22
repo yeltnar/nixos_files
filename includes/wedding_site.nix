@@ -25,6 +25,11 @@
   '';
 
   systemd.services.wedding_site_start = {
+    path = with pkgs; [
+      podman
+      podman-compose
+    ];
+
     description = "Podman container-1b04c16fe8c6e6fe62d99666001e4d899057def07f1237a4fed270fd5a52bf04.service";
     wants = ["network-online.target"];
     # After = ["network-online.target"];
