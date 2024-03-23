@@ -135,6 +135,7 @@
     xclip
     squashfsTools
     podman-compose
+    docker-compose
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
