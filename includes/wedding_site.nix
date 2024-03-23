@@ -35,8 +35,8 @@
     # After = ["network-online.target"];
     # RequiresMountsFor = "/run/user/1000/containers";
 
-    requires = ["wedding_site-git-repo.service"];
-    after = ["wedding_site-git-repo.service" "podman.service" "podman.socket"];
+    requires = ["wedding_site-git-repo.service" "podman.service" "podman.socket"];
+    after = ["wedding_site-git-repo.service"];
     wantedBy = ["multi-user.target"];
     unitConfig = {
       ConditionPathExists = "/tmp/wedding_site";
