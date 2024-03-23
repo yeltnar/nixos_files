@@ -40,6 +40,8 @@
       ConditionPathExists = "/tmp/wedding_site";
     };
     serviceConfig = {
+      User = "drew";
+      # Type = "forking";
       WorkingDirectory = "/tmp/wedding_site";
     };
   };
