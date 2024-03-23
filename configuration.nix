@@ -11,7 +11,7 @@
     ./includes/time-until.nix
     ./includes/custom_bashrc.nix
     ./includes/dot_bashrc.nix
-    # ./includes/wedding_site.nix
+    ./includes/wedding_site.nix
     ./includes/yeltnar_dev.nix
     ./includes/systemd-timers-example.nix
   ];
@@ -170,6 +170,8 @@
       defaultNetwork.settings.dns_enabled = true;
     };
   };
+
+  systemd.services.podman-restart.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
