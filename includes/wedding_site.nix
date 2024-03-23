@@ -37,7 +37,7 @@
 
     requires = ["wedding_site-git-repo.service"];
     after = ["wedding_site-git-repo.service" "podman.service" "podman.socket"];
-    wantedBy = ["default.target"];
+    wantedBy = ["multi-user.target"];
     unitConfig = {
       ConditionPathExists = "/tmp/wedding_site";
     };
