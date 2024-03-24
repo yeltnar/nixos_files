@@ -15,12 +15,12 @@
     unitConfig = {
       ConditionPathExists = "!/tmp/wedding_site";
     };
+    script = ''
+      /run/wrappers/bin/su - drew -s /bin/sh -c 'git clone https://github.com/yeltnar/wedding_site';
+    '';
     serviceConfig = {
       SyslogIdentifier = "wedding_site";
       WorkingDirectory = "/tmp";
-      script = ''
-        runuser -u drew 'git clone https://github.com/yeltnar/wedding_site';
-      '';
       ExecStartPost = "systemctl start wedding_site_start.service";
     };
   };
