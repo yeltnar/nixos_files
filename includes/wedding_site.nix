@@ -4,6 +4,9 @@
   ...
 }: {
   systemd.services.wedding_site-git-repo = {
+    path = with pkgs; [
+      git
+    ];
     description = "wedding_site-git-repo";
     wants = ["basic.target"];
     requires = ["network-online.target"];
@@ -13,10 +16,12 @@
       ConditionPathExists = "!/tmp/wedding_site";
     };
     serviceConfig = {
-      User = "drew";
       SyslogIdentifier = "wedding_site";
       WorkingDirectory = "/tmp";
-      ExecStart = "/run/current-system/sw/bin/git clone https://github.com/yeltnar/wedding_site";
+      script = ''
+        runuser -u drew 'git clone https://github.com/yeltnar/wedding_site';
+      '';
+      ExecStartPost = "systemctl start wedding_site_start.service";
     };
   };
 
