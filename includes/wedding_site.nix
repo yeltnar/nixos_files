@@ -36,6 +36,7 @@
     ];
 
     script = ''
+      sleep 120; # sleep so it maybe has the files
       podman-compose up
     '';
 
