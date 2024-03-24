@@ -16,7 +16,7 @@
       ConditionPathExists = "!/tmp/wedding_site";
     };
     script = ''
-      /run/wrappers/bin/su - drew -s /bin/sh -c 'git clone https://github.com/yeltnar/wedding_site';
+      /run/wrappers/bin/su - drew -s /bin/sh -c 'cd /tmp/; git clone https://github.com/yeltnar/wedding_site';
     '';
     serviceConfig = {
       SyslogIdentifier = "wedding_site";
