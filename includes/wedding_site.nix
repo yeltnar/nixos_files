@@ -19,6 +19,7 @@
       /run/wrappers/bin/su - drew -s /bin/sh -c 'cd /tmp/; git clone https://github.com/yeltnar/wedding_site';
     '';
     serviceConfig = {
+      Type = "oneshot";
       SyslogIdentifier = "wedding_site";
       WorkingDirectory = "/tmp";
       ExecStartPost = "systemctl start wedding_site_start.service";
