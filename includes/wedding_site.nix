@@ -37,6 +37,7 @@
 
     script = ''
       # sleep 120; # sleep so it maybe has the files
+      echo $PATH;
       ${pkgs.podman-compose}/bin/podman-compose up 2>&1 | tee /tmp/wedding_site/podman-compose.log
     '';
 
