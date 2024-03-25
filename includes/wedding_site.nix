@@ -52,6 +52,7 @@
       User = "drew";
       # Type = "forking";
       WorkingDirectory = "/tmp/wedding_site";
+      Restart = "always";
     };
   };
 }
