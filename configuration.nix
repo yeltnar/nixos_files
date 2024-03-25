@@ -160,8 +160,11 @@
   };
 
   virtualisation = {
-    podman = {
+    docker = {
       enable = true;
+    };
+    podman = {
+      enable = false;
 
       # Create a `docker` alias for podman, to use it as a drop-in replacement
       dockerCompat = true;
