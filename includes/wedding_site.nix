@@ -44,6 +44,8 @@
     # If you use podman
     requires = ["wedding_site-git-repo.service" "podman.service" "podman.socket"];
     unitConfig = {
+      StartLimitInterval = 30;
+      StartLimitBurst = 3;
       ConditionPathExists = "/tmp/wedding_site";
     };
     serviceConfig = {
