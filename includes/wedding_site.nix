@@ -43,7 +43,7 @@
 
     wantedBy = ["multi-user.target"];
     # If you use podman
-    requires = ["wedding_site-git-repo.service" "podman.service" "podman.socket"];
+    requires = ["podman.service" "podman.socket"];
     unitConfig = {
       StartLimitInterval = 30;
       StartLimitBurst = 3;
