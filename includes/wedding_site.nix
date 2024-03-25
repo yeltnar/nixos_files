@@ -37,7 +37,7 @@
 
     script = ''
       sleep 120; # sleep so it maybe has the files
-      ${pkgs.podman-compose} up 2>&1 | tee /tmp/wedding_site/podman-compose.log
+      ${pkgs.podman-compose}/bin/podman-compose up 2>&1 | tee /tmp/wedding_site/podman-compose.log
     '';
 
     wantedBy = ["multi-user.target"];
