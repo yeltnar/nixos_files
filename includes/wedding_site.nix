@@ -48,6 +48,7 @@
       StartLimitInterval = 30;
       StartLimitBurst = 3;
       ConditionPathExists = "/tmp/wedding_site";
+      RequiresMountsFor = "/run/user/1000/containers";
     };
     serviceConfig = {
       User = "drew";
