@@ -171,7 +171,7 @@
     };
   };
 
-  systemd.services.podman-restart.enable = false;
+  systemd.services.podman-restart.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
