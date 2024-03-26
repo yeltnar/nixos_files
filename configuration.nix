@@ -176,6 +176,11 @@
 
   systemd.services.podman-restart.enable = true;
 
+  # Enable linger for some user # this allows non-root processes to start at boot
+  systemd.tmpfiles.rules = [
+    "f /var/lib/systemd/linger/drew"
+  ];
+
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
