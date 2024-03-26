@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: {
-  systemd.timers."hello-world" = {
+  systemd.timers."ntfy_report_ip" = {
     wantedBy = ["timers.target"];
     timerConfig = {
       OnBootSec = "5m";
