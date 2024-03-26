@@ -3,6 +3,8 @@
   pkgs,
   ...
 }: {
+  networking.firewall.allowedTCPPorts = [3000];
+
   systemd.services.wedding_site-git-repo = {
     path = with pkgs; [
       git
