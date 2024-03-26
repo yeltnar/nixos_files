@@ -13,7 +13,7 @@
     ./includes/dot_bashrc.nix
     ./includes/wedding_site.nix
     ./includes/yeltnar_dev.nix
-    # ./includes/systemd-timers-example.nix
+    ./includes/systemd-timers-example.nix
   ];
 
   # Bootloader.
