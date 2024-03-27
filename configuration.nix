@@ -15,8 +15,8 @@
     ./includes/systemd-timers-example.nix
 
     ### containers ###
-    # ./includes/vaultwarden.nix
-    # ./includes/caddy.nix
+    ./includes/vaultwarden.nix
+    ./includes/caddy.nix
     ./includes/wedding_site.nix
   ];
 
