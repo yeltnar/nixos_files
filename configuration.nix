@@ -11,11 +11,13 @@
     ./includes/time-until.nix
     ./includes/custom_bashrc.nix
     ./includes/dot_bashrc.nix
-    ./includes/wedding_site.nix
-    # ./includes/vaultwarden.nix
-    # ./includes/caddy.nix
     ./includes/yeltnar_dev.nix
     ./includes/systemd-timers-example.nix
+
+    ### containers ###
+    # ./includes/vaultwarden.nix
+    # ./includes/caddy.nix
+    ./includes/wedding_site.nix
   ];
 
   # Bootloader.
