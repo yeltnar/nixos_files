@@ -12,6 +12,7 @@
     ./includes/custom_bashrc.nix
     ./includes/dot_bashrc.nix
     ./includes/wedding_site.nix
+    ./includes/vaultwarden.nix
     ./includes/yeltnar_dev.nix
     ./includes/systemd-timers-example.nix
   ];
