@@ -9,6 +9,7 @@
     lazygit
     nodejs_20
     dig
+    websocat
     ansible
     python3
   ];
