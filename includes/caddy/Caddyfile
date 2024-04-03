@@ -1,0 +1,23 @@
+:8888, :80 {
+	@allowed {
+		remote_ip 127.0.0.1 
+	}
+	handle @allowed {
+		templates
+		header Content-Type text/plain
+		respond "hello, friend at {{.RemoteIP}}"
+	}
+	templates
+	header Content-Type text/plain
+	respond "I'm not sure who you are, {{.RemoteIP}}"
+}
+
+nixos.lan {
+  log {
+    level debug
+  }
+  tls internal
+  reverse_proxy 127.0.0.1:9980 {
+  }
+}
+
