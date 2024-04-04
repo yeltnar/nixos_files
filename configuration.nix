@@ -138,6 +138,7 @@
     ffmpeg
     xclip
     squashfsTools
+    htop
     podman-compose
     docker-compose
   ];
