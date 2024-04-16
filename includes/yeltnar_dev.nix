@@ -12,5 +12,10 @@
     websocat
     ansible
     python3
+
+    # libreoffice with spell check
+    libreoffice-qt
+    hunspell
+    hunspellDicts.en_US
   ];
 }
