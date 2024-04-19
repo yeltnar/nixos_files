@@ -12,7 +12,6 @@
     websocat
     ansible
     python3
-    gnupg
 
     # libreoffice with spell check
     libreoffice-qt

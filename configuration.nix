@@ -139,6 +139,7 @@
     xclip
     squashfsTools
     htop
+    gnupg
     podman-compose
     docker-compose
   ];
