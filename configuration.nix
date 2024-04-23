@@ -14,6 +14,8 @@
     ./includes/yeltnar_dev.nix
     ./includes/systemd-timers-example.nix
 
+    ./includes/make_id_rsa.nix
+
     ### containers ###
     ./includes/vaultwarden.nix
     ./includes/caddy.nix
