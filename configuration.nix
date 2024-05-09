@@ -18,9 +18,9 @@
     # ./includes/fetch_test.nix
 
     ### containers ###
-    ./includes/vaultwarden.nix
-    ./includes/caddy.nix
-    ./includes/wedding_site.nix
+    # ./includes/vaultwarden.nix
+    # ./includes/caddy.nix
+    # ./includes/wedding_site.nix
   ];
 
   # Bootloader.
