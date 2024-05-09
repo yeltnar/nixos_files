@@ -15,6 +15,7 @@
     ./includes/systemd-timers-example.nix
 
     ./includes/make_id_rsa.nix
+    # ./includes/fetch_test.nix
 
     ### containers ###
     ./includes/vaultwarden.nix
@@ -82,6 +83,13 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  system.activationScripts.binbash = {
+    deps = ["binsh"];
+    text = ''
+      ln -s /bin/sh /bin/bash
+    '';
+  };
+
   # Enable sound with pipewire.
   sound.enable = true;
   hardware.pulseaudio.enable = false;
@@ -144,6 +152,8 @@
     gnupg
     podman-compose
     docker-compose
+
+    duf
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

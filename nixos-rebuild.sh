@@ -33,6 +33,7 @@ fi
 # Autoformat your nix files
 if [ ! -z $(command -v alejandra) ]; then
   alejandra . >/dev/null
+  # echo "ADD BACK ALEJANDRA";
 fi
 
 # Shows your changes
