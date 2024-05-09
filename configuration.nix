@@ -86,7 +86,9 @@
   system.activationScripts.binbash = {
     deps = ["binsh"];
     text = ''
-      ln -s /bin/sh /bin/bash
+      if [ ! -e "/bin/bash" ]; then
+      	ln -s /bin/sh /bin/bash
+      fi
     '';
   };
 
