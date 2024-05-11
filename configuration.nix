@@ -65,7 +65,7 @@
   services.xserver.desktopManager.gnome = {
     enable = true;
   };
-  services.xserver.desktopManager.gnome3.extraGSettingsOverrides = ''
+  services.xserver.desktopManager.gnome.extraGSettingsOverrides = ''
     [org.gnome.desktop.background]
     picture-uri='file://home/alexey/my-background.jpg'
 
