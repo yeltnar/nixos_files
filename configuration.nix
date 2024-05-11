@@ -68,6 +68,10 @@
   services.xserver.desktopManager.gnome3.extraGSettingsOverrides = ''
     [org.gnome.desktop.background]
     picture-uri='file://home/alexey/my-background.jpg'
+
+    [org/gnome/settings-daemon/plugins/power]
+    sleep-inactive-ac-type='nothing'
+    sleep-inactive-battery-type='nothing'
   '';
 
   environment.gnome.excludePackages = with pkgs.gnome; [
