@@ -65,15 +65,6 @@
   services.xserver.desktopManager.gnome = {
     enable = true;
   };
-  services.xserver.desktopManager.gnome.extraGSettingsOverrides = ''
-    [org.gnome.desktop.background]
-    picture-uri='file://home/alexey/my-background.jpg'
-
-    [org/gnome/settings-daemon/plugins/power]
-    sleep-inactive-ac-type='nothing'
-    sleep-inactive-battery-type='nothing'
-  '';
-
   environment.gnome.excludePackages = with pkgs.gnome; [
     epiphany
     totem
@@ -216,6 +207,16 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
+
+  system.activationScripts.gnome_changes = {
+    text = ''
+      echo "# ${pkgs.glib}/bin/gsettings" > /tmp/1.txt
+      echo '${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"' >> /tmp/1.txt;
+      echo '${pkgs.glib}/bin/gsettings set org.gnome.settings-daemon.plugins.power power-button-action "nothing"' >> /tmp/1.txt;
+      echo '${pkgs.glib}/bin/gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type "nothing"' >> /tmp/1.txt;
+      echo '${pkgs.glib}/bin/gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type "nothing"' >> /tmp/1.txt;
+    '';
+  };
 
   system.activationScripts.setup_bash_profile = {
     text = ''
