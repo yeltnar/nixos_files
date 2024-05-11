@@ -65,6 +65,10 @@
   services.xserver.desktopManager.gnome = {
     enable = true;
   };
+  services.xserver.desktopManager.gnome3.extraGSettingsOverrides = ''
+    [org.gnome.desktop.background]
+    picture-uri='file://home/alexey/my-background.jpg'
+  '';
 
   environment.gnome.excludePackages = with pkgs.gnome; [
     epiphany
