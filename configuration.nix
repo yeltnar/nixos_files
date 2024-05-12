@@ -17,10 +17,18 @@
     ./includes/make_id_rsa.nix
     # ./includes/fetch_test.nix
 
+    # home manager
+    # ./includes/home.nix
+
     ### containers ###
     # ./includes/vaultwarden.nix
     # ./includes/caddy.nix
     # ./includes/wedding_site.nix
+  ];
+
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
   ];
 
   # Bootloader.
