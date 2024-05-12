@@ -215,7 +215,7 @@
       echo dconf write /org/gnome/desktop/interface/clock-format \"\'12h\'\" >> /tmp/1.txt
       echo dconf write /org/gnome/desktop/interface/clock-show-seconds \'true\' >> /tmp/1.txt
       echo dconf write /org/gtk/settings/file-chooser/clock-format \"\'12h\'\" >> /tmp/1.txt
-      echo dconf write org/gnome/desktop/interface/show-battery-percentage \'true\' >> /tmp/1.txt
+      echo dconf write /org/gnome/desktop/interface/show-battery-percentage \'true\' >> /tmp/1.txt
 
       echo dconf write /org/gnome/desktop/interface/color-scheme \"\'prefer-dark\'\" >> /tmp/1.txt
       echo dconf write /org/gnome/settings-daemon/plugins/power/power-button-action \"\'nothing\'\" >> /tmp/1.txt
