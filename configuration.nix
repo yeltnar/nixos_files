@@ -221,6 +221,9 @@
       echo dconf write /org/gnome/settings-daemon/plugins/power/power-button-action \"\'nothing\'\" >> /tmp/1.txt
       echo dconf write /org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-type \"\'nothing\'\" >> /tmp/1.txt
       echo dconf write /org/gnome/settings-daemon/plugins/power/sleep-inactive-battery-type \"\'nothing\'\" >> /tmp/1.txt
+
+      echo dconf write /org/gnome/mutter/dynamic-workspaces \'true\' >> /tmp/1.txt
+      echo dconf write /org/gnome/mutter/workspaces-only-on-primary \'true\' >> /tmp/1.txt
     '';
   };
 
