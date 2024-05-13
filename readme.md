@@ -2,3 +2,6 @@
 link etc/nixos/configuration.nix to same path on root
 
 link home-manager to ~/.config/home-manager
+
+# homemamanger switch # without `--flake` it will use `~/.config/home-manager`
+home-manager switch --flake ~/playin/nixos_files/home-manager/ 
