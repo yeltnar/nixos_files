@@ -9,6 +9,8 @@
   imports = [
     # Include the results of the hardware scan.
     /etc/nixos/hardware-configuration.nix
-    /home/drew/playin/nixos_files/configuration.nix
+    /home/drew/playin/nixos_files/generic_configuration.nix
   ];
+
+  # TODO add proxmos_vm specific stuff here
 }
