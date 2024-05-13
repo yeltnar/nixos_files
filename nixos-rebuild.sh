@@ -19,7 +19,7 @@ pushd "$nix_cfg_dir";
 # Edit your config
 if [ -z $file ]; then
 	echo 'file is empty'
-	file="configuration.nix";
+	file="generic_configuration.nix";
 fi
 echo "file is $file";
 

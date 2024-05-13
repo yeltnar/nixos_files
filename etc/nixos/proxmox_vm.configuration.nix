@@ -9,6 +9,13 @@
   imports = [
     # Include the results of the hardware scan.
     /etc/nixos/hardware-configuration.nix
-    /home/drew/playin/nixos_files/configuration.nix
+    /home/drew/playin/nixos_files/generic_configuration.nix
   ];
+
+  # TODO add proxmos_vm specific stuff here
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub.useOSProber = true;
+
+  networking.hostName = "nixos"; # Define your hostname.
 }
