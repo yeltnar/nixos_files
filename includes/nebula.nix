@@ -3,6 +3,10 @@
   pkgs,
   ...
 }: {
+  environment.systemPackages = with pkgs; [
+    nebula
+  ];
+
   # [Unit]
   # Description=nebula
   # Wants=basic.target
