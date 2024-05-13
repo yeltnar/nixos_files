@@ -23,12 +23,16 @@
     # ./includes/wedding_site.nix
   ];
 
-  # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
-  networking.hostName = "nixos"; # Define your hostname.
+  # Bootloader.
+  # MOVED TO FILE FOR MACHINES 
+
+  # HOSTNAME MOVED TO FILE FOR MACHINES 
+  # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
