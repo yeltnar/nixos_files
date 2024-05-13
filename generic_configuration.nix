@@ -14,6 +14,8 @@
     ./includes/yeltnar_dev.nix
     ./includes/systemd-timers-example.nix
 
+    ./includes/nebula.nix
+
     ./includes/make_id_rsa.nix
     # ./includes/fetch_test.nix
 
@@ -144,6 +146,7 @@
   environment.systemPackages = with pkgs; [
     home-manager
     dconf2nix
+    nebula
 
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
