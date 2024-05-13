@@ -20,6 +20,7 @@
   networking.hostName = "drew-lin-lap"; # Define your hostname.
 
   environment.systemPackages = with pkgs; [
+    keybase
     keybase-gui
   ];
 }
