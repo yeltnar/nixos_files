@@ -14,6 +14,7 @@
     python3
 
     wireshark
+    usbutils # has lsusb
 
     # libreoffice with spell check
     libreoffice-qt
