@@ -13,6 +13,8 @@
     ansible
     python3
 
+    wireshark
+
     # libreoffice with spell check
     libreoffice-qt
     hunspell
