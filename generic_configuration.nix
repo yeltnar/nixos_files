@@ -70,12 +70,17 @@
   services.xserver.desktopManager.gnome = {
     enable = true;
   };
-  environment.gnome.excludePackages = with pkgs.gnome; [
-    epiphany
-    totem
-    geary
-    seahorse
-  ];
+  environment.gnome.excludePackages =
+    (with pkgs; [
+      gnome-tour
+    ])
+    ++ (with pkgs.gnome; [
+      epiphany
+      totem
+      geary
+      seahorse
+      gnome-music
+    ]);
 
   # Configure keymap in X11
   services.xserver = {
