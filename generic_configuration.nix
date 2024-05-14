@@ -17,9 +17,6 @@
     ./includes/make_id_rsa.nix
     # ./includes/fetch_test.nix
 
-    # home manager
-    # ./includes/home.nix
-
     ### containers ###
     # ./includes/vaultwarden.nix
     # ./includes/caddy.nix
