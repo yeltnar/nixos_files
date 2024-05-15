@@ -14,6 +14,8 @@
     ./includes/yeltnar_dev.nix
     ./includes/systemd-timers-example.nix
 
+    ./includes/tlp.nix
+
     ./includes/make_id_rsa.nix
     # ./includes/fetch_test.nix
 
@@ -104,23 +106,6 @@
   sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
-  security.sudo = {
-    extraRules = [
-      {
-        users = ["drew"];
-        commands = [
-          {
-            command = "/run/current-system/sw/bin/tlp-stat";
-            options = ["NOPASSWD"];
-          }
-          {
-            command = "/run/current-system/sw/bin/tlp";
-            options = ["NOPASSWD"];
-          }
-        ];
-      }
-    ];
-  };
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -204,16 +189,6 @@
     settings.PasswordAuthentication = false;
     settings.KbdInteractiveAuthentication = false;
     settings.PermitRootLogin = "no";
-  };
-
-  # gnome power management conflicts with tlp
-  services.power-profiles-daemon.enable = false;
-  services.tlp = {
-    enable = true;
-    settings = {
-      START_CHARGE_THRESH_BAT0 = 40; # 40 and bellow it starts to charge
-      STOP_CHARGE_THRESH_BAT0 = 80; # 80 and above it stops charging
-    };
   };
 
   virtualisation = {
