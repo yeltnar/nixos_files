@@ -104,6 +104,23 @@
   sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
+  security.sudo = {
+    extraRules = [
+      {
+        users = ["drew"];
+        commands = [
+          {
+            command = "/run/current-system/sw/bin/tlp-stat";
+            options = ["NOPASSWD"];
+          }
+          {
+            command = "/run/current-system/sw/bin/tlp";
+            options = ["NOPASSWD"];
+          }
+        ];
+      }
+    ];
+  };
   services.pipewire = {
     enable = true;
     alsa.enable = true;
