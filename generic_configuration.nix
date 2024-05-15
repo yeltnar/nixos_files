@@ -14,8 +14,6 @@
     ./includes/yeltnar_dev.nix
     ./includes/systemd-timers-example.nix
 
-    ./includes/tlp.nix
-
     ./includes/make_id_rsa.nix
     # ./includes/fetch_test.nix
 

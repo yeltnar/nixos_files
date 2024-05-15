@@ -40,5 +40,4 @@
   };
 
   # */5 * * * * bash -c 'export SUDO_USER="drew"; cd /var/yeltnar-nebula; ./compare_date.sh 2>&1 > ./compare_date.log'
-
 }

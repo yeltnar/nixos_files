@@ -12,6 +12,7 @@
     /home/drew/playin/nixos_files/generic_configuration.nix
 
     /home/drew/playin/nixos_files/includes/nebula.nix
+    /home/drew/playin/nixos_files/includes/tlp.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
