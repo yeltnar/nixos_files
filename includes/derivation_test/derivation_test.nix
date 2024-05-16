@@ -1,8 +1,6 @@
-{pkgs ? import <nixpkgs> {} }:
-
+{pkgs ? import <nixpkgs> {}}:
 pkgs.stdenv.mkDerivation {
-
-  name ="derivation_test";
+  name = "derivation_test";
   src = ./src;
 
   buildPhase = ''
