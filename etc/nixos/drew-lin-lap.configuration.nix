@@ -25,5 +25,7 @@
   environment.systemPackages = with pkgs; [
     keybase
     keybase-gui
+
+    slack
   ];
 }
