@@ -10,6 +10,8 @@
     # Include the results of the hardware scan.
     /etc/nixos/hardware-configuration.nix
     /home/drew/playin/nixos_files/generic_configuration.nix
+
+    /home/drew/playin/nixos_files/includes/ntfy_report_ip_timer.nix
   ];
 
   # TODO add proxmos_vm specific stuff here

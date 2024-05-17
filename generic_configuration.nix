@@ -12,7 +12,6 @@
     ./includes/custom_bashrc.nix
     ./includes/dot_bashrc.nix
     ./includes/yeltnar_dev.nix
-    ./includes/systemd-timers-example.nix
 
     ./includes/make_id_rsa.nix
     # ./includes/fetch_test.nix
@@ -31,7 +30,9 @@
   # Bootloader.
   # MOVED TO FILE FOR MACHINES
 
+  # !!!!!!
   # HOSTNAME MOVED TO FILE FOR MACHINES
+  # !!!!!!
   # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
