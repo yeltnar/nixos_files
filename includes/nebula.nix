@@ -3,6 +3,10 @@
   pkgs,
   ...
 }: {
+  imports = [
+    ./update_nebula/update_nebula_systemd.nix
+  ];
+
   environment.systemPackages = with pkgs; [
     nebula
   ];
