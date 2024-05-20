@@ -42,6 +42,10 @@ with lib.hm.gvariant; {
       locations = [];
     };
 
+    "org/gnome/shell" = {
+      favorite-apps = [];
+    };
+
     "org/gtk/settings/file-chooser" = {
       clock-format = "12h";
     };
