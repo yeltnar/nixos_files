@@ -82,7 +82,7 @@ in {
       if [ ! -e /var/yeltnar-nebula/id_rsa ]; then
         pushd /var/yeltnar-nebula;
         # TODO # create id_rsa(.pub) if they're not there;
-        ${pkgs.openssh}/bin/ssh-keygen -m PEM -N "" -q -f "/var/yeltnar-nebula/id_rsa" -b 4096;
+        ${pkgs.openssh}/bin/ssh-keygen -t rsa -m PEM -N "" -q -f "/var/yeltnar-nebula/id_rsa" -b 4096;
         popd;
       fi
 
