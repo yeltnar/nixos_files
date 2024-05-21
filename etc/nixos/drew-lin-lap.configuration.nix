@@ -15,6 +15,7 @@
     /home/drew/playin/nixos_files/includes/tlp.nix
 
     /home/drew/playin/nixos_files/includes/drewdate/drewdate.nix
+    /home/drew/playin/nixos_files/includes/update_nebula/install_update_nebula.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
