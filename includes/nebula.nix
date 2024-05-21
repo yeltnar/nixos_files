@@ -10,6 +10,7 @@
 
   environment.systemPackages = with pkgs; [
     nebula
+    openssh
   ];
 
   # [Unit]
