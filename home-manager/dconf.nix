@@ -67,5 +67,9 @@ with lib.hm.gvariant; {
       switch-windows-backward = [ "<Shift><Alt>Tab" ];
     };
 
+    "org/gnome/desktop/wm/preferences" = {
+      button-layout = "appmenu:minimize,maximize,close";
+    };
+
   };
 }
