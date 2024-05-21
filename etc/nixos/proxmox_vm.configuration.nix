@@ -11,6 +11,8 @@
     /etc/nixos/hardware-configuration.nix
     /home/drew/playin/nixos_files/generic_configuration.nix
 
+    /home/drew/playin/nixos_files/includes/nebula.nix
+
     /home/drew/playin/nixos_files/includes/ntfy_report_ip_timer.nix
   ];
 
