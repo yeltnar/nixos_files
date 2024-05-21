@@ -130,6 +130,8 @@
       firefox
       vlc
       vscodium
+
+      yq-go
       #  thunderbird
     ];
     openssh.authorizedKeys.keys = [
