@@ -12,7 +12,7 @@ with lib.hm.gvariant; {
       clock-show-seconds = true;
       color-scheme = "prefer-dark";
       show-battery-percentage = true;
-      enable-hot-corners = false; 
+      enable-hot-corners = false;
     };
 
     "org/gnome/desktop/notifications" = {
@@ -63,13 +63,12 @@ with lib.hm.gvariant; {
     "org/gnome/desktop/wm/keybindings" = {
       switch-applications = [];
       switch-applications-backward = [];
-      switch-windows = [ "<Alt>Tab" ];
-      switch-windows-backward = [ "<Shift><Alt>Tab" ];
+      switch-windows = ["<Alt>Tab"];
+      switch-windows-backward = ["<Shift><Alt>Tab"];
     };
 
     "org/gnome/desktop/wm/preferences" = {
       button-layout = "appmenu:minimize,maximize,close";
     };
-
   };
 }
