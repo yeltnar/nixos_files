@@ -132,6 +132,8 @@
       vscodium
 
       yq-go
+      openssl
+
       #  thunderbird
     ];
     openssh.authorizedKeys.keys = [
@@ -149,7 +151,7 @@
   environment.systemPackages = with pkgs; [
     home-manager
     dconf2nix
-
+    
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     curl
