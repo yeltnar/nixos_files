@@ -14,8 +14,8 @@
       # I dont know why the indentation is odd
 
       # create if not there
-      if [ ! -e /home/drew/.bashrc ]; then        
-        touch /home/drew/.bashrc;        
+      if [ ! -e /home/drew/.bashrc ]; then
+        touch /home/drew/.bashrc;
         chown -v 1000:100 /home/drew/.bashrc # TODO fix this, it is kinda hard coded
       fi
 
