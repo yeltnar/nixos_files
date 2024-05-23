@@ -26,7 +26,7 @@ in {
       # I dont know why the indentation is odd
 
       mkdir -p "$dir_to_add";
-      chown -R "$dir_to_add";
+      chown -R drew:100 "$dir_to_add";
 
       # create source'd file if not there
       cat > $file_to_add <<- EOM
