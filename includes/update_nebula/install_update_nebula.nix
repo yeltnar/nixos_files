@@ -95,8 +95,6 @@ in {
         echo "$text_to_check" >> /home/drew/.bashrc;
         echo "$text_to_add" >> /home/drew/.bashrc;
       fi
-
-      exit;
     '';
   };
 }

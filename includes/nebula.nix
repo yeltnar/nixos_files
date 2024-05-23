@@ -6,7 +6,7 @@
   imports = [
     ./update_nebula/update_nebula_systemd.nix
     # TODO fix... this is preventing booting (I guess thats what activation scripts do when they fail)
-    # ./update_nebula/install_update_nebula.nix
+    ./update_nebula/install_update_nebula.nix
   ];
 
   environment.systemPackages = with pkgs; [
