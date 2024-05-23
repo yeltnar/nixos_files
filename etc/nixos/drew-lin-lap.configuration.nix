@@ -14,7 +14,7 @@
     /home/drew/playin/nixos_files/includes/nebula.nix
     /home/drew/playin/nixos_files/includes/tlp.nix
 
-    /home/drew/playin/nixos_files/includes/drewdate/drewdate.nix
+    # /home/drew/playin/nixos_files/includes/drewdate/drewdate.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
