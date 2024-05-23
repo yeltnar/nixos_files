@@ -19,15 +19,15 @@ pushd "$nix_cfg_dir";
 # Edit your config
 if [ -z $file ]; then
 	echo 'file is empty'
-	file="generic_configuration.nix";
+	# file="generic_configuration.nix";
 fi
 echo "file is $file";
 
 if [ -e "$file" ]; then
 	$EDITOR "$file"; 
-else
-	echo "file is not found";
-	exit;
+# else
+	# echo "file is not found";
+	# exit;
 fi
 
 # Autoformat your nix files

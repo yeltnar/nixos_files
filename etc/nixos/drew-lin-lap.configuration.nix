@@ -13,6 +13,8 @@
 
     /home/drew/playin/nixos_files/includes/nebula.nix
     /home/drew/playin/nixos_files/includes/tlp.nix
+
+    # /home/drew/playin/nixos_files/includes/drewdate/drewdate.nix # TODO add back after boot fix 
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -23,5 +25,7 @@
   environment.systemPackages = with pkgs; [
     keybase
     keybase-gui
+
+    slack
   ];
 }

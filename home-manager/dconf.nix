@@ -4,6 +4,7 @@ with lib.hm.gvariant; {
   dconf.settings = {
     "org/gnome/Console" = {
       font-scale = 1.7000000000000006;
+      audible-bell = false;
     };
 
     "org/gnome/desktop/interface" = {
@@ -11,6 +12,7 @@ with lib.hm.gvariant; {
       clock-show-seconds = true;
       color-scheme = "prefer-dark";
       show-battery-percentage = true;
+      enable-hot-corners = false;
     };
 
     "org/gnome/desktop/notifications" = {
@@ -40,6 +42,10 @@ with lib.hm.gvariant; {
       locations = [];
     };
 
+    "org/gnome/shell" = {
+      favorite-apps = [];
+    };
+
     "org/gtk/settings/file-chooser" = {
       clock-format = "12h";
     };
@@ -52,6 +58,17 @@ with lib.hm.gvariant; {
       binding = "<Control><Alt>t";
       command = "kgx";
       name = "open terminal";
+    };
+
+    "org/gnome/desktop/wm/keybindings" = {
+      switch-applications = [];
+      switch-applications-backward = [];
+      switch-windows = ["<Alt>Tab"];
+      switch-windows-backward = ["<Shift><Alt>Tab"];
+    };
+
+    "org/gnome/desktop/wm/preferences" = {
+      button-layout = "appmenu:minimize,maximize,close";
     };
   };
 }
