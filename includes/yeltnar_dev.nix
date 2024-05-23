@@ -12,6 +12,7 @@
     websocat
     ansible
     python3
+    netcat-gnu
 
     wireshark
     usbutils # has lsusb
