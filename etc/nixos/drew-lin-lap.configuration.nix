@@ -27,5 +27,7 @@
     keybase-gui
 
     slack
+    element-desktop
+
   ];
 }
