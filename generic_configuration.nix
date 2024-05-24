@@ -162,7 +162,7 @@
     fzf
     jq
     file
-    ffmpeg
+    ffmpeg_5-full
     xclip
     squashfsTools
     htop
