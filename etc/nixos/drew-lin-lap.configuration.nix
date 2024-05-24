@@ -29,5 +29,6 @@
     slack
     element-desktop
 
+    mullvad-vpn
   ];
 }
