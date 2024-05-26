@@ -33,5 +33,7 @@
     gimp-with-plugins
 
     betaflight-configurator
+
+    obs-studio
   ];
 }
