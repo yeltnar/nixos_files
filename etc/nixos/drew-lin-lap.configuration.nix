@@ -31,5 +31,7 @@
 
     mullvad-vpn
     gimp-with-plugins
+
+    betaflight-configurator
   ];
 }
