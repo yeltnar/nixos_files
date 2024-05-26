@@ -158,6 +158,7 @@
     neovim
     tmux
     git
+    unzip
     alejandra
     fzf
     jq
