@@ -26,10 +26,10 @@
   environment.systemPackages = with pkgs; [
     keybase
     keybase-gui
-
     slack
     element-desktop
 
     mullvad-vpn
+    gimp-with-plugins
   ];
 }
