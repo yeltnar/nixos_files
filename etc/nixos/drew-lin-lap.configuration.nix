@@ -36,4 +36,10 @@
 
     obs-studio
   ];
+
+  fileSystems."/media/ubuntu" =
+    { device = "/media/ubuntu-small.img";
+      fsType = "ext4";
+    };
+
 }
