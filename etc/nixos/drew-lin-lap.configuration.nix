@@ -37,9 +37,48 @@
     obs-studio
   ];
 
+  # remember to create sub volumes and mount points... some need to be created on the mounted volume 
+  fileSystems."/media/btrfs_top" =
+    { device = "/dev/disk/by-uuid/47c6f308-2398-46e3-98a2-ba5b993500f4";
+      fsType = "btrfs";
+      options = [
+        "nofail"
+      ];
+    };
+
+  fileSystems."/media/btrfs" =
+    { device = "/dev/disk/by-uuid/47c6f308-2398-46e3-98a2-ba5b993500f4";
+      fsType = "btrfs";
+      options = [
+        "nofail" # TODO remove nofail from all btrfs (excpet for _top)
+	"subvol=root"
+      ];
+    };
+
+  fileSystems."/media/btrfs/nix" =
+    { device = "/dev/disk/by-uuid/47c6f308-2398-46e3-98a2-ba5b993500f4";
+      fsType = "btrfs";
+      options = [
+        "nofail"
+	"subvol=nix"
+      ];
+      depends = [ "/media/btrfs" ];
+    };
+
+  fileSystems."/media/btrfs/home" =
+    { device = "/dev/disk/by-uuid/47c6f308-2398-46e3-98a2-ba5b993500f4";
+      fsType = "btrfs";
+      options = [
+        "nofail"
+	"subvol=home"
+      ];
+      depends = [ "/media/btrfs" ];
+    };
+
   fileSystems."/media/ubuntu" =
     { device = "/media/ubuntu-small.img";
       fsType = "ext4";
     };
 
+  networking.firewall.allowedTCPPorts = [ 1883 ];
 }
