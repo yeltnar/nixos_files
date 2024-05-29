@@ -52,6 +52,7 @@
       options = [
         "nofail" # TODO remove nofail from all btrfs (excpet for _top)
 	"subvol=root"
+	"compress=zstd"
       ];
     };
 
@@ -61,6 +62,8 @@
       options = [
         "nofail"
 	"subvol=nix"
+	"compress=zstd"
+	"noatime"
       ];
       depends = [ "/media/btrfs" ];
     };
@@ -71,6 +74,7 @@
       options = [
         "nofail"
 	"subvol=home"
+	"compress=zstd"
       ];
       depends = [ "/media/btrfs" ];
     };
