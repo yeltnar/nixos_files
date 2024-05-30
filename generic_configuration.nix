@@ -10,7 +10,6 @@
     # /home/drew/dotfiles/nixos/hardware-configuration.nix
     ./includes/time-until.nix
     ./includes/custom_bashrc.nix
-    ./includes/dot_bashrc.nix
     ./includes/yeltnar_dev.nix
 
     ./includes/make_id_rsa.nix

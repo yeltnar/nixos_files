@@ -22,10 +22,10 @@
 
   system.activationScripts.setup_bash_profile = {
     text = ''
-      date > /tmp/testing_info;
+      date > /tmp/setup_bash_profile.log;
 
-      text_to_add='if [ -f ~/.bashrc ]; then . ~/.bashrc; fi'
-      text_to_check='# bashrc_load_done # text showing the .bashrc loading is added to profile';
+      text_to_add="if [ -f ~/.bashrc ]; then . ~/.bashrc; fi"
+      text_to_check="# bashrc_load_done # text showing the .bashrc loading is added to profile";
 
       # create if not there
       if [ ! -e /home/drew/.bash_profile ]; then
@@ -41,7 +41,8 @@
         echo "$text_to_add" >> /home/drew/.bash_profile;
       fi
 
-      date > /tmp/testing_info_2;
+      echo done >> /tmp/setup_bash_profile.log;
+      date >> /tmp/setup_bash_profile.log;
     '';
   };
 }
