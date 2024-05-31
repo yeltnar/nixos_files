@@ -5,13 +5,7 @@
   config,
   pkgs,
   ...
-}: 
-let 
-  open_command = pkgs.writeShellScriptBin "open" ''
-    xdg-open $@;
-  '';
-in
-{
+}: {
   imports = [
     # /home/drew/dotfiles/nixos/hardware-configuration.nix
     ./includes/time-until.nix
@@ -155,7 +149,7 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs; [
 
-    open_command
+    ( import ./includes/open.nix { inherit pkgs; } )
     
     home-manager
     dconf2nix
