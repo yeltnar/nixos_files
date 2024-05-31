@@ -8,6 +8,7 @@
   };
   vardir = "/var/yeltnar-nebula";
   user = "drew";
+  group = 100;
 in {
   system.activationScripts.setup_nebula_env = {
     text = ''
@@ -18,7 +19,7 @@ in {
       text_to_add="source $file_to_add"; # TODO remove
 
       mkdir -p "$dir_to_add";
-      chown -R ${user}:100 "$dir_to_add";
+      chown -R ${user}:${group} "$dir_to_add";
 
       # create sourced file if not there
       cat > $file_to_add <<- EOM
@@ -46,7 +47,7 @@ in {
         fi
       EOM
 
-      chown ${user}:100 "$file_to_add";
+      chown ${user}:${group} "$file_to_add";
 
       # create bashrc file if not there
       if [ ! -e /home/${user}/.bashrc ]; then
@@ -63,12 +64,12 @@ in {
       # create compare_date.sh file if not there
       if [ ! -e ${vardir}/compare_date.sh ]; then
         cp ${cloned_repo.outPath}/compare_date.sh ${vardir}/compare_date.sh;
-        chown ${user}:100 ${vardir}/compare_date.sh;
+        chown ${user}:${group} ${vardir}/compare_date.sh;
       fi
       # create process_tar.sh file if not there
       if [ ! -e ${vardir}/process_tar.sh ]; then
         cp ${cloned_repo.outPath}/process_tar.sh ${vardir}/process_tar.sh;
-        chown ${user}:100 ${vardir}/process_tar.sh;
+        chown ${user}:${group} ${vardir}/process_tar.sh;
       fi
 
       if [ ! -e ${vardir}/id_rsa ]; then
