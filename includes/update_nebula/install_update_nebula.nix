@@ -8,7 +8,7 @@
   };
   vardir = "/var/yeltnar-nebula";
   user = "drew";
-  group = 100;
+  group = "100";
 in {
   system.activationScripts.setup_nebula_env = {
     text = ''

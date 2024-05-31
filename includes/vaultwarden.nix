@@ -5,7 +5,7 @@
 }: 
 let
   user = "drew";
-  group = 100;
+  group = "100";
 in {
   networking.firewall.allowedTCPPorts = [3000];
 
