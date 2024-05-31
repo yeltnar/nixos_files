@@ -5,7 +5,10 @@
   config,
   pkgs,
   ...
-}: {
+}: let 
+  # example of defining function, with optional param with fallback value 
+  getName = { name ? "nixos" }: name;
+in {
   imports = [
     # Include the results of the hardware scan.
     /etc/nixos/hardware-configuration.nix
@@ -21,5 +24,5 @@
   boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.useOSProber = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = getName {}; # Define your hostname.
 }
