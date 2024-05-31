@@ -5,7 +5,13 @@
   config,
   pkgs,
   ...
-}: {
+}: 
+let 
+  open_command = pkgs.writeShellScriptBin "open" ''
+    xdg-open $@;
+  '';
+in
+{
   imports = [
     # /home/drew/dotfiles/nixos/hardware-configuration.nix
     ./includes/time-until.nix
@@ -148,6 +154,9 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+
+    open_command
+    
     home-manager
     dconf2nix
     
