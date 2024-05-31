@@ -2,7 +2,11 @@
   config,
   pkgs,
   ...
-}: {
+}: 
+let
+  user = "drew";
+  group = 100;
+in {
   networking.firewall.allowedTCPPorts = [3000];
 
   systemd.services.vaultwarden_start-git-repo = {
@@ -18,10 +22,10 @@
       ConditionPathExists = "!/tmp/vaultwarden_start";
     };
     script = ''
-      /run/wrappers/bin/su - drew -s /bin/sh -c 'cd /tmp/; git clone https://github.com/yeltnar/vaultwarden_start';
-      /run/wrappers/bin/su - drew -s /bin/sh -c 'cd /tmp/vaultwarden_start; echo "VAULTWARDEN_PATH=\"https://nixos.lan\"" > .env';
+      /run/wrappers/bin/su - ${user} -s /bin/sh -c 'cd /tmp/; git clone https://github.com/yeltnar/vaultwarden_start';
+      /run/wrappers/bin/su - ${user} -s /bin/sh -c 'cd /tmp/vaultwarden_start; echo "VAULTWARDEN_PATH=\"https://nixos.lan\"" > .env';
       mkdir /tmp/vaultwarden_start/vw-data;
-      chown drew:100 /tmp/vaultwarden_start/vw-data;
+      chown ${user}:${group} /tmp/vaultwarden_start/vw-data;
       chmod 777 /tmp/vaultwarden_start/vw-data;
     '';
     serviceConfig = {
