@@ -19,6 +19,37 @@ in {
     /home/drew/playin/nixos_files/includes/ntfy_report_ip_timer.nix
   ];
 
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+  # disable xterm
+  services.xserver.excludePackages = [pkgs.xterm];
+
+  # Enable the GNOME Desktop Environment.
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome = {
+    enable = true;
+  };
+  environment.gnome.excludePackages =
+    (with pkgs; [
+      gnome-tour
+    ])
+    ++ (with pkgs.gnome; [
+      epiphany
+      totem
+      geary
+      seahorse
+      gnome-music
+    ]);
+
+  # Configure keymap in X11
+  services.xserver = {
+    layout = "us";
+    xkbVariant = "";
+  };
+
+  # Enable touchpad support (enabled default in most desktopManager).
+  # services.xserver.libinput.enable = true;
+
   # TODO add proxmos_vm specific stuff here
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";

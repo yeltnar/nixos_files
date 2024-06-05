@@ -60,34 +60,6 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  # disable xterm
-  services.xserver.excludePackages = [pkgs.xterm];
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome = {
-    enable = true;
-  };
-  environment.gnome.excludePackages =
-    (with pkgs; [
-      gnome-tour
-    ])
-    ++ (with pkgs.gnome; [
-      epiphany
-      totem
-      geary
-      seahorse
-      gnome-music
-    ]);
-
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbVariant = "";
-  };
-
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
@@ -116,9 +88,6 @@
     # no need to redefine it in your config for now)
     #media-session.enable = true;
   };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.drew = {
@@ -228,24 +197,9 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
 
-  system.activationScripts.gnome_changes = {
-    text = ''
-      echo "# ${pkgs.glib}/bin/gsettings" > /tmp/1.txt
 
-      echo dconf write /org/gnome/desktop/interface/clock-format \"\'12h\'\" >> /tmp/1.txt
-      echo dconf write /org/gnome/desktop/interface/clock-show-seconds \'true\' >> /tmp/1.txt
-      echo dconf write /org/gtk/settings/file-chooser/clock-format \"\'12h\'\" >> /tmp/1.txt
-      echo dconf write /org/gnome/desktop/interface/show-battery-percentage \'true\' >> /tmp/1.txt
 
-      echo dconf write /org/gnome/desktop/interface/color-scheme \"\'prefer-dark\'\" >> /tmp/1.txt
-      echo dconf write /org/gnome/settings-daemon/plugins/power/power-button-action \"\'nothing\'\" >> /tmp/1.txt
-      echo dconf write /org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-type \"\'nothing\'\" >> /tmp/1.txt
-      echo dconf write /org/gnome/settings-daemon/plugins/power/sleep-inactive-battery-type \"\'nothing\'\" >> /tmp/1.txt
 
-      echo dconf write /org/gnome/mutter/dynamic-workspaces \'true\' >> /tmp/1.txt
-      echo dconf write /org/gnome/mutter/workspaces-only-on-primary \'true\' >> /tmp/1.txt
-    '';
-  };
 
   system.activationScripts.code_symlink = {
     text = ''

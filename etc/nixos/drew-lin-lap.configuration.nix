@@ -23,6 +23,37 @@
 
   networking.hostName = "drew-lin-lap"; # Define your hostname.
 
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+  # disable xterm
+  services.xserver.excludePackages = [pkgs.xterm];
+
+  # Enable the GNOME Desktop Environment.
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome = {
+    enable = true;
+  };
+  environment.gnome.excludePackages =
+    (with pkgs; [
+      gnome-tour
+    ])
+    ++ (with pkgs.gnome; [
+      epiphany
+      totem
+      geary
+      seahorse
+      gnome-music
+    ]);
+
+  # Configure keymap in X11
+  services.xserver = {
+    xkb.layout = "us";
+    xkb.variant = "";
+  };
+
+  # Enable touchpad support (enabled default in most desktopManager).
+  # services.xserver.libinput.enable = true;
+
   environment.systemPackages = with pkgs; [
     keybase
     keybase-gui
