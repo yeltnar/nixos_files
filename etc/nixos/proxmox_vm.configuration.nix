@@ -17,6 +17,8 @@ in {
     /home/drew/playin/nixos_files/includes/nebula.nix
 
     /home/drew/playin/nixos_files/includes/ntfy_report_ip_timer.nix
+
+    /home/drew/playin/nixos_files/includes/derivation_test/derivation_test.nix
   ];
 
   # Enable the X11 windowing system.

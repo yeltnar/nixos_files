@@ -1,15 +1,19 @@
-{pkgs ? import <nixpkgs> {}}:
-pkgs.stdenv.mkDerivation {
-  name = "derivation_test";
-  src = ./src;
+{ pkgs, ... }: let
+  xxx = pkgs.stdenv.mkDerivation {
+    name = "derivation_test";
+    src = ./src;
 
-  buildPhase = ''
-    whoami;
-    echo 'date' > r.sh;
-  '';
+    buildPhase = ''
+      whoami;
+      echo 'date' > date_derivation;
+    '';
 
-  installPhase = ''
-    mkdir -p $out/bin;
-    cp r.sh $out/bin/;
-  '';
+    installPhase = ''
+      mkdir -p $out/bin;
+      chmod u+x date_derivation;
+      cp date_derivation $out/bin/;
+    '';
+  };
+in {
+  environment.systemPackages = [xxx];
 }
