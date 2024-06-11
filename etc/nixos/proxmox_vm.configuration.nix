@@ -18,9 +18,8 @@ in {
 
     /home/drew/playin/nixos_files/includes/ntfy_report_ip_timer.nix
 
-    (
-      import /home/drew/playin/nixos_files/includes/derivation_test/derivation_test.nix ( args // { repo_uri = "https://github.com/yeltnar/mqtt-broker"; } )
-    )
+    ( import /home/drew/playin/nixos_files/includes/derivation_test/derivation_test.nix ( args // { repo_uri = "https://github.com/yeltnar/mqtt-broker"; name = "date_mqtt"; } ) )
+    # ( import /home/drew/playin/nixos_files/includes/derivation_test/derivation_test.nix ( args // { repo_uri = "https://github.com/yeltnar/tampermonkey_scripts"; name = "date_tampermonkey"; } ) )
   ];
 
   # Enable the X11 windowing system.

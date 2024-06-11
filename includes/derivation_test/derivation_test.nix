@@ -1,26 +1,28 @@
-{ lib, pkgs, repo_uri, ... }: let
+{ lib, pkgs, repo_uri, name, ... }: let
   cloned_repo = builtins.fetchGit {
     url = repo_uri;
   };
-  xxx = pkgs.stdenv.mkDerivation {
-    name = "derivation_test";
+  prog_to_add = pkgs.stdenv.mkDerivation {
+    name = name;
     # src = cloned_repo;
     src = "/tmp";
 
     buildPhase = ''
       whoami;
-      echo "echo `date`" > date_derivation;
-      echo "date" >> date_derivation;
-      echo "echo ${cloned_repo}" >> date_derivation;
-      echo "echo ${repo_uri}" >> date_derivation;
+      file=${name};
+      echo "echo `date`" > $file;
+      echo "date" >> $file;
+      echo "echo ${cloned_repo}" >> $file;
+      echo "echo ${repo_uri}" >> $file;
     '';
 
     installPhase = ''
       mkdir -p $out/bin;
-      chmod u+x date_derivation;
-      cp date_derivation $out/bin/;
+      file=${name};
+      chmod u+x $file;
+      cp $file $out/bin/;
     '';
   };
 in {
-  environment.systemPackages = [xxx];
+  environment.systemPackages = [ prog_to_add ];
 }
