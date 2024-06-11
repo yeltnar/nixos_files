@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{
+args@{
   config,
   pkgs,
   ...
@@ -18,7 +18,9 @@ in {
 
     /home/drew/playin/nixos_files/includes/ntfy_report_ip_timer.nix
 
-    /home/drew/playin/nixos_files/includes/derivation_test/derivation_test.nix
+    (
+      import /home/drew/playin/nixos_files/includes/derivation_test/derivation_test.nix ( args // { repo_uri = "https://github.com/yeltnar/mqtt-broker"; } )
+    )
   ];
 
   # Enable the X11 windowing system.
