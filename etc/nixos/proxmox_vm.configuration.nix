@@ -44,6 +44,10 @@ in {
       gnome-music
     ]);
 
+  environment.systemPackages = with pkgs; [
+    btrfs-progs
+  ];
+
   # Configure keymap in X11
   services.xserver = {
     layout = "us";
