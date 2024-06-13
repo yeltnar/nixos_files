@@ -18,7 +18,7 @@ in {
 
     /home/drew/playin/nixos_files/includes/ntfy_report_ip_timer.nix
 
-    ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // { repo_uri = "https://github.com/yeltnar/mqtt-broker"; name = "date_mqtt"; } ) )
+    ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // { repo_uri = "/tmp/t/.git"; rev = "ada00053669315682a3b1078e7d077205350cd29"; name = "date_btrfs"; } ) )
     # ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // { repo_uri = "https://github.com/yeltnar/tampermonkey_scripts"; name = "date_tampermonkey"; } ) )
   ];
 
