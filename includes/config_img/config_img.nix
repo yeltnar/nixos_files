@@ -1,10 +1,19 @@
-{ lib, pkgs, repo_uri, rev ? false, ref ? false, shallow ? true, name, ... }: let
+{ 
+  lib, 
+  pkgs, 
+  repo_uri, 
+  rev ? false, 
+  ref ? false, 
+  shallow ? true, 
+  name, 
+  ... 
+}: let
 
   fetchGitOptions = {
     url = repo_uri;
     shallow = shallow;
   } 
-  # merge rev options 
+  # merge options 
   // (if rev != false then { rev = rev; } else {})
   // (if ref != false then { ref = ref; } else {})
   // {}
