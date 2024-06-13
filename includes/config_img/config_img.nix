@@ -1,18 +1,17 @@
-{ lib, pkgs, repo_uri, rev ? false, name, ... }: let
+{ lib, pkgs, repo_uri, rev ? false, ref ? false, shallow ? true, name, ... }: let
 
-  fetchGitOptions = if rev
-    then  {
-      url = repo_uri;
-      rev = rev;
-      shallow = true;
-    }
-    else {
-      url = repo_uri;
-      shallow = true;
-    };
-
+  fetchGitOptions = {
+    url = repo_uri;
+    shallow = shallow;
+  } 
+  # merge rev options 
+  // (if rev != false then { rev = rev; } else {})
+  // (if ref != false then { ref = ref; } else {})
+  // {}
+  ;
 
   cloned_repo = builtins.fetchGit fetchGitOptions;
+
   old_prog_to_add = pkgs.stdenv.mkDerivation {
     name = name;
     src = cloned_repo;
