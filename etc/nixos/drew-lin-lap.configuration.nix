@@ -55,6 +55,8 @@
   # services.xserver.libinput.enable = true;
 
   environment.systemPackages = with pkgs; [
+    gparted
+
     keybase
     keybase-gui
     slack
@@ -62,6 +64,7 @@
 
     mullvad-vpn
     gimp-with-plugins
+    endeavour # gnome tasks app 
 
     betaflight-configurator
 
