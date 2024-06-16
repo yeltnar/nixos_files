@@ -54,6 +54,15 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  ### some power mgmt stuff ### 
+  # this seems to work 
+  services.upower.ignoreLid = true;
+  # these did not seem to work 
+  services.logind.lidSwitch = "ignore";
+  services.logind.lidSwitchExternalPower = "ignore";
+  services.logind.lidSwitchDocked = "ignore";
+  services.logind.powerKey = "lock";
+
   environment.systemPackages = with pkgs; [
     gparted
 
