@@ -5,6 +5,9 @@
   rev ? false, 
   ref ? false, 
   shallow ? true, 
+  mount_point,
+  options ? [],
+  fsType,
   name, 
   ... 
 }: let
@@ -37,13 +40,9 @@
 
 in {
 
-  fileSystems."/media/btrfs_test" = {
+  fileSystems.${mount_point} = {
     device = "${disk_img_derivation}/${name}.img";
-    fsType = "btrfs";
-    options = [
-      "nofail"
-      "compress=zstd"
-      "subvol=root"
-    ];
+    fsType = fsType;
+    options = options; 
   };
 }

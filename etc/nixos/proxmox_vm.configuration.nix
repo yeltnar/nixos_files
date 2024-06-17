@@ -18,7 +18,32 @@ in {
 
     /home/drew/playin/nixos_files/includes/ntfy_report_ip_timer.nix
 
-    ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // { repo_uri = "/home/drew/tmp_git_server/first_disk/.git"; rev = "61eb65687463d31390a0518e5392be16517663c3"; name = "date_btrfs"; } ) )
+    ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // 
+      { 
+        repo_uri = "/home/drew/tmp_git_server/first_disk/.git"; 
+        rev = "61eb65687463d31390a0518e5392be16517663c3"; 
+        name = "date_btrfs"; 
+        mount_point = "/media/btrfs_test";
+        fsType = "btrfs";
+	options = [
+          "nofail"
+          "compress=zstd"
+          "subvol=root"
+        ];
+      }
+    ))
+    ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // 
+      { 
+        repo_uri = "/home/drew/tmp_git_server/first_disk/.git"; 
+        rev = "1dda897f54f461532d0b35e4167f58384baca152"; 
+        name = "sqfs_test"; 
+        mount_point = "/media/sqfs_test";
+        fsType = "squashfs";
+	options = [
+          "nofail"
+        ];
+      }
+    ))
     # ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // { repo_uri = "https://github.com/yeltnar/tampermonkey_scripts"; name = "date_tampermonkey"; } ) )
   ];
 
