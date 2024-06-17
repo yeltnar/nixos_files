@@ -7,6 +7,7 @@
   shallow ? true, 
   mount_point,
   options ? [],
+  source_img ? "disk.img",
   fsType,
   name, 
   ... 
@@ -24,24 +25,10 @@
 
   cloned_repo = builtins.fetchGit fetchGitOptions;
 
-  disk_img_derivation = pkgs.stdenv.mkDerivation {
-    name = name;
-    src = cloned_repo;
-
-    buildPhase = ''
-      whoami;
-    '';
-
-    installPhase = ''
-      mkdir -p $out/bin;
-      cp disk.img $out/${name}.img;
-    '';
-  };
-
 in {
 
   fileSystems.${mount_point} = {
-    device = "${disk_img_derivation}/${name}.img";
+    device = "${cloned_repo}/${source_img}";
     fsType = fsType;
     options = options; 
   };
