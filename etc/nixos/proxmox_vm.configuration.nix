@@ -9,19 +9,6 @@ args@{
   # example of defining function, with optional param with fallback value 
   getName = { name ? "nixos" }: name;
 in {
-
-  environment.etc.crypttab.text = ''
-    enc_sqfs /home/drew/tmp_git_server/first_disk/enc.img /root/mykeyfile.key 
-  '';
-
-  fileSystems."/home/drew/tmp_git_server/first_disk/enc_mnt" =
-    { 
-      device = "/dev/mapper/enc_sqfs";
-      fsType = "squashfs";
-      options = [ "nofail" ];
-    };
-
-
   imports = [
     # Include the results of the hardware scan.
     /etc/nixos/hardware-configuration.nix
@@ -34,7 +21,7 @@ in {
     ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // 
       { 
         repo_uri = "git@github.com:yeltnar/squashfs_git"; 
-        rev = "18b70ecb7778f9e0b1980ddb5c57c1df5d795666"; 
+        rev = "f0039cb17bc6116e5931e1750f4bbf59e9ae803d";
         name = "sqfs_test"; 
         mount_point = "/media/sqfs_test";
         fsType = "squashfs";
