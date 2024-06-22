@@ -33,20 +33,6 @@ in {
 
     ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // 
       { 
-        repo_uri = "/home/drew/tmp_git_server/first_disk/.git"; 
-        rev = "61eb65687463d31390a0518e5392be16517663c3"; 
-        name = "date_btrfs"; 
-        mount_point = "/media/btrfs_test";
-        fsType = "btrfs";
-	options = [
-          "nofail"
-          "compress=zstd"
-          "subvol=root"
-        ];
-      }
-    ))
-    ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // 
-      { 
         repo_uri = "git@github.com:yeltnar/squashfs_git"; 
         rev = "18b70ecb7778f9e0b1980ddb5c57c1df5d795666"; 
         name = "sqfs_test"; 
