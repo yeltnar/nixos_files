@@ -25,7 +25,7 @@
 
   cloned_repo = builtins.fetchGit fetchGitOptions;
 
-  decrypted_device = "enc_sqfs";
+  decrypted_device = builtins.replaceStrings [ "-" "\n" ] [ "" "" ](builtins.readFile /proc/sys/kernel/random/uuid); 
 
 in {
 

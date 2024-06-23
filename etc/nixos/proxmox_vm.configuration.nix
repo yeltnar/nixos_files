@@ -21,7 +21,7 @@ in {
     ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // 
       { 
         repo_uri = "git@github.com:yeltnar/squashfs_git"; 
-        rev = "f0039cb17bc6116e5931e1750f4bbf59e9ae803d";
+        rev = "46c40da96066ef0c5056797c4aae97d0808fca3f";
         name = "sqfs_test"; 
         mount_point = "/media/sqfs_test";
         fsType = "squashfs";
