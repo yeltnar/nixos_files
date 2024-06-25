@@ -24,6 +24,7 @@ in {
         rev = "46c40da96066ef0c5056797c4aae97d0808fca3f";
         name = "sqfs_test"; 
         mount_point = "/media/sqfs_test";
+        disk_key_path = "/root/mykeyfile.key";
         fsType = "squashfs";
 	options = [
           "nofail"
@@ -57,7 +58,6 @@ in {
 
   environment.systemPackages = with pkgs; [
     btrfs-progs
-    cryptsetup
   ];
 
   # Configure keymap in X11

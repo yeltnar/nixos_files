@@ -10,6 +10,7 @@
   source_img ? "enc.img",
   fsType,
   name, 
+  disk_key_path,
   ... 
 }: let
 
@@ -34,7 +35,7 @@ in {
   # second arg is the path of the disk (image) 
   # must manually crate /root/mykeyfile.key, which is the decryption key
   environment.etc.crypttab.text = ''
-    ${decrypted_device} ${cloned_repo}/${source_img} /root/mykeyfile.key 
+    ${decrypted_device} ${cloned_repo}/${source_img} ${disk_key_path} 
   '';
 
   fileSystems.${mount_point} = {

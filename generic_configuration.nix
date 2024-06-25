@@ -139,6 +139,7 @@
     squashfsTools
     htop
     gnupg
+    cryptsetup
     podman-compose
     # docker-compose
 
