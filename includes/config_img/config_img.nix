@@ -28,6 +28,15 @@
 
   decrypted_device = builtins.replaceStrings [ "-" "\n" ] [ "" "" ](builtins.readFile /proc/sys/kernel/random/uuid); 
 
+  xxx = pkgs.stdenv.mkDerivation {
+    name = "${decrypted_device}_derivation";
+    src = cloned_repo;
+
+    installPhase = ''
+      echo hi;
+    '';
+  };
+
 in {
 
   # https://nixos.wiki/wiki/Full_Disk_Encryption#Option_2:_Unlock_after_boot_using_crypttab_and_a_keyfile
