@@ -2,8 +2,7 @@
   config,
   pkgs,
   ...
-}: {  
-
+}: {
   environment.systemPackages = with pkgs; [
     keybase
     keybase-gui
@@ -13,12 +12,12 @@
 
     mullvad-vpn
 
-    protonup 
-    # steam is set below 
+    protonup
+    # steam is set below
   ];
 
   ### gaming ###
-  
+
   # config.environment.sessionVariables = {
   #   STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
   # };
