@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{
+args@{
   config,
   pkgs,
   ...
@@ -16,6 +16,19 @@
     /home/drew/playin/nixos_files/includes/gaming.nix
 
     /home/drew/playin/nixos_files/includes/drewdate/drewdate.nix
+
+    ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // 
+      { 
+        repo_uri = "git@github.com:yeltnar/squashfs_git";  
+        rev = "e6372a2f68de217ffe61590d21ce61a596b10d33";
+        name = "sqfs_test"; 
+        mount_point = "/media/sqfs_test";
+        fsType = "squashfs";
+	      options = [
+          "nofail"
+        ];
+      }
+    ))
   ];
 
   boot.loader.systemd-boot.enable = true;

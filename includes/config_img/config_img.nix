@@ -51,8 +51,8 @@ in {
 
   system.activationScripts.config_img_activationn = {
     text = ''
-      export PATH="$PATH:${pkgs.gnupg}/bin";
-      gpg --yes --decrypt --output ${decrypted_keyfile_path} ${xxx}/${encrypted_keyfile_name}
+      export PATH="$PATH:${pkgs.gnupg}/bin:${pkgs.cryptsetup}/bin";
+      gpg --yes --decrypt --output ${decrypted_keyfile_path} ${xxx}/${encrypted_keyfile_name};
       chmod 400 ${decrypted_keyfile_path};
 
       umount ${mount_point} && cryptsetup close /dev/mapper/${decrypted_device};
