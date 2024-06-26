@@ -42,6 +42,7 @@
 
     # NOTE: this key needs to be held by root 
     installPhase = ''
+      mkdir -p $out
       mv ${encrypted_keyfile_name} $out/ ;
     '';
   };
@@ -53,6 +54,8 @@ in {
       export PATH="$PATH:${pkgs.gnupg}/bin";
       gpg --yes --decrypt --output ${decrypted_keyfile_path} ${xxx}/${encrypted_keyfile_name}
       chmod 400 ${decrypted_keyfile_path};
+
+      umount ${mount_point} && cryptsetup close /dev/mapper/${decrypted_device};
     '';
   };
 
