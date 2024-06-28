@@ -12,7 +12,7 @@ args@{
   config_img_testing = ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // 
     { 
       repo_uri = "git@github.com:yeltnar/squashfs_git"; 
-      rev = "e6372a2f68de217ffe61590d21ce61a596b10d33";
+      rev = "cc21f08a1f0378fea71dabb9c7102bb666d92be2";
       name = "sqfs_test"; 
       mount_point = "/media/sqfs_test";
       fsType = "squashfs";

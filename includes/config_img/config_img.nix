@@ -26,11 +26,11 @@
 
   cloned_repo = builtins.fetchGit fetchGitOptions;
 
-  decrypted_device = builtins.concatStringsSep "_" [
-    "${name}"
-    (builtins.replaceStrings [ "-" "\n" ] [ "" "" ](builtins.readFile /proc/sys/kernel/random/uuid) )
-  ];
-  # decrypted_device = "${name}_decrypt_mnt";
+  # decrypted_device = builtins.concatStringsSep "_" [
+  #   "${name}"
+  #   (builtins.replaceStrings [ "-" "\n" ] [ "" "" ](builtins.readFile /proc/sys/kernel/random/uuid) )
+  # ];
+  decrypted_device = "${name}_decrypt_mnt";
 
   encrypted_keyfile_name = "mykeyfile.key.enc";
   decrypted_keyfile_path = "/root/${name}.keyfile";
@@ -55,17 +55,17 @@ in {
 
   system.activationScripts.config_img_activationn = {
     text = ''
-      export PATH="$PATH:${pkgs.gnupg}/bin:${pkgs.cryptsetup}/bin:${pkgs.gawk}/bin:${pkgs.bash}/bin";
+      export PATH="$PATH:${pkgs.gnupg}/bin:${pkgs.cryptsetup}/bin:${pkgs.gawk}/bin:${pkgs.bash}/bin:${pkgs.systemd}/bin";
       gpg --yes --decrypt --output ${decrypted_keyfile_path} ${xxx}/${encrypted_keyfile_name};
       chmod 400 ${decrypted_keyfile_path};
 
       # we use ":" because it forces the status code to be 0... this is likely not needed 
-      ${pkgs.bash}/bin/bash -c "umount ${mount_point}; : ;"; 
 
       # does it work without this?
       # cryptsetup close /dev/mapper/${name}* > /tmp/close.log 2>&1
-      ls /dev/mapper | awk "/sqfs_test/{print \"cryptsetup close \"\$0}" | bash
 
+      # stop the cryptsetup service for this device, so it will be remounted 
+      systemctl stop systemd-cryptsetup@${decrypted_device}.service 
     '';
   };
 
