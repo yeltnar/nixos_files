@@ -74,7 +74,7 @@ in {
   # second arg is the path of the disk (image) 
   # must manually crate /root/mykeyfile.key, which is the decryption key
   environment.etc.crypttab.text = ''
-    ${decrypted_device} ${cloned_repo}/${source_img} ${decrypted_keyfile_path} 
+    ${decrypted_device} ${cloned_repo}/${source_img} ${decrypted_keyfile_path} nofail 
   '';
 
   fileSystems.${mount_point} = {
