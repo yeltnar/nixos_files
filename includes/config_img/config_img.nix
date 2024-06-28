@@ -53,18 +53,19 @@
 
 in {
 
-  system.activationScripts.config_img_activationn = {
+  system.activationScripts.config_img_setup = {
     text = ''
-      export PATH="$PATH:${pkgs.gnupg}/bin:${pkgs.cryptsetup}/bin:${pkgs.gawk}/bin:${pkgs.bash}/bin:${pkgs.systemd}/bin";
+      export PATH="$PATH:${pkgs.gnupg}/bin";
       gpg --yes --decrypt --output ${decrypted_keyfile_path} ${xxx}/${encrypted_keyfile_name};
       chmod 400 ${decrypted_keyfile_path};
+    '';
+  };
 
-      # we use ":" because it forces the status code to be 0... this is likely not needed 
+  system.activationScripts.config_img_deactivation = {
+    text = ''      
+      export PATH="$PATH:${pkgs.systemd}/bin";
 
-      # does it work without this?
-      # cryptsetup close /dev/mapper/${name}* > /tmp/close.log 2>&1
-
-      # stop the cryptsetup service for this device, so it will be remounted 
+      # TODO make this conditional, if the service exsists
       systemctl stop systemd-cryptsetup@${decrypted_device}.service 
     '';
   };
