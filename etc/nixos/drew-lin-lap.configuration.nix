@@ -17,18 +17,18 @@ args@{
 
     /home/drew/playin/nixos_files/includes/drewdate/drewdate.nix
 
-    ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // 
-      { 
-        repo_uri = "git@github.com:yeltnar/squashfs_git";  
-        rev = "2b7bbadd18c10de05946781f7dd5f312dd14f70c";
-        name = "sqfs_test"; 
-        mount_point = "/media/sqfs_test";
-        fsType = "squashfs";
-	      options = [
-          "nofail"
-        ];
-      }
-    ))
+    # ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // 
+    #   { 
+    #     repo_uri = "git@github.com:yeltnar/squashfs_git";  
+    #     rev = "2b7bbadd18c10de05946781f7dd5f312dd14f70c";
+    #     name = "sqfs_test"; 
+    #     mount_point = "/media/sqfs_test";
+    #     fsType = "squashfs";
+	#       options = [
+        #   "nofail"
+        # ];
+      # }
+    # ))
   ];
 
   boot.loader.systemd-boot.enable = true;
