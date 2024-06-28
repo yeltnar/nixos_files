@@ -25,8 +25,11 @@
 
   cloned_repo = builtins.fetchGit fetchGitOptions;
 
-  # decrypted_device = builtins.replaceStrings [ "-" "\n" ] [ "" "" ](builtins.readFile /proc/sys/kernel/random/uuid); 
-  decrypted_device = "${name}_decrypt_mnt";
+  decrypted_device = builtins.concatStringsSep "_" [
+    "${name}"
+    (builtins.replaceStrings [ "-" "\n" ] [ "" "" ](builtins.readFile /proc/sys/kernel/random/uuid) )
+  ];
+  # decrypted_device = "${name}_decrypt_mnt";
 
   encrypted_keyfile_name = "mykeyfile.key.enc";
   decrypted_keyfile_path = "/root/${name}.keyfile";
@@ -49,15 +52,20 @@
 
 in {
 
-  system.activationScripts.config_img_activationn = {
-    text = ''
-      export PATH="$PATH:${pkgs.gnupg}/bin:${pkgs.cryptsetup}/bin";
-      gpg --yes --decrypt --output ${decrypted_keyfile_path} ${xxx}/${encrypted_keyfile_name};
-      chmod 400 ${decrypted_keyfile_path};
+  # system.activationScripts.config_img_activationn = {
+  #   text = ''
+  #     # export PATH="$PATH:${pkgs.gnupg}/bin:${pkgs.cryptsetup}/bin:${pkgs.gawk}/bin:${pkgs.bash}/bin";
+  #     # gpg --yes --decrypt --output ${decrypted_keyfile_path} ${xxx}/${encrypted_keyfile_name};
+  #     # chmod 400 ${decrypted_keyfile_path};
 
-      umount ${mount_point} && cryptsetup close /dev/mapper/${decrypted_device};
-    '';
-  };
+  #     # we use ":" because it forces the status code to be 0... this is likely not needed 
+  #     # ${pkgs.bash}/bin/bash -c "umount ${mount_point}; : ;"; 
+
+  #     # does it work without this?
+  #     # cryptsetup close /dev/mapper/${name}* > /tmp/close.log 2>&1
+
+  #   '';
+  # };
 
   # https://nixos.wiki/wiki/Full_Disk_Encryption#Option_2:_Unlock_after_boot_using_crypttab_and_a_keyfile
   # first arg is the decrypted mount name
@@ -72,4 +80,8 @@ in {
     fsType = fsType;
     options = options; 
   };
+
+  environment.systemPackages = [
+    xxx
+  ];
 }
