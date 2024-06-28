@@ -8,6 +8,20 @@ args@{
 }: let 
   # example of defining function, with optional param with fallback value 
   getName = { name ? "nixos" }: name;
+
+  config_img_testing = ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // 
+    { 
+      repo_uri = "git@github.com:yeltnar/squashfs_git"; 
+      rev = "e6372a2f68de217ffe61590d21ce61a596b10d33";
+      name = "sqfs_test"; 
+      mount_point = "/media/sqfs_test";
+      fsType = "squashfs";
+      options = [
+        "nofail"
+      ];
+    }
+  ));
+
 in {
   imports = [
     # Include the results of the hardware scan.
@@ -17,19 +31,10 @@ in {
     /home/drew/playin/nixos_files/includes/nebula.nix
 
     /home/drew/playin/nixos_files/includes/ntfy_report_ip_timer.nix
-
-    ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // 
-      { 
-        repo_uri = "git@github.com:yeltnar/squashfs_git"; 
-        rev = "e6372a2f68de217ffe61590d21ce61a596b10d33";
-        name = "sqfs_test"; 
-        mount_point = "/media/sqfs_test";
-        fsType = "squashfs";
-	options = [
-          "nofail"
-        ];
-      }
-    ))
+    
+    # conditionally import config_img_testing
+    config_img_testing
+  
     # ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // { repo_uri = "https://github.com/yeltnar/tampermonkey_scripts"; name = "date_tampermonkey"; } ) )
   ];
 
