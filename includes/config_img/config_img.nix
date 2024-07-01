@@ -66,14 +66,6 @@ in {
     '';
   };
 
-  system.activationScripts.config_img_deactivation = {
-    text = ''      
-      export PATH="$PATH:${pkgs.systemd}/bin";
-
-      # TODO make this conditional, if the service exsists
-      systemctl stop systemd-cryptsetup@${decrypted_device}.service 
-    '';
-  };
 
   systemd.services."sqfs_test_decrypt_mnt_notatarget" = {
     
@@ -87,13 +79,13 @@ in {
     ];
     wantedBy = [
       "multi-user.target"
-      # "systemd-cryptsetup@${decrypted_device}.service"
-      # "media-${decrypted_device}.mount"
     ];
 
     serviceConfig = {
       ExecStart = "systemctl start systemd-cryptsetup@${decrypted_device} media-${name}.mount";
-      # ExecStop =  "systemctl stop systemd-cryptsetup@${decrypted_device} media-${name}.mount";
+      ExecStop =  "systemctl stop systemd-cryptsetup@${decrypted_device} media-${name}.mount";
+      RemainAfterExit = "yes";
+      Type = "oneshot";
     };
   };
 
