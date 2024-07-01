@@ -57,7 +57,12 @@ in {
     text = ''
       export PATH="$PATH:${pkgs.gnupg}/bin";
       gpg --yes --decrypt --output ${decrypted_keyfile_path} ${xxx}/${encrypted_keyfile_name};
-      chmod 400 ${decrypted_keyfile_path};
+      # make sure the decryption goes well 
+      if [ $? -eq 0 ]; then
+        chmod 400 ${decrypted_keyfile_path};
+      else
+        rm ${decrypted_keyfile_path};
+      fi
     '';
   };
 
