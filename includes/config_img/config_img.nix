@@ -75,6 +75,28 @@ in {
     '';
   };
 
+  systemd.services."sqfs_test_decrypt_mnt_notatarget" = {
+    
+    description = "target to restart mount";
+    
+    after = [ 
+      "sysinit-reactivation.target" 
+    ];
+    requires = [ 
+      "sysinit-reactivation.target" 
+    ];
+    wantedBy = [
+      "multi-user.target"
+      # "systemd-cryptsetup@${decrypted_device}.service"
+      # "media-${decrypted_device}.mount"
+    ];
+
+    serviceConfig = {
+      ExecStart = "systemctl start systemd-cryptsetup@${decrypted_device} media-${name}.mount";
+      # ExecStop =  "systemctl stop systemd-cryptsetup@${decrypted_device} media-${name}.mount";
+    };
+  };
+
   # https://nixos.wiki/wiki/Full_Disk_Encryption#Option_2:_Unlock_after_boot_using_crypttab_and_a_keyfile
   # first arg is the decrypted mount name
   # second arg is the path of the disk (image) 
