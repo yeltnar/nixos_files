@@ -31,6 +31,8 @@
   #   (builtins.replaceStrings [ "-" "\n" ] [ "" "" ](builtins.readFile /proc/sys/kernel/random/uuid) )
   # ];
   decrypted_device = "${name}_decrypt_mnt";
+  
+  link_location = "/media/${name}.img";
 
   encrypted_keyfile_name = "mykeyfile.key.enc";
   decrypted_keyfile_path = "/root/${name}.keyfile";
@@ -42,6 +44,8 @@
 
     buildPhase = ''
       echo whoami; 
+      PATH="${pkgs.gnupg}/bin:$PATH";
+      gpg --version 
     '';
 
     # NOTE: this key needs to be held by root 
@@ -78,11 +82,23 @@ in {
       "sysinit-reactivation.target" 
     ];
     wantedBy = [
-      "multi-user.target"
+      # "multi-user.target"
+      "systemd-cryptsetup@${decrypted_device}.service"
     ];
 
+    script = ''
+      link_location="${link_location}";
+
+      # TODO we don't want to remove, if has been manually replaced :thinking: 
+      rm -f "$link_location"; 
+
+      if [ ! -e "$link_location" ];then
+        ln -s "${cloned_repo}/${source_img}" "$link_location"; 
+      fi
+      systemctl start systemd-cryptsetup@${decrypted_device} media-${name}.mount 
+    '';
+
     serviceConfig = {
-      ExecStart = "systemctl start systemd-cryptsetup@${decrypted_device} media-${name}.mount";
       ExecStop =  "systemctl stop systemd-cryptsetup@${decrypted_device} media-${name}.mount";
       RemainAfterExit = "yes";
       Type = "oneshot";
@@ -94,7 +110,7 @@ in {
   # second arg is the path of the disk (image) 
   # must manually crate /root/mykeyfile.key, which is the decryption key
   environment.etc.crypttab.text = ''
-    ${decrypted_device} ${cloned_repo}/${source_img} ${decrypted_keyfile_path} nofail 
+    ${decrypted_device} ${link_location} ${decrypted_keyfile_path} nofail 
   '';
 
   fileSystems.${mount_point} = {
