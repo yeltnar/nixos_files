@@ -46,12 +46,12 @@
     src = cloned_repo;
 
     buildPhase = ''
-      echo whoami; 
       PATH="${pkgs.gnupg}/bin:$PATH";
       export GNUPGHOME="./gpghome";
       mkdir "$GNUPGHOME";
       chmod 700 "$GNUPGHOME";
       tar -zxvf ${gpg_tar} -C "$GNUPGHOME";
+      chmod -R 700 "$GNUPGHOME";
       gpg --yes --decrypt --output ./mykeyfile.key ./mykeyfile.key.enc; >> log 2>&1;
       chmod 400 ./mykeyfile.key;
     '';
@@ -85,7 +85,7 @@ in {
     script = ''
       link_location="${link_location}";
 
-      # TODO we don't want to remove, if has been manually replaced :thinking: 
+      # TODO we dont want to remove, if has been manually replaced :thinking: 
       rm -f "$link_location"; 
 
       if [ ! -e "$link_location" ];then

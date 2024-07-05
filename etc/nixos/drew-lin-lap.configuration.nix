@@ -10,7 +10,7 @@ args@{
   config_img_testing = ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // 
         { 
           repo_uri = "git@github.com:yeltnar/squashfs_git";  
-          rev = "4f1e35622b3ff073a9186c35f3b9cfd0d633225b";
+          rev = "3a240ad4b009327db8627ab51382b637791ce0bd";
           name = "sqfs_test"; 
           mount_point = "/media/sqfs_test";
           fsType = "squashfs";
@@ -34,7 +34,7 @@ in {
 
 
     # toggle to mount encrypted mount 
-    # config_img_testing 
+    config_img_testing 
     
   ];
 
