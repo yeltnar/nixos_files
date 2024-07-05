@@ -14,6 +14,9 @@
   ... 
 }: let
 
+  # tar of the GNUPGHOME directory that is set up to decrypt the encrypted squashfs
+  gpg_tar = builtins.fetchurl "file:///root/gpg_dir.tar.gz";
+
   fetchGitOptions = {
     url = repo_uri;
     shallow = shallow;
@@ -45,30 +48,23 @@
     buildPhase = ''
       echo whoami; 
       PATH="${pkgs.gnupg}/bin:$PATH";
-      gpg --version 
+      export GNUPGHOME="./gpghome";
+      mkdir "$GNUPGHOME";
+      chmod 700 "$GNUPGHOME";
+      tar -zxvf ${gpg_tar} -C "$GNUPGHOME";
+      gpg --yes --decrypt --output ./mykeyfile.key ./mykeyfile.key.enc; >> log 2>&1;
+      chmod 400 ./mykeyfile.key;
     '';
 
     # NOTE: this key needs to be held by root 
     installPhase = ''
       mkdir -p $out
       mv ${encrypted_keyfile_name} $out/ ;
+      mv ./mykeyfile.key $out/ ;
     '';
   };
 
 in {
-
-  system.activationScripts.config_img_setup = {
-    text = ''
-      export PATH="$PATH:${pkgs.gnupg}/bin";
-      gpg --yes --decrypt --output ${decrypted_keyfile_path} ${xxx}/${encrypted_keyfile_name};
-      # make sure the decryption goes well 
-      if [ $? -eq 0 ]; then
-        chmod 400 ${decrypted_keyfile_path};
-      else
-        rm ${decrypted_keyfile_path};
-      fi
-    '';
-  };
 
 
   systemd.services."sqfs_test_decrypt_mnt_notatarget" = {
@@ -110,7 +106,7 @@ in {
   # second arg is the path of the disk (image) 
   # must manually crate /root/mykeyfile.key, which is the decryption key
   environment.etc.crypttab.text = ''
-    ${decrypted_device} ${link_location} ${decrypted_keyfile_path} nofail 
+    ${decrypted_device} ${link_location}  ${xxx}/mykeyfile.key nofail 
   '';
 
   fileSystems.${mount_point} = {
