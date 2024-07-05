@@ -40,7 +40,7 @@
   encrypted_keyfile_name = "mykeyfile.key.enc";
   decrypted_keyfile_path = "/root/${name}.keyfile";
 
-  xxx = pkgs.stdenv.mkDerivation {
+  decrypt_keyfile_derv = pkgs.stdenv.mkDerivation {
 
     name = "${decrypted_device}_derivation";
     src = cloned_repo;
@@ -106,7 +106,7 @@ in {
   # second arg is the path of the disk (image) 
   # must manually crate /root/mykeyfile.key, which is the decryption key
   environment.etc.crypttab.text = ''
-    ${decrypted_device} ${link_location}  ${xxx}/mykeyfile.key nofail 
+    ${decrypted_device} ${link_location}  ${decrypt_keyfile_derv}/mykeyfile.key nofail 
   '';
 
   fileSystems.${mount_point} = {
@@ -116,6 +116,6 @@ in {
   };
 
   environment.systemPackages = [
-    xxx
+    decrypt_keyfile_derv
   ];
 }
