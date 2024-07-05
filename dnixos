@@ -10,4 +10,4 @@ set -x;
 sudo nixos-rebuild "$rebuild_operation"; 
 set +x;
 
-echo -e "\nstart: "; cat /tmp/.d.rebuild.date; printf "finish: "; date
+printf "\nstart: "; cat /tmp/.d.rebuild.date; printf "finish: "; date
