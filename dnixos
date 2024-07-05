@@ -1,0 +1,13 @@
+if [ -z $1 ]; then
+  rebuild_operation="test";
+else
+  rebuild_operation="$1";
+fi
+
+date > /tmp/.d.rebuild.date; 
+
+set -x;
+sudo nixos-rebuild "$rebuild_operation"; 
+set +x;
+
+echo -e "\nstart: "; cat /tmp/.d.rebuild.date; printf "finish: "; date
