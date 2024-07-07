@@ -40,20 +40,25 @@
   encrypted_keyfile_name = "mykeyfile.key.enc";
   decrypted_keyfile_path = "/root/${name}.keyfile";
 
+  gpgDecriptScript = pkgs.writeShellScriptBin "gpgDecriptScript" ''
+    PATH="${pkgs.gnupg}/bin:$PATH";
+    export GNUPGHOME="./gpghome";
+    mkdir "$GNUPGHOME";
+    chmod 700 "$GNUPGHOME";
+    tar -zxvf ${gpg_tar} -C "$GNUPGHOME";
+    chmod -R 700 "$GNUPGHOME";
+    gpg --yes --decrypt --output ./mykeyfile.key ./mykeyfile.key.enc; >> log 2>&1;
+    chmod 400 ./mykeyfile.key;
+  '';
+
   decrypt_keyfile_derv = pkgs.stdenv.mkDerivation {
 
     name = "${decrypted_device}_derivation";
     src = cloned_repo;
 
     buildPhase = ''
-      PATH="${pkgs.gnupg}/bin:$PATH";
-      export GNUPGHOME="./gpghome";
-      mkdir "$GNUPGHOME";
-      chmod 700 "$GNUPGHOME";
-      tar -zxvf ${gpg_tar} -C "$GNUPGHOME";
-      chmod -R 700 "$GNUPGHOME";
-      gpg --yes --decrypt --output ./mykeyfile.key ./mykeyfile.key.enc; >> log 2>&1;
-      chmod 400 ./mykeyfile.key;
+      PATH="$PATH:${gpgDecriptScript}/bin";
+      gpgDecriptScript
     '';
 
     # NOTE: this key needs to be held by root 
@@ -117,5 +122,6 @@ in {
 
   environment.systemPackages = [
     decrypt_keyfile_derv
+    gpgDecriptScript
   ];
 }
