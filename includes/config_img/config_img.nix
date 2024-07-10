@@ -60,7 +60,15 @@
       gpgSetupCustomHome
 
       # TODO check that the signature is good; if not, explode
-      gpg --yes --decrypt --output ./mykeyfile.key ./mykeyfile.key.enc; >> log 2>&1;
+      gpg --yes --decrypt --output ./mykeyfile.key ./mykeyfile.key.enc;
+
+      # want it to break if the status check failes
+      status=$?;
+      echo "status is $status";
+      if [ 1 -eq $status ]; then
+        rm ./mykeyfile.key        
+      fi
+
       chmod 400 ./mykeyfile.key;
     '';
 
