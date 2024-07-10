@@ -40,15 +40,11 @@
   encrypted_keyfile_name = "mykeyfile.key.enc";
   decrypted_keyfile_path = "/root/${name}.keyfile";
 
-  gpgDecriptScript = pkgs.writeShellScriptBin "gpgDecriptScript" ''
-    PATH="${pkgs.gnupg}/bin:$PATH";
-    export GNUPGHOME="./gpghome";
-    mkdir "$GNUPGHOME";
+  gpgSetupCustomHome = pkgs.writeShellScriptBin "gpgSetupCustomHome" ''
+    mkdir -p "$GNUPGHOME";
     chmod 700 "$GNUPGHOME";
     tar -zxvf ${gpg_tar} -C "$GNUPGHOME";
     chmod -R 700 "$GNUPGHOME";
-    gpg --yes --decrypt --output ./mykeyfile.key ./mykeyfile.key.enc; >> log 2>&1;
-    chmod 400 ./mykeyfile.key;
   '';
 
   decrypt_keyfile_derv = pkgs.stdenv.mkDerivation {
@@ -57,8 +53,15 @@
     src = cloned_repo;
 
     buildPhase = ''
-      PATH="$PATH:${gpgDecriptScript}/bin";
-      gpgDecriptScript
+      PATH="$PATH:${gpgSetupCustomHome}/bin:${pkgs.gnupg}/bin:$PATH";
+
+      export GNUPGHOME="./gpghome";
+
+      gpgSetupCustomHome
+
+      # TODO check that the signature is good; if not, explode
+      gpg --yes --decrypt --output ./mykeyfile.key ./mykeyfile.key.enc; >> log 2>&1;
+      chmod 400 ./mykeyfile.key;
     '';
 
     # NOTE: this key needs to be held by root 
@@ -122,6 +125,6 @@ in {
 
   environment.systemPackages = [
     decrypt_keyfile_derv
-    gpgDecriptScript
+    gpgSetupCustomHome
   ];
 }
