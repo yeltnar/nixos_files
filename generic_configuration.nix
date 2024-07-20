@@ -142,6 +142,7 @@
     podman-compose
     # docker-compose
 
+    tree
     duf
   ];
 
