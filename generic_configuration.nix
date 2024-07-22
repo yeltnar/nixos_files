@@ -141,7 +141,8 @@
     gnupg
     cryptsetup
     tree
-    clang
+    clang # needed to compile c # used by nvim 
+    ripgrep # search files in dir # used by telescope nvim plugin
     podman-compose
     # docker-compose
 
