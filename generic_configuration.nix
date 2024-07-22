@@ -140,6 +140,8 @@
     htop
     gnupg
     cryptsetup
+    tree
+    clang
     podman-compose
     # docker-compose
 
