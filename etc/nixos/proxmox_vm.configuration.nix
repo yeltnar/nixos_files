@@ -1,13 +1,27 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{
+args@{
   config,
   pkgs,
   ...
 }: let 
   # example of defining function, with optional param with fallback value 
   getName = { name ? "nixos" }: name;
+
+  config_img_testing = ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // 
+    { 
+      repo_uri = "git@github.com:yeltnar/squashfs_git"; 
+      rev = "c3121a9ffc86b82f47dd5ac3bfd0f0584319804c";
+      name = "sqfs_test"; 
+      mount_point = "/media/sqfs_test";
+      fsType = "squashfs";
+      options = [
+        "nofail"
+      ];
+    }
+  ));
+
 in {
   imports = [
     # Include the results of the hardware scan.
