@@ -5,13 +5,12 @@
 }:
 let
   token = "";
-  exampleServerAddr = "https://<ip of first node>:6443";
-  serverAddr = "https://<ip of first node>:6443";
+  serverAddr = ""; # "https://<ip of first node>:6443";
+  role = "agent"; # defaults to agent # one of "server" or "agent" for worker only nodes
 
   services_k3s_options = { 
 
     enable = true;
-    role = "server"; # Or "agent" for worker only nodes
 
     # required for multi node cluster
     token = token;
@@ -23,7 +22,8 @@ let
 
   }
   # merge keys, if provided 
-  // (if serverAddr != exampleServerAddr then { serverAddr = serverAddr; } else {}) 
+  // (if serverAddr != "" then { serverAddr = serverAddr; } else {}) 
+  // (if role != "" then { role = role; } else { role = "agent" }) 
   ;
 
 in
