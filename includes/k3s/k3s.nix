@@ -12,11 +12,22 @@
   networking.firewall.allowedUDPPorts = [
     # 8472 # k3s, flannel: required if using multi-node for inter-node networking
   ];
-  services.k3s.enable = true;
-  services.k3s.role = "server";
-  services.k3s.extraFlags = toString [
-    # "--kubelet-arg=v=4" # add args to k3s
-  ];
+
+  services.k3s = { 
+
+    enable = true;
+    role = "server"; # Or "agent" for worker only nodes
+
+    # required for multi node cluster
+    # token = "<randomized common secret>";  
+    # serverAddr = "https://<ip of first node>:6443";
+
+    extraFlags = toString [
+      # "--kubelet-arg=v=4" # add args to k3s
+    ];
+
+  };
+
   # END K3S
 }
 
