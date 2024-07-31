@@ -18,6 +18,7 @@ let
     extraFlags = toString [
       # "--kubelet-arg=v=4" # add args to k3s
       # "--with-node-id nixos-clean-2" # this allows you to change node id 
+      # "--node-name nixos-clean-2" # this allows you to change node id 
     ];
 
   }
