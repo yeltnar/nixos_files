@@ -14,6 +14,7 @@
 }:
 let
   # token can be found on the server (master) at `/var/lib/rancher/k3s/server/node-token` 
+  # required for multi node cluster
   token = "";
   # TODO change token to tokenFile
 
@@ -23,9 +24,6 @@ let
   services_k3s_options = { 
 
     enable = true;
-
-    # required for multi node cluster
-    token = token;
 
     extraFlags = toString [
       # "--kubelet-arg=v=4" # add args to k3s
