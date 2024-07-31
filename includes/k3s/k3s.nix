@@ -1,3 +1,6 @@
+# considering linking `/etc/rancher/k3s/k3s.yaml` -> `/home/drew/.kube/config`
+# (and `chmod +x ...`)
+
 {
   config,
   pkgs, 
@@ -24,7 +27,8 @@ let
   }
   # merge keys, if provided 
   // (if serverAddr != "" then { serverAddr = serverAddr; } else {}) 
-  // (if role != "" then { role = role; } else { role = "agent" }) 
+  // (if role != "" then { role = role; } else { role = "agent"; }) 
+  // (if token != "" then { token = token; } else {}) 
   ;
 
 in
