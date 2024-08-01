@@ -34,6 +34,7 @@ in {
 
     /home/drew/playin/nixos_files/includes/derivation_test/derivation_test.nix
     # /home/drew/playin/nixos_files/includes/nextcloud/nextcloud.nix
+    # /home/drew/playin/nixos_files/includes/k3s/k3s.nix
   ];
 
   # Enable the X11 windowing system.
