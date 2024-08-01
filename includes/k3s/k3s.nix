@@ -20,6 +20,7 @@ let
 
   serverAddr = ""; # "https://<ip of first node>:6443";
   role = "agent"; # defaults to agent # one of "server" or "agent" for worker only nodes
+  clusterInit = ""; # set to true when using multiple server (master) nodes 
 
   services_k3s_options = { 
 
@@ -36,6 +37,7 @@ let
   // (if serverAddr != "" then { serverAddr = serverAddr; } else {}) 
   // (if role != "" then { role = role; } else { role = "agent"; }) 
   // (if token != "" then { token = token; } else {}) 
+  // (if clusterInit != "" then { clusterInit = clusterInit; } else {}) 
   ;
 
 in
