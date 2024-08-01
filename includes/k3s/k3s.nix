@@ -13,7 +13,11 @@
   ...
 }:
 let
-  # token can be found on the server (master) at `/var/lib/rancher/k3s/server/node-token` 
+  # token can be found on the server (master) at:
+  # to generate, use `k3s token create --ttl 0` # ttl 0 means it doesn't expire 
+  # /var/lib/rancher/k3s/server/token
+  # /var/lib/rancher/k3s/server/node-token ( server token )
+  # /var/lib/rancher/k3s/server/agent-token ( agent token )
   # more token info: https://docs.k3s.io/cli/token
   # required for multi node cluster
   token = "";
