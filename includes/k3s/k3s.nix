@@ -20,6 +20,9 @@
   ...
 }:
 let
+  
+  external_dir = "/home/drew/k3s";
+
   # token can be found on the server (master) at:
   # to generate, use `k3s token create --ttl 0` # ttl 0 means it doesn't expire 
   # /var/lib/rancher/k3s/server/token
@@ -27,11 +30,11 @@ let
   # /var/lib/rancher/k3s/server/agent-token ( agent token )
   # more token info: https://docs.k3s.io/cli/token
   # required for multi node cluster
-  token = "";
+  token = builtins.readFile "${external_dir}/token";
   # TODO change token to tokenFile
 
-  serverAddr = ""; # "https://<ip of first node>:6443";
   role = "agent"; # defaults to agent # one of "server" or "agent" for worker only nodes
+  serverAddr = builtins.readFile "${external_dir}/serverAddr"; # "https://<ip of first node>:6443";
   clusterInit = ""; # set to true when using multiple server (master) nodes 
 
   services_k3s_options = { 
