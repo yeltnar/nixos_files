@@ -30,11 +30,11 @@ let
   # /var/lib/rancher/k3s/server/agent-token ( agent token )
   # more token info: https://docs.k3s.io/cli/token
   # required for multi node cluster
-  token = builtins.readFile "${external_dir}/token";
+  token = builtins.readFile "${external_dir}/token"; # this file should should not have a trailing `\n`
   # TODO change token to tokenFile
 
   role = "agent"; # defaults to agent # one of "server" or "agent" for worker only nodes
-  serverAddr = builtins.readFile "${external_dir}/serverAddr"; # "https://<ip of first node>:6443";
+  serverAddr = builtins.readFile "${external_dir}/serverAddr"; # this file should should not have a trailing `\n` # "https://<ip of first node>:6443";
   clusterInit = ""; # set to true when using multiple server (master) nodes 
 
   services_k3s_options = { 
