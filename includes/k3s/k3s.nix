@@ -14,6 +14,7 @@
 }:
 let
   # token can be found on the server (master) at `/var/lib/rancher/k3s/server/node-token` 
+  # more token info: https://docs.k3s.io/cli/token
   # required for multi node cluster
   token = "";
   # TODO change token to tokenFile
