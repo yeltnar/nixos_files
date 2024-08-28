@@ -119,6 +119,7 @@
   environment.systemPackages = with pkgs; [
 
     ( import ./includes/open.nix { inherit pkgs; } )
+    ( import ./includes/force_charge.nix { inherit pkgs; } )
     
     home-manager
     dconf2nix
