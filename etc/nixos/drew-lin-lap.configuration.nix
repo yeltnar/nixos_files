@@ -72,6 +72,9 @@
   services.logind.powerKey = "lock";
 
   environment.systemPackages = with pkgs; [
+    
+    ( import ./includes/force_charge.nix { inherit pkgs; } )
+
     gparted
 
     keybase
