@@ -8,6 +8,8 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      /home/drew/playin/nixos_files/generic_configuration.nix
+      /home/drew/playin/nixos_files/includes/gaming.nix
     ];
 
   # Bootloader.
@@ -107,6 +109,9 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable; 
+  services.xserver.videoDrivers = [ "nvidia" ]; 
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

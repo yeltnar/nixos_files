@@ -4,15 +4,8 @@
   ...
 }: {
   environment.systemPackages = with pkgs; [
-    keybase
-    keybase-gui
-
-    slack
-    element-desktop
-
-    mullvad-vpn
-
     protonup
+    mangohud
     # steam is set below
   ];
 
@@ -22,13 +15,19 @@
   #   STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
   # };
 
+  # hardware.graphics = {
   hardware.opengl = {
     enable = true;
+    # enable32Bit = true;
     driSupport = true;
     driSupport32Bit = true;
   };
+
   programs.steam.enable = true;
   programs.steam.gamescopeSession.enable = true;
+
+  # TODO move this to a nvidia file? 
+  hardware.nvidia.modesetting.enable = true;
 
   programs.gamemode.enable = true;
 
