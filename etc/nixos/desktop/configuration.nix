@@ -94,6 +94,7 @@
     description = "drew";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
+      discord
     #  thunderbird
     ];
   };
