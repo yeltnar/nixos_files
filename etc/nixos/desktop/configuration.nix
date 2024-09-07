@@ -20,13 +20,13 @@
   networking.hostName = "drew-lin-desktop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-    settings.PasswordAuthentication = false;
-    settings.KbdInteractiveAuthentication = false;
-    settings.PermitRootLogin = "no";
-  };
+  # Enable the OpenSSH daemon... this is done in generic 
+  # services.openssh = {
+    # enable = true;
+    # settings.PasswordAuthentication = false;
+    # settings.KbdInteractiveAuthentication = false;
+    # settings.PermitRootLogin = "no";
+  # };
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -95,12 +95,6 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
     #  thunderbird
-    ];
-    
-    openssh.authorizedKeys.keys = [
-      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC9rjHOtb0r+kqUQA/AtZlTN9LNo/l8fDFjfjoHpF0pzx4i8N4S0765o1FEU2wbrGGhxO9iaibsWNv6ZnCtrRuqKHzV+laoDInbpOtB4Zj3qV3JRp6ANM1ct+YOQ1DDrMSFCUdTySxE3mztJ7OlCRBFMVDrQCNLFYY+ujTxEL2FzYGAUblvVHA+A4U9GTYildULTb/O9VMCVKSYc4InaBtKdlkIngIJr+ZbfWucqNP1G+OgY7wGe4/XTDqkEswgttyEpkcbXhQXZCbb7MzyqP3wwjCHLCfgkh1GDJ1R9Bzuu2BrGcTq30dRXgPTMrmhIGwScqmfIK23Y+Hxy827TQoxlccfT8i1tfWAG1ISkDlluiTM4vJdZOI9aKfkC83fCp/gfJeWwMsYIJkxQcT9IJN136ZVY/BbyymxEQPMro2jD7jvFVnkR+us7Mv0qDMQBFTaFSqEYqGaNXGf7y1JHGL2hKtfS0g7RGWwPmZwKFbTtYNRvNwROyDUoXqiolbtJZs="
-      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCroPILe/Pm2C8OWv+CF7MsBI7l22sCA4TgQ+IfCvz1cPrco4rC9GY+WbPdzzTrheCgnAMZ8JES8lASCV6YBW9jqVUvnRZJ6P+ncmAVT/p2X0GOvBFBXrzeDzM0T6qZuLX5yYPqCEs1ws/myR8YMJmKa27TiT7KF0shrnYdDmX5z9vGZxBBmVP7iCt2dHw3R7ATjL1FJzHPMv60dBhCinaRXe/h2u8xvPi1meFdxmI5cQG8Z/9kK0CE6ONSNsEddQLjpBsfS3/uDA97YVRCtSNmMz3nNfZSEHo1Xrei4gHsr6/RNIxvLC8d+pqOBQEYwiIDwY3Th6HGubnOHoTW18fgHHL1tNE2dOBPkA/J+oyM4UsG3GKyr1JkVql7ZvfcY01XAm1gYD6sRJcDOump3GJmXhlY1xkD/2GFQWZaTJuWCouZ0iq7vOKcab18aTvVwSbUv0p9dVfvgsUo/Dl+bkExyhGDuxSY1GTKInydILw90X9OS2NcHbEo7GG52m9Zeu9TikBY76mYYTHEVHze+YJihecxTcEcK1TF3jFDoWGRD6XsPd/TvhORPHycqgwM7g+YBVUtWZSevCJ4i2l+qKqqpHfVoF41FQctafI2hRPQQPmDsDyAB9uC/Nm49JFExq0BVXdtI7WZ4jmvyanhkWPbENNe6pnEdED2Eq4ZSP0JdQ=="
-      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDBeZvZp1Yua3P+ifLv/a43uwZqY/YnXhc8AbSUplxQGlN+DWykOkSTBDME77ETkqryEwSW/enFdzQbd+SszNiozrPNnfDK3xnPLClg1uPBJctCj0qqzi9xsI0daVBBREWXU4biVCfqtYN1RherHpDnavvVZ2K2WZO5LR0MapCbQdQVNVMVbZuRvaX36Kq3WRodFAVRWPSYLGWdEuILwNJVAkgayDh3l/m48DrbByKDzxD3/yeejd0PVqK/2WIQ4rtJDiDy/vJpxD/teFp8ikA6tTP2BU0fCgkLP1sxZ1MC3zJCeJto8g4rqm7o2lyl1FzhOROJuT4SqlyQhH0T311XdW9aeP0FHSEBBiwABjM7ZEzH8HgLA2r+7f8PXoeqzn3mbxJG+ufwQgbyQttIiXxCgGIIfAlDjiiCCTCy0dj/YQs00zqHHux7QLD3dQgHQ7BjdAOBlqxRSJQ4eCr6f8QpJAlUi2qDEdofW0nBSCUSsIgiwj2DIKU/o1oWvFfrOSvoKX1KHCzGUgikcf1+zddJXR3XEO/0qVRXUVtxtHdH/7rRQwzcX5/2fXf8PJ5Jm6L62QuUkawLHt9SxmmyokedyAo6bQ5rz39an1KOWnKuoefV13qUeDzrCV0q7Prqay/uyfv5F0d2L5blFKqH+aGsc7U2FRcv4J4EdwJrWV/5XQ=="
     ];
   };
 
