@@ -1,8 +1,12 @@
 # simple.nix
 with (import <nixpkgs> {});
+let
+  unstable = import
+    (builtins.fetchTarball https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable) {};
+in
 mkShell {
   buildInputs = [
-    google-chrome
+    unstable.google-chrome
   ];
   shellHook = ''
   	# TODO download this deb in distrobox, and install 
