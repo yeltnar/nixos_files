@@ -10,6 +10,8 @@
       ./hardware-configuration.nix
       /home/drew/playin/nixos_files/generic_configuration.nix
       /home/drew/playin/nixos_files/includes/gaming.nix
+
+      /home/drew/playin/nixos_files/includes/rclone_mounts/rclone_mini.desktop.nix
     ];
 
   # Bootloader.
