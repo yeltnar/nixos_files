@@ -158,6 +158,7 @@
     ripgrep # search files in dir # used by telescope nvim plugin
     podman-compose
     # docker-compose
+    rclone
 
     tree
     duf
