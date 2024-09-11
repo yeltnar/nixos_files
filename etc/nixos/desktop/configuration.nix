@@ -7,7 +7,7 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+      /etc/nixos/hardware-configuration.nix
       /home/drew/playin/nixos_files/generic_configuration.nix
       /home/drew/playin/nixos_files/includes/gaming.nix
 
@@ -16,8 +16,15 @@
 
   # Bootloader.
   boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sdd";
+  boot.loader.grub.device = "/dev/sdc";
   boot.loader.grub.useOSProber = true;
+
+  fileSystems = {
+    "/".options = [ "compress=zstd" ];
+    "/home".options = [ "compress=zstd" ];
+    "/nix".options = [ "compress=zstd" "noatime" ];
+    # "/swap".options = [ "noatime" ];
+  };
 
   networking.hostName = "drew-lin-desktop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
