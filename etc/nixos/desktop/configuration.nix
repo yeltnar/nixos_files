@@ -124,6 +124,14 @@
   #  wget
     gparted
     btrfs-progs
+    mullvad-vpn
+
+    slack
+    element-desktop
+
+    gimp-with-plugins
+    betaflight-configurator
+    obs-studio
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
