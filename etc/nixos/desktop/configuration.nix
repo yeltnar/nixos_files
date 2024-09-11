@@ -19,11 +19,14 @@
   boot.loader.grub.device = "/dev/sdc";
   boot.loader.grub.useOSProber = true;
 
+  # this should be in the hardware-config.nix file 
+  # swapDevices = [ { device = "/swap/swapfile"; } ];
+
   fileSystems = {
     "/".options = [ "compress=zstd" ];
     "/home".options = [ "compress=zstd" ];
     "/nix".options = [ "compress=zstd" "noatime" ];
-    # "/swap".options = [ "noatime" ];
+    "/swap".options = [ "noatime" ];
   };
 
   networking.hostName = "drew-lin-desktop"; # Define your hostname.
