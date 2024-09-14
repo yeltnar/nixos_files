@@ -73,7 +73,7 @@
 
   environment.systemPackages = with pkgs; [
     
-    ( import ./includes/force_charge.nix { inherit pkgs; } )
+    ( import /home/drew/playin/nixos_files/includes/force_charge.nix { inherit pkgs; } )
 
     gparted
 
