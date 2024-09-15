@@ -77,6 +77,7 @@
     layout = "us";
     variant = "";
   };
+  services.xserver.excludePackages = [pkgs.xterm];
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -136,6 +137,19 @@
     betaflight-configurator
     obs-studio
   ];
+
+  environment.gnome.excludePackages =
+    (with pkgs; [
+      gnome-tour
+      xterm
+    ])
+    ++ (with pkgs.gnome; [
+      epiphany
+      totem
+      geary
+      seahorse
+      gnome-music
+    ]);
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
