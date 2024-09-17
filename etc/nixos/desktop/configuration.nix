@@ -26,6 +26,7 @@
     "/".options = [ "compress=zstd" ];
     "/home".options = [ "compress=zstd" ];
     "/home/drew/.local/share/Steam".options = [ "compress=zstd" ];
+    "/home/drew/.cache".options = [ "compress=zstd" ];
     "/nix".options = [ "compress=zstd" "noatime" ];
     "/swap".options = [ "noatime" ];
   };

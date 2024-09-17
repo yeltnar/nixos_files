@@ -49,6 +49,12 @@
       options = [ "subvol=Steam" ];
     };
 
+  fileSystems."/home/drew/.cache" =
+    { device = "/dev/disk/by-uuid/8d6b3957-edb0-4ff5-8334-4e0c14e7252f";
+      fsType = "btrfs";
+      options = [ "subvol=home.cache" ];
+    };
+
   swapDevices = [ { device = "/swap/swapfile"; } ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
