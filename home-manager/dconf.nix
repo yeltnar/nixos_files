@@ -17,6 +17,7 @@ with lib.hm.gvariant; {
 
     "org/gnome/desktop/notifications" = {
       application-children = ["firefox" "org-gnome-console"];
+      show-in-lock-screen = false; 
     };
 
     "org/gnome/desktop/notifications/application/firefox" = {
@@ -25,6 +26,15 @@ with lib.hm.gvariant; {
 
     "org/gnome/desktop/notifications/application/org-gnome-console" = {
       application-id = "org.gnome.Console.desktop";
+    };
+
+    "org/gnome/desktop/screensaver" = {
+      lock-delay = mkUint32 120;
+      lock-enable = true;
+    };
+
+    "org/gnome/desktop/session" = {
+      idle-delay = mkUint32 600;
     };
 
     "org/gnome/mutter" = {
