@@ -36,6 +36,20 @@ in {
     # /home/drew/playin/nixos_files/includes/nextcloud/nextcloud.nix
   ];
 
+  networking.firewall.allowedTCPPorts = [ 2049 ];
+  services.nfs.server = {
+	enable = true;
+	createMountPoints = true;
+	exports = ''
+		/tmp/exports	192.168.2.180(rw,fsid=0,no_subtree_check)
+	'';
+  };
+
+  fileSystems."/tmp/nfs_mnt" = {
+    device = "192.169.2.180:/tmp/exports";
+    fsType = "nfs";
+  };
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   # disable xterm
