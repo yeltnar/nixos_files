@@ -1,45 +1,83 @@
-{ pkgs, ... }: let
-  nbdkit = pkgs.stdenv.mkDerivation {
-    name = "nbdkit";
+{
+  stdenv,
+  testers,
+  fetchurl,
+  autoreconfHook,
+  makeWrapper,
+  pkg-config,
+  bash-completion,
+  gnutls,
+  libtool,
+  curl,
+  xz,
+  zlib-ng,
+  libssh,
+  libnbd,
+  lib,
+  cdrkit,
+  e2fsprogs,
+}:
 
-    buildInputs = [
-      pkgs.libgcc 
-      pkgs.gnumake 
-      pkgs.perl
-      pkgs.autoconf
-      pkgs.automake
-      pkgs.bash
-    ];
+stdenv.mkDerivation (finalAttrs: {
+  pname = "nbdkit";
+  version = "1.40.4";
 
-    src = builtins.fetchTarball {
-      url = "https://download.libguestfs.org/nbdkit/1.40-stable/nbdkit-1.40.4.tar.gz";
-      sha256 = "03zh028dpmv2wkx4v0kbxkaxxpscjnhzpcdyn3f09fb4icji3550";
-    };
-
-    buildPhase = ''
-
-      patchShebangs --build docs/make-links.sh 
-      patchShebangs --build common/protocol/generate-protostrings.sh 
-
-      make;
-    '';
-
-    installPhase = ''
-      mkdir -p $out/bin;
-      mkdir -p $out/lib/nbdkit/plugins
-      mkdir -p $out/share/bash-completion/completions/
-
-      # copy the bash completions
-      cp bash-completion/nbdkit $out/share/bash-completion/completions/
-
-      # move the plugins to the directory that is expected 
-      find . | grep -v tests | awk ''\'/plugin.so/{ print "cp " $0 " $out/lib/nbdkit/plugins" }''\' | bash 
-
-      # copy the binary... 
-      # the one in the root points here for some reason, but the link doesn't make it out of the build env
-      cp -r server/nbdkit $out/bin/
-    '';
+  src = fetchurl {
+    url = "https://download.libguestfs.org/nbdkit/${lib.versions.majorMinor finalAttrs.version}-stable/nbdkit-${finalAttrs.version}.tar.gz";
+    hash = "sha256-hGoc34F7eAvHjdQHxcquNJhpwpL5CLfv2DBZKVmpcpw=";
   };
-in {
-  environment.systemPackages = [nbdkit];
-}
+
+  prePatch = ''
+    # some scripts hardcore /usr/bin/env which is not available in the build env
+    patchShebangs .
+  '';
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    bash-completion
+    autoreconfHook
+    makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [
+    bash-completion
+    gnutls
+    libtool
+    curl
+    xz
+    zlib-ng
+    libssh
+    libnbd
+    cdrkit
+    e2fsprogs
+  ];
+
+  configureFlags = [
+    "--disable-rust"
+    "--disable-golang"
+    "--disable-perl"
+    "--disable-ocaml"
+    "--disable-tcl"
+    "--disable-lua"
+    "--without-libguestfs"
+    "--disable-example4"
+    "--disable-floppy"
+    "--with-iso"
+  ];
+
+  installFlags = [ "bashcompdir=$(out)/share/bash-completion/completions" ];
+
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+
+  meta = with lib; {
+    homepage = "https://gitlab.com/nbdkit/nbdkit";
+    description = "NBD server with stable plugin ABI and permissive license.";
+    license = with licenses; bsd3;
+    # maintainers = with maintainers; [ lukts30 ];
+    platforms = with platforms; unix;
+    mainProgram = "nbdkit";
+  };
+})
+

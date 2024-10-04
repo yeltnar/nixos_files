@@ -36,7 +36,7 @@ in {
     # /home/drew/playin/nixos_files/includes/nextcloud/nextcloud.nix
 
     # /home/drew/playin/nixos_files/includes/vm/vm.nix
-    /home/drew/playin/nixos_files/includes/nbdkit/nbdkit.nix
+    /home/drew/playin/nixos_files/includes/nbdkit/nbdkit.entry.nix
   ];
 
   # Enable the X11 windowing system.
@@ -49,6 +49,13 @@ in {
   services.xserver.desktopManager.gnome = {
     enable = true;
   };
+
+  environment.systemPackages = with pkgs; [
+    libnbd
+    # (import /home/drew/playin/nixos_files/includes/nbdkit/nbdkit.nix)
+    
+  ];
+
   environment.gnome.excludePackages =
     (with pkgs; [
       gnome-tour
