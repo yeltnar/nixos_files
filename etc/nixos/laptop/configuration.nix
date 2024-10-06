@@ -16,6 +16,8 @@
     /home/drew/playin/nixos_files/includes/gaming.nix
 
     /home/drew/playin/nixos_files/includes/drewdate/drewdate.nix
+
+    # /home/drew/playin/nixos_files/includes/makemkv/makemkv.entry.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -28,6 +30,13 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
+  
+  # this allows any user (not just user who mounted) to access fuse (rclone) files 
+  environment.etc = {
+    "fuse.conf".text = ''
+    user_allow_other
+    '';
+  };
 
   networking.hostName = "drew-lin-lap"; # Define your hostname.
 
