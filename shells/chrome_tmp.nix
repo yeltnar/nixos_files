@@ -1,8 +1,6 @@
-# simple.nix
-with (import <nixpkgs> {});
 let
   unstable = import
-    (builtins.fetchTarball https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable) {};
+    (builtins.fetchTarball https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable) { config.allowUnfree = true; };
 in
 mkShell {
   buildInputs = [
