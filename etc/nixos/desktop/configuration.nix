@@ -112,11 +112,13 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  programs.adb.enable = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.drew = {
     isNormalUser = true;
     description = "drew";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "plugdev" "adbusers" ];
     packages = with pkgs; [
       discord
     #  thunderbird
