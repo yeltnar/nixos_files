@@ -12,6 +12,7 @@
       /home/drew/playin/nixos_files/includes/gaming.nix
 
       /home/drew/playin/nixos_files/includes/rclone_mounts/rclone_mini.desktop.nix
+      /home/drew/playin/nixos_files/includes/nbdkit/nbdkit.entry.nix
     ];
 
   # Bootloader.
@@ -134,6 +135,7 @@
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
+    libnbd 
     gparted
     btrfs-progs
     mullvad-vpn
