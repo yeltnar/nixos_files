@@ -4,7 +4,8 @@ with (import <nixpkgs> {
 mkShell {
   buildInputs = [
     nbd
-    # nbdkit # TODO add this from FS
+    # libnbd
+    (pkgs.callPackage /home/drew/playin/nixos_files/includes/nbdkit/nbdkit.nix { })
   ];
   shellHook = ''
   	# nbd-server 9999 /tmp/_rm/to_squash.sqsh; 
