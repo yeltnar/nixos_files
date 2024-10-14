@@ -35,6 +35,20 @@ in {
     "flakes"
   ];
 
+  fonts = { 
+    enableDefaultPackages = true;
+     packages = with pkgs; [(
+       # nerdfonts.override { fonts = [ "BitstreamWeraSansMono" ]; }
+      nerdfonts.override { fonts = [ "Arimo" ]; }
+     # nerdfonts
+    )];
+    fontconfig = {
+      defaultFonts = {
+
+      };
+    };
+  };
+
   # Bootloader.
   # MOVED TO FILE FOR MACHINES
 
