@@ -8,7 +8,12 @@
 }: 
 let
   unstable = import
-    (builtins.fetchTarball https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable) { config.allowUnfree = true; };
+    (builtins.fetchTarball {
+      url = "https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    })
+    # reuse the current configuration
+    { config = config.nixpkgs.config; };
 in {
   imports = [
     # /home/drew/dotfiles/nixos/hardware-configuration.nix
@@ -143,7 +148,7 @@ in {
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     curl
-    unstable.neovim
+    # unstable.neovim # this is installed from the option below 
     tmux
     git
     unzip
@@ -177,6 +182,7 @@ in {
   # };
 
   programs.neovim.enable = true;
+  programs.neovim.package = unstable.neovim-unwrapped;
   programs.neovim.defaultEditor = true;
 
   # List services that you want to enable:
