@@ -37,16 +37,14 @@ in {
 
   fonts = { 
     enableDefaultPackages = true;
-     packages = with pkgs; [(
-       # nerdfonts.override { fonts = [ "BitstreamWeraSansMono" ]; }
-      nerdfonts.override { fonts = [ "Arimo" ]; }
-     # nerdfonts
+    packages = with pkgs; [(
+      nerdfonts.override { fonts = [ "BitstreamVeraSansMono" ]; }  # may need to change to "BitstreamWeraSansMono" 
     )];
-    fontconfig = {
-      defaultFonts = {
-
-      };
-    };
+    # fontconfig = {
+    #   defaultFonts = {
+    #
+    #   };
+    # };
   };
 
   # Bootloader.
