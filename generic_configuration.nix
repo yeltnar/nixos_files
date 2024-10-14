@@ -5,7 +5,11 @@
   config,
   pkgs,
   ...
-}: {
+}: 
+let
+  unstable = import
+    (builtins.fetchTarball https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable) { config.allowUnfree = true; };
+in {
   imports = [
     # /home/drew/dotfiles/nixos/hardware-configuration.nix
     ./includes/time-until.nix
@@ -139,7 +143,7 @@
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     curl
-    neovim
+    unstable.neovim
     tmux
     git
     unzip
