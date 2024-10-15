@@ -20,12 +20,6 @@
     };
  
   fileSystems."/home" =
-    { device = "none";
-      fsType = "tmpfs";
-      options = [ "size=3G" "mode=777" ];
-    };
-
-  fileSystems."/not_home" =
     { device = "/dev/disk/by-uuid/4abc3880-40a9-4bcf-8cb6-0d99fe384008";
       fsType = "btrfs";
       options = [ "subvol=home" ];
