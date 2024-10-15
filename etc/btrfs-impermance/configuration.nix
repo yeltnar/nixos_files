@@ -89,7 +89,7 @@ fileSystems = {
   users.users.drew = {
     isNormalUser = true;
     description = "drew";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "cdrom" ];
     hashedPassword = "$y$j9T$0I23hfjcxxjwBgO72qgzS/$YyT2EU/qoZnamUdU2jrtfjSeSPsJEvdi/BB/hlZzh33";
     packages = with pkgs; [
     #  thunderbird
