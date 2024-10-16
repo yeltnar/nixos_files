@@ -193,9 +193,13 @@ in {
   #   enableSSHSupport = true;
   # };
 
-  programs.neovim.enable = true;
-  programs.neovim.package = unstable.neovim-unwrapped;
-  programs.neovim.defaultEditor = true;
+  programs.neovim = {
+    enable = true;
+    package = unstable.neovim-unwrapped;
+    defaultEditor = true;
+    vimAlias = true; 
+    viAlias = true; 
+  };
 
   # List services that you want to enable:
 
