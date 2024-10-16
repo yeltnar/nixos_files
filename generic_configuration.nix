@@ -18,6 +18,7 @@ in {
   imports = [
     # /home/drew/dotfiles/nixos/hardware-configuration.nix
     ./includes/time-until.nix
+    ./includes/make_playin.nix
     ./includes/custom_bashrc.nix
     ./includes/yeltnar_dev.nix
 

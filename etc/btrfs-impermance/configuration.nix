@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      /_home/drew/playin/nixos_files/generic_configuration.nix
     ];
 
   # Bootloader.
