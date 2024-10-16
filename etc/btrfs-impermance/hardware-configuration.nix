@@ -18,8 +18,14 @@
       fsType = "tmpfs";
       options = [ "size=3G" "mode=755" ];
     };
- 
-  fileSystems."/home" =
+  
+  fileSystems."/home/drew" =
+    { device = "none";
+      fsType = "tmpfs";
+      options = [ "size=3G" "mode=777" "uid=1000" "gid=100" ];
+    };
+
+  fileSystems."/_home" =
     { device = "/dev/disk/by-uuid/4abc3880-40a9-4bcf-8cb6-0d99fe384008";
       fsType = "btrfs";
       options = [ "subvol=home" ];
