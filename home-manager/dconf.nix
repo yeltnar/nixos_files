@@ -33,6 +33,10 @@ with lib.hm.gvariant; {
       lock-enable = true;
     };
 
+    "org/gnome/desktop/search-providers" = {
+      sort-order = ["org.gnome.Settings.desktop" "org.gnome.Nautilus.desktop" "org.gnome.Contacts.desktop" "org.gnome.Documents.desktop" "org.gnome.Calculator.desktop" "org.gnome.Calendar.desktop" "org.gnome.Characters.desktop" "org.gnome.clocks.desktop"];
+    };
+
     "org/gnome/desktop/session" = {
       idle-delay = mkUint32 600;
     };
