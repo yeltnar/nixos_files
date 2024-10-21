@@ -181,6 +181,9 @@ in {
     # docker-compose
     rclone
 
+    # see about moving to nvim section 
+    lua-language-server
+
     tree
     duf
   ];
