@@ -1,21 +1,24 @@
-{ config, lib, pkgs, ... }:
-let
-  unstable = import
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  unstable =
+    import
     (builtins.fetchTarball {
       url = "https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable";
       sha256 = "08fdkjliv286jjn4nnyhsvcs7mmqjxglv9x58bfw61k1qrrmd3w1";
-    }) { 
-      config.allowUnfree = true; 
+    }) {
+      config.allowUnfree = true;
       # config = config.nixpkgs.config;
     };
-in
-{
-
+in {
   # Simply install just the packages
   environment.packages = with pkgs; [
     # User-facing stuff that you really really want to have
     unstable.neovim # or some other editor, e.g. nano or neovim
-#    neovim # or some other editor, e.g. nano or neovim
+    #    neovim # or some other editor, e.g. nano or neovim
 
     # Some common stuff that people expect to have
     #procps
@@ -35,22 +38,22 @@ in
     zip
     unzip
 
-    curl 
+    curl
     gawk
-    git 
-    gnugrep 
+    git
+    gnugrep
     iputils
-    lua-language-server 
+    lua-language-server
     ncurses
-    netcat 
+    netcat
     nettools
-    openssh 
+    openssh
     ps
-    tmux 
+    tmux
     which
     lazygit
     nixd
-    ripgrep 
+    ripgrep
     alejandra
   ];
 
@@ -85,5 +88,5 @@ in
   #    };
   #};
 }
-
 # vim: ft=nix
+
