@@ -183,6 +183,7 @@ in {
 
     # see about moving to nvim section 
     lua-language-server
+    nixd
 
     tree
     duf
