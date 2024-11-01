@@ -150,6 +150,8 @@
     gimp-with-plugins
     betaflight-configurator
     obs-studio
+
+    audacity
   ];
 
   environment.gnome.excludePackages =
