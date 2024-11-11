@@ -7,7 +7,7 @@ args@{
   ...
 }: let 
   # example of defining function, with optional param with fallback value 
-  getName = { name ? "nixos" }: name;
+  getName = { name ? "nixos-testing" }: name;
 
   config_img_testing = ( import /home/drew/playin/nixos_files/includes/config_img/config_img.nix ( args // 
     { 
@@ -53,6 +53,7 @@ in {
   environment.systemPackages = with pkgs; [
     libnbd
     # (import /home/drew/playin/nixos_files/includes/nbdkit/nbdkit.nix)
+    gparted
     
   ];
 
