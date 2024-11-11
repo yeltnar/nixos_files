@@ -10,6 +10,7 @@
       /etc/nixos/hardware-configuration.nix
       /home/drew/playin/nixos_files/generic_configuration.nix
       /home/drew/playin/nixos_files/includes/gaming.nix
+      /home/drew/playin/nixos_files/includes/systemd-proxy/systemd-proxy.nix
 
       /home/drew/playin/nixos_files/includes/rclone_mounts/rclone_mini.desktop.nix
       /home/drew/playin/nixos_files/includes/nbdkit/nbdkit.entry.nix
@@ -21,6 +22,13 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sdc";
   boot.loader.grub.useOSProber = true;
+
+  # services.getty.autologinUser = "drew";
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
+
 
   # this should be in the hardware-config.nix file 
   # swapDevices = [ { device = "/swap/swapfile"; } ];
