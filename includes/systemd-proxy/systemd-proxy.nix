@@ -15,7 +15,7 @@
   };
   systemd.services.wedding_site_serverless = {
     requires = ["wedding_site_start.service" "wedding_site_socket.socket"];
-    after =    ["wedding_site_start.serivce" "wedding_site_socket.socket"];
+    after =    ["wedding_site_start.service" "wedding_site_socket.socket"];
     
   };
 
