@@ -11,6 +11,7 @@
 
 # man systemd-socket-proxyd
   systemd.sockets.wedding_site_serverless = {
+    requires = ["network-online.target"];
     listenStreams = [
       "192.168.2.180:9999"
       # "8080"
@@ -66,19 +67,17 @@
     ];
 
     serviceConfig = {
-      ExecStart =''
-        ${pkgs.netcat}/bin/nc -l 3000
-        '';
       ExecStop = ''
         kill -9 $MAINPID
       '';
     };
 
-    # script = ''
-    #   # sleep 120; # sleep so it maybe has the files
-    #   PATH="$PATH:/run/wrappers/bin/";
-    #   ${pkgs.podman-compose}/bin/podman-compose up 2>&1 | tee /tmp/wedding_site/podman-compose.log
-    # '';
+    # WARNING this process can not self re-start, or it will confuse the serverless aspect
+    script = ''
+      # sleep 120; # sleep so it maybe has the files
+      PATH="$PATH:/nix/store/rhcdph69njf9ma4jyrzbm4by0jp5zn60-podman-5.0.3/bin";
+      /nix/store/6gi5l2cf6gpmg3skj5mc32xx454rnjwr-podman-compose-1.1.0/bin/podman-compose --podman-run-args="--replace" up 2>&1 | tee /tmp/wedding_site/podman-compose.log
+    '';
 
     # wantedBy = ["multi-user.target"];
     # If you use podman
