@@ -4,18 +4,32 @@
   pkgs,
   ...
 }: {
-  networking.firewall.allowedTCPPorts = [3000];
+  networking.firewall.allowedTCPPorts = [
+  3000
+  9999
+  ];
 
 # man systemd-socket-proxyd
-  systemd.sockets.wedding_site_socket = {
+  systemd.sockets.wedding_site_serverless = {
     listenStreams = [
-      "192.168.2.181:9999"
+      "192.168.2.180:9999"
+      # "8080"
     ];
-    wantedBy = ["multi-user.target"];
+    wantedBy = ["sockets.target"];
   };
+
   systemd.services.wedding_site_serverless = {
-    requires = ["wedding_site_start.service" "wedding_site_socket.socket"];
-    after =    ["wedding_site_start.service" "wedding_site_socket.socket"];
+    requires = ["wedding_site_start.service" "wedding_site_serverless.socket"];
+    after =    ["wedding_site_start.service" "wedding_site_serverless.socket"];
+
+    serviceConfig = { 
+      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=30s 127.0.0.1:3000";
+    };
+
+    # script = ''
+    #   date > /tmp/proxyd-hit;
+    #   ${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:3000;
+    # '';
     
   };
 
@@ -38,7 +52,7 @@
       Type = "oneshot";
       SyslogIdentifier = "wedding_site";
       WorkingDirectory = "/tmp";
-      ExecStartPost = "systemctl start wedding_site_start.service";
+      # ExecStartPost = "systemctl start wedding_site_start.service";
     };
   };
 
@@ -51,16 +65,27 @@
       podman-compose
     ];
 
-    script = ''
-      # sleep 120; # sleep so it maybe has the files
-      PATH="$PATH:/run/wrappers/bin/";
-      ${pkgs.podman-compose}/bin/podman-compose up 2>&1 | tee /tmp/wedding_site/podman-compose.log
-    '';
+    serviceConfig = {
+      ExecStart =''
+        ${pkgs.netcat}/bin/nc -l 3000
+        '';
+      ExecStop = ''
+        kill -9 $MAINPID
+      '';
+    };
 
-    wantedBy = ["multi-user.target"];
+    # script = ''
+    #   # sleep 120; # sleep so it maybe has the files
+    #   PATH="$PATH:/run/wrappers/bin/";
+    #   ${pkgs.podman-compose}/bin/podman-compose up 2>&1 | tee /tmp/wedding_site/podman-compose.log
+    # '';
+
+    # wantedBy = ["multi-user.target"];
     # If you use podman
     requires = ["podman.service" "podman.socket"];
+
     unitConfig = {
+      StopWhenUnneeded = "yes";
       StartLimitInterval = 30;
       StartLimitBurst = 3;
       ConditionPathExists = "/tmp/wedding_site";
