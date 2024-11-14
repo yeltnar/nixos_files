@@ -67,21 +67,11 @@
       podman-compose
     ];
 
-    serviceConfig = {
-      ExecStop = ''
-        kill -9 $MAINPID
-      '';
-    };
-
     # WARNING this process can not self re-start, or it will confuse the serverless aspect
     script = ''
       # sleep 120; # sleep so it maybe has the files
       PATH="$PATH:/nix/store/rhcdph69njf9ma4jyrzbm4by0jp5zn60-podman-5.0.3/bin";
-      /nix/store/6gi5l2cf6gpmg3skj5mc32xx454rnjwr-podman-compose-1.1.0/bin/podman-compose --podman-run-args="--replace --sdnotify=container" up -d 2>&1 | tee /tmp/wedding_site/podman-compose.log
-      date >> /tmp/podman-start-drew
-      sleep 1; 
-      # TODO set main PID to be where the notify comes from 
-      ${pkgs.systemd}/bin/systemd-notify --ready;
+      /nix/store/6gi5l2cf6gpmg3skj5mc32xx454rnjwr-podman-compose-1.1.0/bin/podman-compose --podman-run-args="--replace --sdnotify=container --conmon-pidfile=/tmp/wedding_podman.pid" up -d 2>&1 | tee /tmp/wedding_site/podman-compose.log
     '';
 
     # wantedBy = ["multi-user.target"];
@@ -95,12 +85,17 @@
       ConditionPathExists = "/tmp/wedding_site";
       RequiresMountsFor = "/run/user/1000/containers";
     };
+
     serviceConfig = {
       User = "drew";
       Type = "notify";
       WorkingDirectory = "/tmp/wedding_site";
       Restart = "always";
       NotifyAccess = "all";
+      PIDFile = "/tmp/wedding_podman.pid";
+      ExecStop = ''
+        kill -9 $MAINPID
+      '';
     };
   };
 }
