@@ -13,7 +13,8 @@
   systemd.sockets.wedding_site_serverless = {
     requires = ["network-online.target"];
     listenStreams = [
-      "192.168.2.180:9999"
+      "9999"
+      # "192.168.2.180:9999"
       # "8080"
     ];
     wantedBy = ["sockets.target"];
@@ -76,7 +77,11 @@
     script = ''
       # sleep 120; # sleep so it maybe has the files
       PATH="$PATH:/nix/store/rhcdph69njf9ma4jyrzbm4by0jp5zn60-podman-5.0.3/bin";
-      /nix/store/6gi5l2cf6gpmg3skj5mc32xx454rnjwr-podman-compose-1.1.0/bin/podman-compose --podman-run-args="--replace" up 2>&1 | tee /tmp/wedding_site/podman-compose.log
+      /nix/store/6gi5l2cf6gpmg3skj5mc32xx454rnjwr-podman-compose-1.1.0/bin/podman-compose --podman-run-args="--replace --sdnotify=container" up -d 2>&1 | tee /tmp/wedding_site/podman-compose.log
+      date >> /tmp/podman-start-drew
+      sleep 1; 
+      # TODO set main PID to be where the notify comes from 
+      ${pkgs.systemd}/bin/systemd-notify --ready;
     '';
 
     # wantedBy = ["multi-user.target"];
@@ -92,9 +97,10 @@
     };
     serviceConfig = {
       User = "drew";
-      # Type = "forking";
+      Type = "notify";
       WorkingDirectory = "/tmp/wedding_site";
       Restart = "always";
+      NotifyAccess = "all";
     };
   };
 }
