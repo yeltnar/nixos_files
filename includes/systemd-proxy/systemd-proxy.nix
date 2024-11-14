@@ -71,7 +71,8 @@
     script = ''
       # sleep 120; # sleep so it maybe has the files
       PATH="$PATH:/nix/store/rhcdph69njf9ma4jyrzbm4by0jp5zn60-podman-5.0.3/bin";
-      /nix/store/6gi5l2cf6gpmg3skj5mc32xx454rnjwr-podman-compose-1.1.0/bin/podman-compose --podman-run-args="--replace --sdnotify=container --conmon-pidfile=/tmp/wedding_podman.pid" up -d 2>&1 | tee /tmp/wedding_site/podman-compose.log
+      # /nix/store/6gi5l2cf6gpmg3skj5mc32xx454rnjwr-podman-compose-1.1.0/bin/podman-compose --podman-run-args="--replace --sdnotify=container --conmon-pidfile=/tmp/wedding_podman.pid --replace" up --no-recreate -d 2>&1 | tee /tmp/wedding_site/podman-compose.log
+      /nix/store/6gi5l2cf6gpmg3skj5mc32xx454rnjwr-podman-compose-1.1.0/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/wedding_podman.pid --replace" up --no-recreate -d 2>&1 | tee /tmp/wedding_site/podman-compose.log
     '';
 
     # wantedBy = ["multi-user.target"];
@@ -87,15 +88,15 @@
     };
 
     serviceConfig = {
-      User = "drew";
+      # User = "drew";
       Type = "notify";
       WorkingDirectory = "/tmp/wedding_site";
       Restart = "always";
       NotifyAccess = "all";
       PIDFile = "/tmp/wedding_podman.pid";
-      ExecStop = ''
-        kill -9 $MAINPID
-      '';
+      # ExecStop = ''
+      #   kill -9 $MAINPID
+      # '';
     };
   };
 }
