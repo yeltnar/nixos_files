@@ -5,15 +5,15 @@
   ...
 }: {
   networking.firewall.allowedTCPPorts = [
-  3000
-  443 
+  8080
+  9999 
   ];
 
 # man systemd-socket-proxyd
   systemd.sockets.wedding_site_serverless = {
     requires = ["network-online.target"];
     listenStreams = [
-      "443"
+      "9999"
       # "192.168.2.180:9999"
       # "8080"
     ];
@@ -25,12 +25,12 @@
     after =    ["wedding_site_start.service" "wedding_site_serverless.socket"];
 
     serviceConfig = { 
-      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=30s 127.0.0.1:3000";
+      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=600s 127.0.0.1:8080";
     };
 
     # script = ''
     #   date > /tmp/proxyd-hit;
-    #   ${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:3000;
+    #   ${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:8080;
     # '';
     
   };
