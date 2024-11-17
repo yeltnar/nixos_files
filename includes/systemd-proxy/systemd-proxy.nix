@@ -6,14 +6,14 @@
 }: {
   networking.firewall.allowedTCPPorts = [
   3000
-  9999
+  443 
   ];
 
 # man systemd-socket-proxyd
   systemd.sockets.wedding_site_serverless = {
     requires = ["network-online.target"];
     listenStreams = [
-      "9999"
+      "443"
       # "192.168.2.180:9999"
       # "8080"
     ];
