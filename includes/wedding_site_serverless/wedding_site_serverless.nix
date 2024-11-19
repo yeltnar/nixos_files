@@ -6,21 +6,39 @@
 }: {
   networking.firewall.allowedTCPPorts = [
   3000
-  443 
+  8443 
   ];
 
-# man systemd-socket-proxyd
-  systemd.sockets.wedding_site_serverless = {
-    requires = ["network-online.target"];
+  # systemd.service.wedding_site_enable = {
+  #
+  # };
+
+  # enable lingering so service starts before user logs in
+  users.users.drew.linger = true;
+
+  # man systemd-socket-proxyd
+  # TODO try to have the root proxy start the non-root podman service 
+  systemd.user.sockets.wedding_site_serverless = {
+
+    enable = true;
+    
+    requires = [
+      # "network-online.target"
+      "default.target"
+    ]; # TODO make sure this is there, if starting at boot 
+    wantedBy = [
+      "default.target"
+      "sockets.target"
+      "multi-user.target"
+    ];
     listenStreams = [
-      "443"
+      "8443"
       # "192.168.2.180:9999"
       # "8080"
     ];
-    wantedBy = ["sockets.target"];
   };
 
-  systemd.services.wedding_site_serverless = {
+  systemd.user.services.wedding_site_serverless = {
     requires = ["wedding_site_start.service" "wedding_site_serverless.socket"];
     after =    ["wedding_site_start.service" "wedding_site_serverless.socket"];
 
@@ -61,7 +79,7 @@
   systemd.user.extraConfig = ''
     DefaultEnvironment="PATH=/run/current-system/sw/bin"
   '';
-  systemd.services.wedding_site_start = {
+  systemd.user.services.wedding_site_start = {
     path = with pkgs; [
       podman
       podman-compose
@@ -71,9 +89,7 @@
 
     # WARNING this process can not self re-start, or it will confuse the serverless aspect
     script = ''
-      # sleep 120; # sleep so it maybe has the files
       PATH="$PATH:${pkgs.podman}/bin";
-      # /nix/store/6gi5l2cf6gpmg3skj5mc32xx454rnjwr-podman-compose-1.1.0/bin/podman-compose --podman-run-args="--replace --sdnotify=container --conmon-pidfile=/tmp/wedding_podman.pid --replace" up --no-recreate -d 2>&1 | tee /tmp/wedding_site/podman-compose.log
       ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/wedding_podman.pid --replace" up --no-recreate -d 2>&1 | tee /tmp/wedding_site/podman-compose.log
     '';
 
