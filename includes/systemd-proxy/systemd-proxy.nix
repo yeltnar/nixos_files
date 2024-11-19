@@ -69,9 +69,7 @@
 
     # WARNING this process can not self re-start, or it will confuse the serverless aspect
     script = ''
-      # sleep 120; # sleep so it maybe has the files
       PATH="$PATH:${pkgs.podman}/bin";
-      # /nix/store/6gi5l2cf6gpmg3skj5mc32xx454rnjwr-podman-compose-1.1.0/bin/podman-compose --podman-run-args="--replace --sdnotify=container --conmon-pidfile=/tmp/wedding_podman.pid --replace" up --no-recreate -d 2>&1 | tee /tmp/wedding_site/podman-compose.log
       ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/wedding_podman.pid --replace" up --no-recreate -d 2>&1 | tee /tmp/wedding_site/podman-compose.log
     '';
 
@@ -88,12 +86,12 @@
     };
 
     serviceConfig = {
-      # User = "drew";
-      Type = "notify";
+      User = "drew";
+      # Type = "notify";
       WorkingDirectory = "/tmp/wedding_site";
       Restart = "always";
       NotifyAccess = "all";
-      PIDFile = "/tmp/wedding_podman.pid";
+      # PIDFile = "/tmp/wedding_podman.pid";
       # ExecStop = ''
       #   kill -9 $MAINPID
       # '';
