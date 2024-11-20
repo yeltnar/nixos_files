@@ -6,21 +6,40 @@
 }: {
   networking.firewall.allowedTCPPorts = [
   3000
-  8443 
+  8443 # TODO remove? 
+  443 
   ];
-
-  # systemd.service.wedding_site_enable = {
-  #
-  # };
 
   # enable lingering so service starts before user logs in
   users.users.drew.linger = true;
 
+  systemd.sockets.wedding_site_serverless = {
+    
+    requires = [
+      # "network-online.target"
+      "default.target"
+    ]; # TODO make sure this is there, if starting at boot 
+    wantedBy = [
+      "default.target"
+      "sockets.target"
+      "multi-user.target"
+    ];
+    listenStreams = [
+      "443"
+    ];
+  };
+
+  systemd.services.wedding_site_serverless = {
+    serviceConfig = { 
+      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=30s 127.0.0.1:8443";
+    };
+  };
+
+
+
   # man systemd-socket-proxyd
   # TODO try to have the root proxy start the non-root podman service 
   systemd.user.sockets.wedding_site_serverless = {
-
-    enable = true;
     
     requires = [
       # "network-online.target"
