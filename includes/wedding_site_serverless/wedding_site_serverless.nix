@@ -1,24 +1,23 @@
-
+# man systemd-socket-proxyd
 {
-  config,
+  # config,
   pkgs,
   ...
 }: {
   networking.firewall.allowedTCPPorts = [
-  3000
-  8443 # TODO remove? 
-  443 
+  # 3000 # port for container
+  # 8443 # port for user service  
+  443 # port for system service
   ];
 
   # enable lingering so service starts before user logs in
   users.users.drew.linger = true;
 
   systemd.sockets.wedding_site_serverless = {
-    
     requires = [
-      # "network-online.target"
+      "network-online.target"
       "default.target"
-    ]; # TODO make sure this is there, if starting at boot 
+    ]; 
     wantedBy = [
       "default.target"
       "sockets.target"
@@ -35,12 +34,7 @@
     };
   };
 
-
-
-  # man systemd-socket-proxyd
-  # TODO try to have the root proxy start the non-root podman service 
   systemd.user.sockets.wedding_site_serverless = {
-    
     requires = [
       # "network-online.target"
       "default.target"
@@ -51,7 +45,7 @@
       "multi-user.target"
     ];
     listenStreams = [
-      "8443"
+      "127.0.0.1:8443"
       # "192.168.2.180:9999"
       # "8080"
     ];
@@ -64,12 +58,6 @@
     serviceConfig = { 
       ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=30s 127.0.0.1:3000";
     };
-
-    # script = ''
-    #   date > /tmp/proxyd-hit;
-    #   ${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:3000;
-    # '';
-    
   };
 
   systemd.services.wedding_site-git-repo = {
@@ -98,23 +86,19 @@
   systemd.user.extraConfig = ''
     DefaultEnvironment="PATH=/run/current-system/sw/bin"
   '';
+
   systemd.user.services.wedding_site_start = {
     path = with pkgs; [
       podman
       podman-compose
     ];
-
     requires = ["podman.service" "podman.socket"];
-
     # WARNING this process can not self re-start, or it will confuse the serverless aspect
     script = ''
       PATH="$PATH:${pkgs.podman}/bin";
       ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/wedding_podman.pid --replace" up --no-recreate -d 2>&1 | tee /tmp/wedding_site/podman-compose.log
     '';
-
     # wantedBy = ["multi-user.target"];
-    # If you use podman
-
     unitConfig = {
       StopWhenUnneeded = "yes";
       StartLimitInterval = 30;
@@ -122,17 +106,12 @@
       ConditionPathExists = "/tmp/wedding_site";
       RequiresMountsFor = "/run/user/1000/containers";
     };
-
     serviceConfig = {
-      # User = "drew";
       Type = "notify";
-      WorkingDirectory = "/tmp/wedding_site";
+      WorkingDirectory = "/tmp/wedding_site"; # TODO change repo location
       Restart = "always";
       NotifyAccess = "all";
-      PIDFile = "/tmp/wedding_podman.pid";
-      # ExecStop = ''
-      #   kill -9 $MAINPID
-      # '';
+      PIDFile = "/tmp/wedding_podman.pid"; # TODO change pid location 
     };
   };
 }
