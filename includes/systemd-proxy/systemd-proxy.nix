@@ -31,7 +31,7 @@
 
   systemd.services.systemd-proxy_serverless = {
     serviceConfig = { 
-      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=30s 127.0.0.1:8443";
+      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=10s 127.0.0.1:8443";
     };
   };
 
@@ -66,7 +66,7 @@
     ];
 
     serviceConfig = { 
-      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=30s 127.0.0.1:8080";
+      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=180s 127.0.0.1:8080";
     };
   };
 
