@@ -13,7 +13,7 @@
     script = ''
       rm -f /tmp/waldo
       mkfifo /tmp/waldo
-      sleep 10
+      sleep 3
       systemd-notify --ready --status="Waiting for data…"
 
       while : ; do
@@ -21,7 +21,7 @@
         systemd-notify --status="Processing $a"
 
         # Do something with $a …
-        sleep 10
+        sleep 3
 
         systemd-notify --status="Waiting for data again…"
       done
