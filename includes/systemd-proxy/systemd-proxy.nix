@@ -107,6 +107,18 @@
     script = ''
       PATH="$PATH:${pkgs.podman}/bin";
       ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_proxy_ollama_podman.pid --replace" up --no-recreate -d ollama
+      
+      podman-compose logs -f open-webui 2>&1 | while IFS= read -r line; do
+        # Process the line
+        if [[ "$line" == *"Uvicorn running on"* ]]; then
+          echo "Found a match: $line"
+          # Take action, e.g., run another command
+          systemd-notify --ready --status="container up"
+        else
+          echo "x-$line"
+        fi
+      done
+
     '';
     # wantedBy = ["multi-user.target"];
     unitConfig = {
@@ -117,7 +129,7 @@
       RequiresMountsFor = "/run/user/1000/containers";
     };
     serviceConfig = {
-      # Type = "simple";
+      Type = "notify";
       WorkingDirectory = "/tmp/granite-ollama"; # TODO change repo location
       Restart = "always";
       NotifyAccess = "all";
