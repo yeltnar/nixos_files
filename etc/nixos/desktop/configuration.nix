@@ -94,7 +94,6 @@
       layout = "us";
       variant = "";
     };
-    excludePackages = [pkgs.xterm];
 
   };
 
@@ -160,20 +159,9 @@
     obs-studio
 
     audacity
-  ];
 
-  environment.gnome.excludePackages =
-    (with pkgs; [
-      gnome-tour
-      xterm
-    ])
-    ++ (with pkgs.gnome; [
-      epiphany
-      totem
-      geary
-      seahorse
-      gnome-music
-    ]);
+    superTuxKart
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

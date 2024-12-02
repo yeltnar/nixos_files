@@ -189,6 +189,20 @@ in {
     duf
   ];
 
+  services.xserver.excludePackages = [pkgs.xterm];
+  environment.gnome.excludePackages =
+    (with pkgs; [
+      gnome-tour
+      xterm
+    ])
+    ++ (with pkgs.gnome; [
+      epiphany
+      totem
+      geary
+      seahorse
+      gnome-music
+    ]);
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

@@ -42,7 +42,6 @@ in {
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   # disable xterm
-  services.xserver.excludePackages = [pkgs.xterm];
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
@@ -56,18 +55,6 @@ in {
     gparted
     
   ];
-
-  environment.gnome.excludePackages =
-    (with pkgs; [
-      gnome-tour
-    ])
-    ++ (with pkgs.gnome; [
-      epiphany
-      totem
-      geary
-      seahorse
-      gnome-music
-    ]);
 
   # Configure keymap in X11
   services.xserver = {
