@@ -123,6 +123,9 @@ in {
       yq-go
       openssl
 
+      # ffmpeg based video editor
+      # losslesscut-bin
+
       #  thunderbird
     ];
 
