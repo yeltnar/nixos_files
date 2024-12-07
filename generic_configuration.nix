@@ -10,7 +10,7 @@ let
   unstable = import
     (builtins.fetchTarball {
       url = "https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable";
-      sha256 = "0h7z2g4ysb6cnavragn20vhqf33vi5a89g6pydavwg5rivdlx40d";
+      sha256 = "1c9nwlhsv3da5d8wg2fa0r7kl0v0icidq100v51ax99brpj1idhl";
     })
     # reuse the current configuration
     { config = config.nixpkgs.config; };
@@ -94,7 +94,7 @@ in {
   };
 
   # Enable sound with pipewire.
-  sound.enable = true;
+  # sound.enable = true # removed at request of nixos-rebuild;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -171,7 +171,7 @@ in {
     fzf
     jq
     file
-    ffmpeg_5-full
+    ffmpeg_6-full
     xclip
     squashfsTools
     htop
@@ -198,7 +198,7 @@ in {
       gnome-tour
       xterm
     ])
-    ++ (with pkgs.gnome; [
+    ++ (with pkgs; [
       epiphany
       totem
       geary

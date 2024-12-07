@@ -18,7 +18,7 @@
     usbutils # has lsusb
 
     # android dev tools... found from nixos android page
-    androidenv.androidPkgs_9_0.platform-tools
+    androidenv.androidPkgs.platform-tools
 
     # libreoffice with spell check
     libreoffice-qt

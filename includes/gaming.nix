@@ -17,10 +17,14 @@
 
   # hardware.graphics = {
   hardware.opengl = {
-    enable = true;
+    # enable = true;
     # enable32Bit = true;
-    driSupport = true;
-    driSupport32Bit = true;
+    # driSupport = true; # removed at request of nixos-rebuild
+  };
+
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
   };
 
   programs.steam.enable = true;
