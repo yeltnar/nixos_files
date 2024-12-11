@@ -219,7 +219,8 @@ in {
 
   programs.neovim = {
     enable = true;
-    package = unstable.neovim-unwrapped;
+    # package = unstable.neovim-unwrapped;
+    package = pkgs.neovim-unwrapped;
     defaultEditor = true;
     vimAlias = true; 
     viAlias = true; 
