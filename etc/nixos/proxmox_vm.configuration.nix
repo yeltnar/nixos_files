@@ -29,6 +29,7 @@ in {
     /home/drew/playin/nixos_files/generic_configuration.nix
 
     /home/drew/playin/nixos_files/includes/nebula.nix
+    /home/drew/playin/nixos_files/includes/rclone_mounts/rclone_mini.proxmoxvm.nix
 
     /home/drew/playin/nixos_files/includes/ntfy_report_ip_timer.nix
 
@@ -80,6 +81,13 @@ in {
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
+
+  # this allows any user (not just user who mounted) to access fuse (rclone) files 
+  environment.etc = {
+    "fuse.conf".text = ''
+    user_allow_other
+    '';
+  };
 
   networking.hostName = getName {}; # Define your hostname.
 }
