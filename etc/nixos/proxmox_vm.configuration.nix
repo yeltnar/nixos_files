@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 args@{
-  config,
+  # config,
   pkgs,
   ...
 }: let 
@@ -54,6 +54,7 @@ in {
     # (import /home/drew/playin/nixos_files/includes/nbdkit/nbdkit.nix)
     gparted
     
+    borgbackup    
   ];
 
   # Configure keymap in X11

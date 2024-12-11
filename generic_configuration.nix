@@ -190,6 +190,9 @@ in {
 
     tree
     duf
+
+    bcache-tools
+    bcachefs-tools
   ];
 
   services.xserver.excludePackages = [pkgs.xterm];
