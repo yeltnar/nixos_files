@@ -12,6 +12,8 @@
       /home/drew/playin/nixos_files/includes/gaming.nix
       # /home/drew/playin/nixos_files/includes/systemd-proxy/systemd-proxy.nix
 
+      /home/drew/playin/nixos_files/includes/nebula.nix
+
       /home/drew/playin/nixos_files/includes/rclone_mounts/rclone_mini.desktop.nix
       /home/drew/playin/nixos_files/includes/nbdkit/nbdkit.entry.nix
 
