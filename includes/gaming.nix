@@ -32,6 +32,7 @@
 
   # TODO move this to a nvidia file? 
   hardware.nvidia.modesetting.enable = true;
+  hardware.nvidia.open = false; # use non-free drivers
 
   programs.gamemode.enable = true;
 
