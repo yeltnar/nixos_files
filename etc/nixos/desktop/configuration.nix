@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports =
@@ -10,13 +10,22 @@
       /etc/nixos/hardware-configuration.nix
       /home/drew/playin/nixos_files/generic_configuration.nix
       /home/drew/playin/nixos_files/includes/gaming.nix
-      /home/drew/playin/nixos_files/includes/systemd-proxy/systemd-proxy.nix
+      # /home/drew/playin/nixos_files/includes/systemd-proxy/systemd-proxy.nix
 
       /home/drew/playin/nixos_files/includes/rclone_mounts/rclone_mini.desktop.nix
       /home/drew/playin/nixos_files/includes/nbdkit/nbdkit.entry.nix
 
       # /home/drew/playin/nixos_files/includes/makemkv/makemkv.nix
-    ];
+    ] 
+    ++
+    lib.fileset.toList (
+      # All default.nix files in ./.
+      # lib.fileset.fileFilter (file: file.name == "systemd-proxy.nix") /home/drew/playin/nixos_files/includes/systemd-proxy
+      lib.fileset.fileFilter (file: file.hasExt "nix") /home/drew/playin/nixos_files/includes/systemd-proxy
+    )
+    ;
+   
+
 
   # Bootloader.
   boot.loader.grub.enable = true;
