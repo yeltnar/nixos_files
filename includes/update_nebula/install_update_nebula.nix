@@ -12,6 +12,41 @@
 in {
   system.activationScripts.setup_nebula_env = {
     text = /*bash*/ ''
+
+      # set up the cert for the private network for the update script 
+      cat <<EOCERT > ${vardir}/knownca.pem
+      -----BEGIN CERTIFICATE-----
+      MIIBozCCAUqgAwIBAgIRAPZn1/oD/c0M9GhKndrWbmcwCgYIKoZIzj0EAwIwMDEu
+      MCwGA1UEAxMlQ2FkZHkgTG9jYWwgQXV0aG9yaXR5IC0gMjAyMSBFQ0MgUm9vdDAe
+      Fw0yMTEwMDMwNDIzNDdaFw0zMTA4MTIwNDIzNDdaMDAxLjAsBgNVBAMTJUNhZGR5
+      IExvY2FsIEF1dGhvcml0eSAtIDIwMjEgRUNDIFJvb3QwWTATBgcqhkjOPQIBBggq
+      hkjOPQMBBwNCAAR4V9bn+bmOJfWlIGkNZyy+FzHCxIZiU3Ko6f+MgY9fbZddVvZU
+      +qUMqdj1jOOSHGb2oksfABkhrJAnNcqtafH9o0UwQzAOBgNVHQ8BAf8EBAMCAQYw
+      EgYDVR0TAQH/BAgwBgEB/wIBATAdBgNVHQ4EFgQUGxw7vsSlsHoIbX3fqTwnH8+8
+      Ni0wCgYIKoZIzj0EAwIDRwAwRAIgAPmMzq8t6N9H6wUyxEjYZY870ysKNxtrBrmK
+      JmH3busCICZnli09FnPU9/3mt6Kf1AhEF6X3evM+J/P1gEGOqM9u
+      -----END CERTIFICATE-----
+      EOCERT
+      
+      # set defaults which can be overwritten with the .env file 
+      cat <<EOENV > ${vardir}/.default.env
+      # GENERATED; DO NOT EDIT; use .env if you need to edit
+      export HOST="10.10.10.8"
+      export PORT="2323"
+      export CURL_OPTIONS="--cacert ./knownca.pem"
+      
+      export SECONDARY_PORT="443"
+      # export SECONDARY_HOST="hot.andbrant.com"
+      # export SECONDARY_CURL_OPTIONS=""
+      export SECONDARY_HOST="hot.mini.lan"
+      export SECONDARY_CURL_OPTIONS="--cacert ./knownca.pem"
+      
+      export DEVICE_NAME="${config.networking.hostName}" 
+      export DATE_FILE_PATH="/var/yeltnar-nebula/tar_stuff/remote_updated.date"
+      export var_dir="/var/yeltnar-nebula"
+      export nebula_config_client_folder="/etc/nebula"
+      EOENV
+
       text_to_check="# setup nebula env # ";
 
       dir_to_add="/home/${user}/.config/extra_includes";
