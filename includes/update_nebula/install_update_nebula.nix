@@ -1,3 +1,7 @@
+# this will set up the network updating functionality 
+# to create the cert, etc for this device, copy the id_rsa.pub to the machine that will generate the new files
+# this will also generate a .default.env file wich can be overwritten with the .env file in the same directory 
+# the rest _should_ be taken care of with the script and systemd timer 
 {
   config,
   pkgs,
