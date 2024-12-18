@@ -159,6 +159,7 @@
     gparted
     btrfs-progs
     mullvad-vpn
+    borgbackup
 
     slack
     element-desktop
