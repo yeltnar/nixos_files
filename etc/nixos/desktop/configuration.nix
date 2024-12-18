@@ -151,6 +151,7 @@
 
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable; 
   services.xserver.videoDrivers = [ "nvidia" ]; 
+  hardware.nvidia.open = false; # use non-free drivers
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
