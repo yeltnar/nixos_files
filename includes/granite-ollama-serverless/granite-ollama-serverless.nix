@@ -35,6 +35,41 @@
     };
   };
 
+  # serverless socket setup dedicated to ollama
+  systemd.user.sockets.granite-ollama_small_serverless = {
+    requires = [
+      # "network-online.target"
+      "default.target"
+    ]; # TODO make sure this is there, if starting at boot 
+    wantedBy = [
+      "default.target"
+      "sockets.target"
+      "multi-user.target"
+    ];
+    listenStreams = [
+      # "127.0.0.1:8443"
+      "11435"
+      # "192.168.2.180:9999"
+      # "8080"
+    ];
+  };
+
+  systemd.user.services.granite-ollama_small_serverless = {
+    requires = [
+      "granite-ollama_start_ollama.service"
+      "granite-ollama_small_serverless.socket"
+    ];
+    after = [
+      "granite-ollama_start_ollama.service"
+      "granite-ollama_small_serverless.socket"
+    ];
+
+    serviceConfig = { 
+      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=180s 127.0.0.1:11434";
+    };
+  };
+
+  # serverless socket setup for open-webui, and ollama
   systemd.user.sockets.granite-ollama_serverless = {
     requires = [
       # "network-online.target"
@@ -106,6 +141,7 @@
     # WARNING this process can not self re-start, or it will confuse the serverless aspect
     script = ''
       PATH="$PATH:${pkgs.podman}/bin";
+      ${pkgs.podman-compose}/bin/podman-compose down ollama
       ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_proxy_ollama_podman.pid --replace" up --no-recreate -d ollama
       
       podman-compose logs -f open-webui 2>&1 | while IFS= read -r line; do
@@ -152,6 +188,7 @@
     # WARNING this process can not self re-start, or it will confuse the serverless aspect
     script = ''
       PATH="$PATH:${pkgs.podman}/bin";
+      ${pkgs.podman-compose}/bin/podman-compose down open-webui 
       ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_proxy_open-webui_podman.pid --replace" up --no-recreate -d open-webui
     '';
     # wantedBy = ["multi-user.target"];
@@ -164,7 +201,7 @@
     };
     serviceConfig = {
       # Type = "simple";
-      ExecStop = ""; # TODO 
+      # ExecStop = ""; # TODO 
       WorkingDirectory = "/tmp/granite-ollama"; # TODO change repo location
       Restart = "always";
       NotifyAccess = "all";
