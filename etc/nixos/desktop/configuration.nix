@@ -23,7 +23,8 @@
     lib.fileset.toList (
       # All default.nix files in ./.
       # lib.fileset.fileFilter (file: file.name == "systemd-proxy.nix") /home/drew/playin/nixos_files/includes/systemd-proxy
-      lib.fileset.fileFilter (file: file.hasExt "nix") /home/drew/playin/nixos_files/includes/systemd-proxy
+      # lib.fileset.fileFilter (file: file.hasExt "nix") /home/drew/playin/nixos_files/includes/systemd-proxy
+      lib.fileset.fileFilter (file: file.hasExt "nix") /home/drew/playin/nixos_files/includes/granite-ollama-serverless
     )
     ;
    
