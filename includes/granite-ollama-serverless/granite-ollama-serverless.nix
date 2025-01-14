@@ -213,7 +213,7 @@
       RequiresMountsFor = "/run/user/1000/containers";
     };
     serviceConfig = {
-      # Type = "simple";
+      Type = "notify";
       # ExecStop = ""; # TODO 
       WorkingDirectory = "/tmp/granite-ollama"; # TODO change repo location
       Restart = "always";
