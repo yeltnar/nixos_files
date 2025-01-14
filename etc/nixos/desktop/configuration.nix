@@ -153,6 +153,8 @@
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable; 
   services.xserver.videoDrivers = [ "nvidia" ]; 
   hardware.nvidia.open = false; # use non-free drivers
+  # enable nvidia usage inside podman containers... maybe docker too
+  hardware.nvidia-container-toolkit.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
