@@ -142,7 +142,7 @@
     script = ''
       PATH="$PATH:${pkgs.podman}/bin";
       ${pkgs.podman-compose}/bin/podman-compose down ollama
-      ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_proxy_ollama_podman.pid --replace" up --no-recreate -d ollama
+      ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_proxy_ollama_podman.pid --gpus=all" up --no-recreate -d ollama
 
 
       podman-compose logs -f ollama 2>&1 | while IFS= read -r line; do
@@ -171,14 +171,12 @@
       Restart = "always";
       NotifyAccess = "all";
       PIDFile = "/tmp/systemd_proxy_ollama_podman.pid"; # TODO change pid location 
+      ExecStop = pkgs.writeShellScript "stop-granite-ollama_start_open-webui" ''
+        PATH="$PATH:${pkgs.podman}/bin";
+        ${pkgs.podman-compose}/bin/podman-compose down ollama
+      '';
     };
   };
-
-  # TODO create exit scripts for containers 
-  # pkgs.writeShellScript = "stop-granite-ollama_start_open-webui" ''
-  #   PATH="$PATH:${pkgs.podman}/bin";
-  #   ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_proxy_open-webui_podman.pid --replace" down --no-recreate -d open-webui
-  # '';
 
   systemd.user.services.granite-ollama_start_open-webui = {
     path = with pkgs; [
@@ -190,7 +188,7 @@
     script = ''
       PATH="$PATH:${pkgs.podman}/bin";
       ${pkgs.podman-compose}/bin/podman-compose down open-webui 
-      ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_proxy_open-webui_podman.pid --replace" up --no-recreate -d open-webui
+      ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_proxy_open-webui_podman.pid" up --no-recreate -d open-webui
 
       podman-compose logs -f open-webui 2>&1 | while IFS= read -r line; do
         # Process the line
@@ -218,7 +216,12 @@
       WorkingDirectory = "/tmp/granite-ollama"; # TODO change repo location
       Restart = "always";
       NotifyAccess = "all";
-      # PIDFile = "/tmp/systemd_proxy_open-webui_podman.pid"; # TODO change pid location 
+      PIDFile = "/tmp/systemd_proxy_open-webui_podman.pid"; # TODO change pid location  
+      ExecStop = pkgs.writeShellScript "stop-granite-ollama_start_open-webui" ''
+        PATH="$PATH:${pkgs.podman}/bin";
+        ${pkgs.podman-compose}/bin/podman-compose down open-webui
+      '';
+
     };
   };
 }
