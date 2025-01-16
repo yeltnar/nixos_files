@@ -169,6 +169,9 @@
     nvtopPackages.nvidia
     nvitop
 
+    age
+    sops
+
     slack
     element-desktop
 
