@@ -175,6 +175,7 @@ in {
     xclip
     squashfsTools
     htop
+    btop
     gnupg
     cryptsetup
     tree

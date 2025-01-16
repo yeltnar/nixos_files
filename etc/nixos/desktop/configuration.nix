@@ -166,6 +166,8 @@
     btrfs-progs
     mullvad-vpn
     borgbackup
+    nvtopPackages.nvidia
+    nvitop
 
     slack
     element-desktop
