@@ -10,6 +10,7 @@
       /etc/nixos/hardware-configuration.nix
       /home/drew/playin/nixos_files/generic_configuration.nix
       /home/drew/playin/nixos_files/includes/gaming.nix
+      /home/drew/playin/nixos_files/includes/libvirt/libvirt.nix
       # /home/drew/playin/nixos_files/includes/systemd-proxy/systemd-proxy.nix
 
       /home/drew/playin/nixos_files/includes/nebula.nix
