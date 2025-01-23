@@ -137,7 +137,12 @@
   users.users.drew = {
     isNormalUser = true;
     description = "drew";
-    extraGroups = [ "networkmanager" "wheel" "plugdev" "adbusers" ];
+    extraGroups = [ 
+      "networkmanager"
+      "wheel"
+      "plugdev"
+      "adbusers" 
+    ];
     packages = with pkgs; [
       discord
     #  thunderbird
