@@ -37,10 +37,12 @@
   boot.loader.grub.useOSProber = true;
 
   # services.getty.autologinUser = "drew";
-  systemd.targets.sleep.enable = false;
-  systemd.targets.suspend.enable = false;
-  systemd.targets.hibernate.enable = false;
-  systemd.targets.hybrid-sleep.enable = false;
+
+  # disable sleep 
+  # systemd.targets.sleep.enable = false;
+  # systemd.targets.suspend.enable = false;
+  # systemd.targets.hibernate.enable = false;
+  # systemd.targets.hybrid-sleep.enable = false;
 
 
   # this should be in the hardware-config.nix file 
@@ -99,7 +101,11 @@
     enable = true;
 
     # Enable the GNOME Desktop Environment.
-    displayManager.gdm.enable = true;
+    displayManager.gdm = {
+      enable = true;
+      # prevent suspend before user logs in 
+      autoSuspend = false;
+    };
     desktopManager.gnome.enable = true;
 
     # Configure keymap in X11
