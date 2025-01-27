@@ -1,11 +1,23 @@
 # Generated via dconf2nix: https://github.com/gvolpe/dconf2nix
-{lib, ...}:
+{lib, pkgs, ...}:
+let
+  _wallpaper = "file:///home/drew/Downloads/milkyway+C&H-nix.jpg"; 
+  wallpaper = pkgs.fetchurl {
+    url = "https://hot.andbrant.com/milkyway+C&H-nix.jpg";
+    sha256 = "sha256-Xzlv420zq3SOcjDJU0mc7Cew9dNql0IvhQcSvTVbziM=";
+  };
+in 
 with lib.hm.gvariant; {
   dconf.settings = {
     "org/gnome/Console" = {
       font-scale = 1.7000000000000006;
       audible-bell = false;
     };
+
+    "org/gnome/desktop/background" = {
+      picture-uri = "file://${wallpaper}";
+      picture-uri-dark = "file://${wallpaper}";
+    }; 
 
     "org/gnome/desktop/interface" = {
       clock-format = "12h";
