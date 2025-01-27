@@ -7,6 +7,11 @@ with lib.hm.gvariant; {
       audible-bell = false;
     };
 
+    "org/gnome/desktop/background" = {
+      picture-uri = "file:///home/drew/Downloads/milkyway+C&H-nix.jpg";
+      picture-uri-dark = "file:///home/drew/Downloads/milkyway+C&H-nix.jpg";
+    }; 
+
     "org/gnome/desktop/interface" = {
       clock-format = "12h";
       clock-show-seconds = true;
