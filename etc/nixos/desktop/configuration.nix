@@ -18,6 +18,8 @@
       /home/drew/playin/nixos_files/includes/rclone_mounts/rclone_mini.desktop.nix
       /home/drew/playin/nixos_files/includes/nbdkit/nbdkit.entry.nix
 
+      /home/drew/playin/nixos_files/includes/flatpak/flatpak.nix
+
       # /home/drew/playin/nixos_files/includes/makemkv/makemkv.nix
     ] 
     ++
