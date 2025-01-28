@@ -142,8 +142,12 @@
 
   programs.adb.enable = true;
 
+  # users.mutableUsers = false;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.drew = {
+    # generate with mkpasswd 
+    # hashedPassword = "";
     isNormalUser = true;
     description = "drew";
     extraGroups = [ 
