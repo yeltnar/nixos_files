@@ -1,11 +1,9 @@
-# man systemd-socket-proxyd
 {
   # config,
   pkgs,
   ...
 }: {
   
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.drew = {
     extraGroups = [ 
       "libvirtd" 
