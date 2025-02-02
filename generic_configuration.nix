@@ -19,7 +19,6 @@ in {
     # /home/drew/dotfiles/nixos/hardware-configuration.nix
     ./includes/time-until.nix
     ./includes/custom_bashrc.nix
-    ./includes/yeltnar_dev.nix
 
     ./includes/make_id_rsa.nix
     # ./includes/fetch_test.nix
@@ -34,18 +33,6 @@ in {
     "nix-command"
     "flakes"
   ];
-
-  fonts = { 
-    enableDefaultPackages = true;
-    packages = with pkgs; [(
-      nerdfonts.override { fonts = [ "BitstreamVeraSansMono" ]; }  # may need to change to "BitstreamWeraSansMono" 
-    )];
-    # fontconfig = {
-    #   defaultFonts = {
-    #
-    #   };
-    # };
-  };
 
   # Bootloader.
   # MOVED TO FILE FOR MACHINES
@@ -81,9 +68,6 @@ in {
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
   system.activationScripts.binbash = {
     deps = ["binsh"];
     text = ''
@@ -93,40 +77,15 @@ in {
     '';
   };
 
-  # Enable sound with pipewire.
-  # sound.enable = true # removed at request of nixos-rebuild;
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.drew = {
     isNormalUser = true;
     description = "drew";
     extraGroups = ["networkmanager" "wheel" "docker"];
     packages = with pkgs; [
-      firefox
-      vlc
-      vscodium
 
       yq-go
       openssl
-
-      # ffmpeg based video editor
-      # losslesscut-bin
-
-      #  thunderbird
     ];
 
     # this has been replaced with ssh certificates 
@@ -172,7 +131,6 @@ in {
     jq
     file
     ffmpeg_6-full
-    xclip
     squashfsTools
     htop
     btop
@@ -268,25 +226,6 @@ in {
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   # system.stateVersion = "23.11"; # Did you read the comment?
-
-  system.activationScripts.code_symlink = {
-    text = ''
-      text_to_add='alias code="codium"';
-      text_to_check='# code_alias_done';
-
-      # create if not there
-      if [ ! -e /home/drew/.bash_profile ]; then
-        touch /home/drew/.bash_profile;
-      fi
-
-      test_str=$(cat /home/drew/.bash_profile | grep "$text_to_check");
-
-      if [ -z "$test_str" ]; then
-        echo "$text_to_check" >> /home/drew/.bash_profile;
-        echo "$text_to_add" >> /home/drew/.bash_profile;
-      fi
-    '';
-  };
 
   system.activationScripts.build_time = {
     text = ''
