@@ -17,6 +17,9 @@
 
     /home/drew/playin/nixos_files/includes/drewdate/drewdate.nix
 
+    /home/drew/playin/nixos_files/includes/rclone_mounts/rclone_mini.laptop.nix
+    /home/drew/playin/nixos_files/includes/libvirt/libvirt.nix
+
     # /home/drew/playin/nixos_files/includes/makemkv/makemkv.entry.nix
   ];
 
