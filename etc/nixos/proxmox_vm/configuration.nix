@@ -23,21 +23,23 @@ args@{
   ));
 
 in {
+  # can not use absolute path for /home or /etc
   imports = [
     # Include the results of the hardware scan.
-    /etc/nixos/hardware-configuration.nix
-    /home/drew/playin/nixos_files/generic_configuration.nix
+    ./hardware-configuration.nix
+    ../../../generic_configuration.nix
+    ../../../desktop.nix
 
-    /home/drew/playin/nixos_files/includes/nebula.nix
-    /home/drew/playin/nixos_files/includes/rclone_mounts/rclone_mini.proxmoxvm.nix
+    ../../../includes/nebula.nix
+    ../../../includes/rclone_mounts/rclone_mini.proxmoxvm.nix
 
-    /home/drew/playin/nixos_files/includes/ntfy_report_ip_timer.nix
+    ../../../includes/ntfy_report_ip_timer.nix
 
-    /home/drew/playin/nixos_files/includes/derivation_test/derivation_test.nix
-    # /home/drew/playin/nixos_files/includes/nextcloud/nextcloud.nix
+    ../../../includes/derivation_test/derivation_test.nix
+    # ../../../includes/nextcloud/nextcloud.nix
 
-    # /home/drew/playin/nixos_files/includes/vm/vm.nix
-    /home/drew/playin/nixos_files/includes/nbdkit/nbdkit.entry.nix
+    # ../../../includes/vm/vm.nix
+    ../../../includes/nbdkit/nbdkit.entry.nix
   ];
 
   # Enable the X11 windowing system.
@@ -83,11 +85,11 @@ in {
   system.stateVersion = "23.11"; # Did you read the comment?
 
   # this allows any user (not just user who mounted) to access fuse (rclone) files 
-  environment.etc = {
-    "fuse.conf".text = ''
-    user_allow_other
-    '';
-  };
+  # environment.etc = {
+  #   "fuse.conf".text = ''
+  #   user_allow_other
+  #   '';
+  # };
 
   networking.hostName = getName {}; # Define your hostname.
 }

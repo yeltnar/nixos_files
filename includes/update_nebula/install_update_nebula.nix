@@ -9,6 +9,7 @@
 }: let
   cloned_repo = builtins.fetchGit {
     url = "https://github.com/yeltnar/nebula-ansible";
+    rev = "5f674ec95c8656f10d86cdc7913b82af0256ec13";
   };
   vardir = "/var/yeltnar-nebula";
   user = "drew";
