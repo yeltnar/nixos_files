@@ -7,31 +7,33 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      /etc/nixos/hardware-configuration.nix
-      /home/drew/playin/nixos_files/generic_configuration.nix
-      /home/drew/playin/nixos_files/includes/gaming.nix
-      /home/drew/playin/nixos_files/includes/libvirt/libvirt.nix
-      # /home/drew/playin/nixos_files/includes/systemd-proxy/systemd-proxy.nix
+      ./hardware-configuration.nix
+      ../../../generic_configuration.nix
+      ../../../desktop.nix
+      ../../../includes/gaming.nix
+      ../../../includes/libvirt/libvirt.nix
+      # ../../../includes/systemd-proxy/systemd-proxy.nix
 
-      /home/drew/playin/nixos_files/includes/nebula.nix
+      ../../../includes/nebula.nix
 
-      /home/drew/playin/nixos_files/includes/rclone_mounts/rclone_mini.desktop.nix
-      /home/drew/playin/nixos_files/includes/nbdkit/nbdkit.entry.nix
+      ../../../includes/rclone_mounts/rclone_mini.desktop.nix
+      ../../../includes/nbdkit/nbdkit.entry.nix
 
-      /home/drew/playin/nixos_files/includes/flatpak/flatpak.nix
+      ../../../includes/flatpak/flatpak.nix
 
-      # /home/drew/playin/nixos_files/includes/makemkv/makemkv.nix
+      # ../../../includes/makemkv/makemkv.nix
     ] 
     ++
     lib.fileset.toList (
       # All default.nix files in ./.
-      # lib.fileset.fileFilter (file: file.name == "systemd-proxy.nix") /home/drew/playin/nixos_files/includes/systemd-proxy
-      # lib.fileset.fileFilter (file: file.hasExt "nix") /home/drew/playin/nixos_files/includes/systemd-proxy
-      lib.fileset.fileFilter (file: file.hasExt "nix") /home/drew/playin/nixos_files/includes/granite-ollama-serverless
+      # lib.fileset.fileFilter (file: file.name == "systemd-proxy.nix") ../../../includes/systemd-proxy
+      # lib.fileset.fileFilter (file: file.hasExt "nix") ../../../includes/systemd-proxy
+      lib.fileset.fileFilter (file: file.hasExt "nix") ../../../includes/granite-ollama-serverless
     )
     ;
    
-
+  # Do I need this for remote build? 
+  # nix.settings.trusted-users = ["drew"];
 
   # Bootloader.
   boot.loader.grub.enable = true;
