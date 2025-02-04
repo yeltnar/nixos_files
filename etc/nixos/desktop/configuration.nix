@@ -56,7 +56,7 @@
     "/home/drew/.local/share/Steam".options = [ "compress=zstd" ];
     "/home/drew/.cache".options = [ "compress=zstd" ];
     "/nix".options = [ "compress=zstd" "noatime" ];
-    "/swap".options = [ "noatime" ];
+    # "/swap".options = [ "noatime" ];
   };
 
   networking.hostName = "drew-lin-desktop"; # Define your hostname.
