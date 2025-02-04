@@ -46,6 +46,7 @@ in {
       export SECONDARY_HOST="hot.mini.lan"
       export SECONDARY_CURL_OPTIONS="--cacert ./knownca.pem"
       
+      # Make sure this device name matches the one on the server  
       export DEVICE_NAME="${config.networking.hostName}" 
       export DATE_FILE_PATH="/var/yeltnar-nebula/tar_stuff/remote_updated.date"
       export var_dir="/var/yeltnar-nebula"
