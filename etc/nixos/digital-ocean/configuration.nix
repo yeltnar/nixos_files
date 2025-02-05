@@ -65,13 +65,32 @@ nix.settings.trusted-users = ["drew"];
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  # neovim
-  # curl
-  # git
-  # lazygit
-  # tmux
-  # nebula
+  neovim
+  curl
+  git
+  lazygit
+  tmux
+  nebula
+  podman-compose
   ];
+
+  virtualisation = {
+    docker = {
+      enable = false;
+    };
+    podman = {
+      enable = true;
+
+      # Create a `docker` alias for podman, to use it as a drop-in replacement
+      dockerCompat = true;
+
+      # Required for containers under podman-compose to be able to talk to each other.
+      defaultNetwork.settings.dns_enabled = true;
+    };
+  };
+
+  systemd.services.podman-restart.enable = true;
+
 
   environment.etc = {
     "ssh/user_ca.pub".text = ''
@@ -80,7 +99,7 @@ nix.settings.trusted-users = ["drew"];
   };
 
   services.openssh.extraConfig = ''
-  # TrustedUserCAKeys /etc/ssh/user_ca.pub
+    TrustedUserCAKeys /etc/ssh/user_ca.pub
   '';
 
   # Some programs need SUID wrappers, can be configured further or are
