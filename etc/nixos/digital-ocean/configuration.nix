@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../../includes/custom_bashrc.nix
     ];
 
 nix.settings.trusted-users = ["drew"];
@@ -17,7 +18,7 @@ nix.settings.trusted-users = ["drew"];
   boot.loader.grub.device = "/dev/vda";
   boot.loader.grub.useOSProber = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "do-nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -65,13 +66,18 @@ nix.settings.trusted-users = ["drew"];
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  neovim
-  curl
-  git
-  lazygit
-  tmux
-  nebula
-  podman-compose
+    neovim
+    clang # needed to compile c # used in nvim 
+    ripgrep # nvim search 
+    lua-language-server
+    # nixd
+
+    curl
+    git
+    lazygit
+    tmux
+    nebula
+    podman-compose
   ];
 
   virtualisation = {
