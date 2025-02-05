@@ -20,7 +20,7 @@
   in 
   {
     nixosConfigurations = {
-      nixos = nixpkgs.lib.nixosSystem {
+      do-nixos = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit system; };
 
         modules = [
