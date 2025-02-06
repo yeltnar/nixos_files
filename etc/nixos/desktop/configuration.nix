@@ -168,11 +168,19 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable; 
   services.xserver.videoDrivers = [ "nvidia" ]; 
-  hardware.nvidia.open = false; # use non-free drivers
   # enable nvidia usage inside podman containers... maybe docker too
   hardware.nvidia-container-toolkit.enable = true;
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = true;
+    # powerManagement.enable = false;
+    powerManagement.finegrained = false;
+    open = false; # use non-free drivers
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable; 
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
