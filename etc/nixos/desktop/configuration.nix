@@ -14,7 +14,7 @@
       ../../../includes/libvirt/libvirt.nix
       # ../../../includes/systemd-proxy/systemd-proxy.nix
 
-      ../../../includes/nebula.nix
+      ../../../includes/nebula/nebula.nix
 
       ../../../includes/rclone_mounts/rclone_mini.desktop.nix
       ../../../includes/nbdkit/nbdkit.entry.nix

@@ -4,8 +4,8 @@
   ...
 }: {
   imports = [
-    ./update_nebula/update_nebula_systemd.nix
-    ./update_nebula/install_update_nebula.nix
+    ./update_nebula_systemd.nix
+    ./install_update_nebula.nix
   ];
 
   environment.systemPackages = with pkgs; [

@@ -12,7 +12,7 @@
     ../../../generic_configuration.nix
     ../../../desktop.nix
 
-    ../../../includes/nebula.nix
+    ../../../includes/nebula/nebula.nix
     ../../../includes/tlp.nix
     ../../../includes/gaming.nix
 

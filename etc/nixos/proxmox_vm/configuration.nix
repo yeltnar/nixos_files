@@ -30,7 +30,7 @@ in {
     ../../../generic_configuration.nix
     ../../../desktop.nix
 
-    ../../../includes/nebula.nix
+    ../../../includes/nebula/nebula.nix
     ../../../includes/rclone_mounts/rclone_mini.proxmoxvm.nix
 
     ../../../includes/ntfy_report_ip_timer.nix
