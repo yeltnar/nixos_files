@@ -4,6 +4,7 @@
 {
   config,
   pkgs,
+  leUser,
   ...
 }: 
 let
@@ -16,7 +17,6 @@ let
     { config = config.nixpkgs.config; };
 in {
   imports = [
-    # /home/drew/dotfiles/nixos/hardware-configuration.nix
     ./includes/time-until.nix
     ./includes/custom_bashrc.nix
 
@@ -78,9 +78,9 @@ in {
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.drew = {
+  users.users."${leUser}" = {
     isNormalUser = true;
-    description = "drew";
+    description = leUser;
     extraGroups = ["networkmanager" "wheel" "docker"];
     packages = with pkgs; [
 

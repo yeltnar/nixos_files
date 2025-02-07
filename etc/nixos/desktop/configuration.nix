@@ -2,19 +2,30 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, ... }:
-
+args@{ 
+  config, 
+  pkgs, 
+  lib, 
+  ... 
+}:
+let
+  leUser = "drew";
+in 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../../generic_configuration.nix
+      ( import ../../../generic_configuration.nix (args // { leUser = leUser; }))
       ../../../desktop.nix
       ../../../includes/gaming.nix
       ../../../includes/libvirt/libvirt.nix
       # ../../../includes/systemd-proxy/systemd-proxy.nix
 
-      ../../../includes/nebula/nebula.nix
+      
+      ( import ../../../includes/nebula/nebula.nix (args // {
+        user = leUser; 
+        group = "100"; 
+      }))
 
       ../../../includes/rclone_mounts/rclone_mini.desktop.nix
       ../../../includes/nbdkit/nbdkit.entry.nix
@@ -150,7 +161,6 @@
   users.users.drew = {
     # generate with mkpasswd 
     # hashedPassword = "";
-    isNormalUser = true;
     description = "drew";
     extraGroups = [ 
       "networkmanager"

@@ -5,6 +5,8 @@
 {
   config,
   pkgs,
+  user,
+  group ? "100",
   ...
 }: let
   cloned_repo = builtins.fetchGit {
@@ -12,8 +14,6 @@
     rev = "5f674ec95c8656f10d86cdc7913b82af0256ec13";
   };
   vardir = "/var/yeltnar-nebula";
-  user = "drew";
-  group = "100";
 in {
   system.activationScripts.setup_nebula_env = {
     text = /*bash*/ ''

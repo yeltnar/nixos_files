@@ -1,11 +1,16 @@
-{
+args@{
   config,
   pkgs,
+  user,
+  group ? "100",
   ...
 }: {
   imports = [
     ./update_nebula_systemd.nix
-    ./install_update_nebula.nix
+    ( import ./install_update_nebula.nix (args // {
+      user = user; 
+      group = group; 
+    }))
   ];
 
   environment.systemPackages = with pkgs; [

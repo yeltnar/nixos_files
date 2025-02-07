@@ -1,18 +1,25 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{
+args@{
   config,
   pkgs,
   ...
-}: {
+}: 
+let
+  leUser = "drew";
+in 
+{
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../../generic_configuration.nix
+    ( import ../../../generic_configuration.nix (args // { leUser = leUser; }))
     ../../../desktop.nix
 
-    ../../../includes/nebula/nebula.nix
+    ( import ../../../includes/nebula/nebula.nix (args // {
+      user = leUser; 
+      group = "100"; 
+    }))
     ../../../includes/tlp.nix
     ../../../includes/gaming.nix
 

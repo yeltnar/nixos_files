@@ -21,16 +21,19 @@ args@{
       ];
     }
   ));
-
+  leUser = "drew";
 in {
   # can not use absolute path for /home or /etc
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../../generic_configuration.nix
+    ( import ../../../generic_configuration.nix (args // { leUser = leUser; }))
     ../../../desktop.nix
 
-    ../../../includes/nebula/nebula.nix
+    ( import ../../../includes/nebula/nebula.nix (args // {
+      user = leUser; 
+      group = "100"; 
+    }))
     ../../../includes/rclone_mounts/rclone_mini.proxmoxvm.nix
 
     ../../../includes/ntfy_report_ip_timer.nix
