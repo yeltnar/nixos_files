@@ -20,7 +20,7 @@
   in 
   {
     nixosConfigurations = {
-      drew-lin-laptop = nixpkgs.lib.nixosSystem {
+      drew-lin-lap = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit system; };
 
         modules = [

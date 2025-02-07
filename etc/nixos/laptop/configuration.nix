@@ -8,7 +8,7 @@
 }: {
   imports = [
     # Include the results of the hardware scan.
-    /etc/nixos/hardware-configuration.nix
+    ./hardware-configuration.nix
     ../../../generic_configuration.nix
     ../../../desktop.nix
 
@@ -16,7 +16,7 @@
     ../../../includes/tlp.nix
     ../../../includes/gaming.nix
 
-    ../../../includes/drewdate/drewdate.nix
+    # ../../../includes/drewdate/drewdate.nix
 
     ../../../includes/rclone_mounts/rclone_mini.laptop.nix
     ../../../includes/libvirt/libvirt.nix
