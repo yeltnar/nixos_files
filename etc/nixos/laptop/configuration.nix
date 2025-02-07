@@ -8,20 +8,20 @@
 }: {
   imports = [
     # Include the results of the hardware scan.
-    /etc/nixos/hardware-configuration.nix
-    /home/drew/playin/nixos_files/generic_configuration.nix
-    /home/drew/playin/nixos_files/desktop.nix
+    ./hardware-configuration.nix
+    ../../../generic_configuration.nix
+    ../../../desktop.nix
 
-    /home/drew/playin/nixos_files/includes/nebula.nix
-    /home/drew/playin/nixos_files/includes/tlp.nix
-    /home/drew/playin/nixos_files/includes/gaming.nix
+    ../../../includes/nebula.nix
+    ../../../includes/tlp.nix
+    ../../../includes/gaming.nix
 
-    /home/drew/playin/nixos_files/includes/drewdate/drewdate.nix
+    # ../../../includes/drewdate/drewdate.nix
 
-    /home/drew/playin/nixos_files/includes/rclone_mounts/rclone_mini.laptop.nix
-    /home/drew/playin/nixos_files/includes/libvirt/libvirt.nix
+    ../../../includes/rclone_mounts/rclone_mini.laptop.nix
+    ../../../includes/libvirt/libvirt.nix
 
-    # /home/drew/playin/nixos_files/includes/makemkv/makemkv.entry.nix
+    # ../../../includes/makemkv/makemkv.entry.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -74,7 +74,7 @@
 
   environment.systemPackages = with pkgs; [
     
-    ( import /home/drew/playin/nixos_files/includes/force_charge.nix { inherit pkgs; } )
+    ( import ../../../includes/force_charge.nix { inherit pkgs; } )
 
     gparted
 
