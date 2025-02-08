@@ -88,22 +88,22 @@ in {
       gnome-music
     ]);
 
-  system.activationScripts.code_symlink = {
-    text = ''
-      text_to_add='alias code="codium"';
-      text_to_check='# code_alias_done';
-
-      # create if not there
-      if [ ! -e /home/drew/.bash_profile ]; then
-        touch /home/drew/.bash_profile;
-      fi
-
-      test_str=$(cat /home/drew/.bash_profile | grep "$text_to_check");
-
-      if [ -z "$test_str" ]; then
-        echo "$text_to_check" >> /home/drew/.bash_profile;
-        echo "$text_to_add" >> /home/drew/.bash_profile;
-      fi
-    '';
-  };
+  # system.activationScripts.code_symlink = {
+  #   text = ''
+  #     text_to_add='alias code="codium"';
+  #     text_to_check='# code_alias_done';
+  #
+  #     # create if not there
+  #     if [ ! -e /home/drew/.bash_profile ]; then
+  #       touch /home/drew/.bash_profile;
+  #     fi
+  #
+  #     test_str=$(cat /home/drew/.bash_profile | grep "$text_to_check");
+  #
+  #     if [ -z "$test_str" ]; then
+  #       echo "$text_to_check" >> /home/drew/.bash_profile;
+  #       echo "$text_to_add" >> /home/drew/.bash_profile;
+  #     fi
+  #   '';
+  # };
 }
