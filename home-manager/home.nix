@@ -2,11 +2,15 @@
   config,
   pkgs,
   ...
-}: {
+}:
+let
+  username = "drew";
+  homeDirectory = "/home/${username}";
+in {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
-  home.username = "drew";
-  home.homeDirectory = "/home/drew";
+  home.username = username; 
+  home.homeDirectory = homeDirectory;
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -74,6 +78,20 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  programs.bash = {
+    enable = true;
+    # sessionVariables = {
+    #   DEVICE_NAME=config.hostname;
+    #   GROUP_NAME="linux";
+    # };
+    bashrcExtra = ''
+bashrc_folder="${homeDirectory}/playin/custom_bashrc"
+. $bashrc_folder/gitignore/device_name.env
+. $bashrc_folder/entrypoint.sh
+'';
+  };
+
   imports = [
     ./dconf.nix
   ];
