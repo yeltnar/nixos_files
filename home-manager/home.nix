@@ -6,6 +6,11 @@
 let
   username = "drew";
   homeDirectory = "/home/${username}";
+  clone_custom_bashrc = pkgs.writeShellScript "clone_custom_bashrc" ''
+  if [ ! -e $HOME/playin/custom_bashrc ]; then
+    cd ~/playin/;
+    ${pkgs.git}/bin/git clone https://github.com/yeltnar/custom_bashrc
+  fi'';
 in {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -76,20 +81,20 @@ in {
     # EDITOR = "emacs";
   };
 
+  home.activation = {
+    clone_custom_bashrc = "run ${clone_custom_bashrc}";
+  };
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
   programs.bash = {
     enable = true;
-    # sessionVariables = {
-    #   DEVICE_NAME=config.hostname;
-    #   GROUP_NAME="linux";
-    # };
     bashrcExtra = ''
-bashrc_folder="${homeDirectory}/playin/custom_bashrc"
-. $bashrc_folder/gitignore/device_name.env
-. $bashrc_folder/entrypoint.sh
-'';
+    bashrc_folder="${homeDirectory}/playin/custom_bashrc"
+    . $bashrc_folder/gitignore/device_name.env
+    . $bashrc_folder/entrypoint.sh
+    '';
   };
 
   imports = [

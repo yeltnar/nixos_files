@@ -18,7 +18,6 @@ let
 in {
   imports = [
     ./includes/time-until.nix
-    ./includes/custom_bashrc.nix
 
     ./includes/make_id_rsa.nix
     # ./includes/fetch_test.nix

@@ -1,3 +1,4 @@
+# THIS SHOULD NOT BE USED... USE HOME MANAGER INSTEAD
 {
   config,
   pkgs,
