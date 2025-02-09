@@ -38,8 +38,12 @@
   -----END CERTIFICATE-----
   '';
 in {
-  system.activationScripts.setup_nebula_env = {
-    text = /*bash*/ ''
+  # TODO move this to systemctl
+  systemd.services.setup_nebula_env = {
+    after = ["sysinit-reactivation.target"];
+    wantedBy = ["basic.target"];
+    partOf = ["sysinit-reactivation.target"]; 
+    script = /*bash*/ ''
 
       # set up the cert for the private network for the update script 
       cat <<EOCERT > ${vardir}/knownca.pem
@@ -89,5 +93,9 @@ in {
         popd;
       fi
     '';
+    serviceConfig = {
+      Type = "oneshot"; 
+      WorkingDirectory = "/home/${user}";
+    };
   };
 }
