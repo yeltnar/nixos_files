@@ -45,6 +45,8 @@ in {
     ../../../includes/nbdkit/nbdkit.entry.nix
   ];
 
+  nix.settings.trusted-users = [ "drew" ];
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   # disable xterm

@@ -18,7 +18,31 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "wedding_site": "wedding_site"
+      }
+    },
+    "wedding_site": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "dir": "includes/wedding_site",
+        "lastModified": 1739215305,
+        "narHash": "sha256-2c679ymfCA3yLTM5TvqZ3pMFES7bGyUag2fF7Wk5bvM=",
+        "owner": "yeltnar",
+        "repo": "nixos_files",
+        "rev": "f3ce61150ad0fb9768fc5826b3f4c3041c3b9780",
+        "type": "github"
+      },
+      "original": {
+        "dir": "includes/wedding_site",
+        "owner": "yeltnar",
+        "ref": "main",
+        "repo": "nixos_files",
+        "type": "github"
       }
     }
   },
