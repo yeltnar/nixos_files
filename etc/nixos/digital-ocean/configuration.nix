@@ -3,14 +3,14 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 args@{ config, pkgs, ... }:
+
 let
   leUser = "drew";
-in 
-{
+in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ( import ../../../generic_configuration.nix (args // { leUser = leUser; }))
+      ( import ../../../includes/nebula/nebula.nix ( args // { user = leUser; SECONDARY_HOST ="hot.andbrant.com"; } ) )
     ];
 
   nix.settings.trusted-users = [leUser];
@@ -83,6 +83,7 @@ in
 
     sops
     age
+    rclone 
   ];
 
   virtualisation = {
@@ -112,6 +113,22 @@ in
   services.openssh.extraConfig = ''
     TrustedUserCAKeys /etc/ssh/user_ca.pub
   '';
+
+  system.activationScripts.binbash = {
+    deps = ["binsh"];
+    text = ''
+      if [ ! -e "/bin/bash" ]; then
+      	ln -s /bin/sh /bin/bash
+      fi
+    '';
+  };
+
+  # this allows any user (not just user who mounted) to access fuse (rclone) files 
+  environment.etc = {
+    "fuse.conf".text = ''
+    user_allow_other
+    '';
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
