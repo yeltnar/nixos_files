@@ -7,6 +7,7 @@
   pkgs,
   user,
   group ? "100",
+  SECONDARY_HOST ? "hot.h.lan",
   ...
 }: let
   cloned_repo = builtins.fetchGit {
@@ -18,7 +19,6 @@
   PORT="2323";
   CURL_OPTIONS="--cacert ./knownca.pem";
   SECONDARY_PORT="443";
-  SECONDARY_HOST="hot.mini.lan";
   SECONDARY_CURL_OPTIONS="--cacert ./knownca.pem";
   DEVICE_NAME="${config.networking.hostName}" ;
   DATE_FILE_PATH="/var/yeltnar-nebula/tar_stuff/remote_updated.date";
@@ -45,6 +45,12 @@ in {
     partOf = ["sysinit-reactivation.target"]; 
     script = /*bash*/ ''
 
+      # create update_nebula dir if not there
+      if [ ! -d ${vardir} ]; then
+        mkdir -p ${vardir}
+        chown ${user} ${vardir};
+      fi
+
       # set up the cert for the private network for the update script 
       cat <<EOCERT > ${vardir}/knownca.pem
       ${cacert}
@@ -67,12 +73,6 @@ in {
       export var_dir="${var_dir}";
       export nebula_config_client_folder="${nebula_config_client_folder}";
       EOENV
-
-      # create update_nebula dir if not there
-      if [ ! -d ${vardir} ]; then
-        mkdir -p ${vardir}
-        chown ${user} ${vardir};
-      fi
 
       # create compare_date.sh file if not there
       if [ ! -e ${vardir}/compare_date.sh ]; then

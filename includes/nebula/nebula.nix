@@ -3,6 +3,7 @@ args@{
   pkgs,
   user,
   group ? "100",
+  SECONDARY_HOST ? "hot.h.lan",
   ...
 }: {
   imports = [
@@ -10,6 +11,7 @@ args@{
     ( import ./install_update_nebula.nix (args // {
       user = user; 
       group = group; 
+      SECONDARY_HOST = SECONDARY_HOST;
     }))
   ];
 
