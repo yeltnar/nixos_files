@@ -91,10 +91,14 @@ in {
   programs.bash = {
     enable = true;
     bashrcExtra = ''
+
     bashrc_folder="${homeDirectory}/playin/custom_bashrc"
     . $bashrc_folder/gitignore/device_name.env
-    . $bashrc_folder/entrypoint.sh
-    '';
+
+    # Commands that should be applied only for interactive shells.
+    [[ $- == *i* ]] || return
+
+    . $bashrc_folder/entrypoint.sh'';
   };
 
   imports = [
