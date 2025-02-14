@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{
+args@{
   config,
   pkgs,
   leUser,
@@ -17,6 +17,8 @@ let
     { config = config.nixpkgs.config; };
 in {
   imports = [
+    ( import ./includes/sops/sops_make_age_key.nix (args // { leUser = leUser; }))
+
     ./includes/time-until.nix
 
     ./includes/make_id_rsa.nix

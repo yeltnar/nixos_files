@@ -2,15 +2,18 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
-
+args@{ config, pkgs, ... }:
+let
+  leUser = "drew";
+in 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ( import ../../../generic_configuration.nix (args // { leUser = leUser; }))
     ];
 
-nix.settings.trusted-users = ["drew"];
+  nix.settings.trusted-users = [leUser];
 
   # Bootloader.
   boot.loader.grub.enable = true;
@@ -52,9 +55,9 @@ nix.settings.trusted-users = ["drew"];
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.drew = {
+  users.users."${leUser}" = {
     isNormalUser = true;
-    description = "drew";
+    description = leUser;
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [];
   };
