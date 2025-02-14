@@ -77,6 +77,9 @@ nix.settings.trusted-users = ["drew"];
     tmux
     nebula
     podman-compose
+
+    sops
+    age
   ];
 
   virtualisation = {
