@@ -1,0 +1,8 @@
+keys:
+  - &nix-darwin age10z776utsv2h97fwq93q2cqxqdvjmt7f4ffcrq582yj2qtnft796q879gn6
+creation_rules:
+  - path_regex: etc/nix-darwin/*
+    key_groups:
+    - age:
+      - *nix-darwin
+ 
