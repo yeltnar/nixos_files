@@ -151,6 +151,9 @@ in {
 
     bcache-tools
     bcachefs-tools
+
+    sops
+    age # for sops encryption 
   ];
 
   services.xserver.excludePackages = [pkgs.xterm];
