@@ -15,11 +15,13 @@
       environment.systemPackages = with pkgs; 
         [ 
           neovim
-          podman
+          # podman # can't get virt going with nix-darwin
           podman-compose
           podman-desktop
           nixd
-          cowsay
+          openssh
+          sops
+          age # for sops encryption 
         ];
 
       # Necessary for using flakes on this system.
