@@ -1,8 +1,13 @@
 keys:
   - &nix-darwin age10z776utsv2h97fwq93q2cqxqdvjmt7f4ffcrq582yj2qtnft796q879gn6
+  - &proxmox_vm age1clwp295hjrrmufpjgqgasgsr7r6fdaew4f2c9xfgp5azzvx6mqhqdkqwaw
 creation_rules:
   - path_regex: etc/nix-darwin/*
     key_groups:
     - age:
       - *nix-darwin
+  - path_regex: etc/nixos/proxmox_vm/*
+    key_groups:
+    - age:
+      - *proxmox_vm
  
