@@ -7,6 +7,7 @@
   systemd.services.sops_make_age_key = {
     path = with pkgs; [
       age 
+      gawk
     ];
     description = "sops_make_age_key";
     wants = ["basic.target"];
@@ -23,7 +24,8 @@
     script = ''
       # TODO change path to use username
       mkdir -p /home/drew/.config/sops/age/
-      age-keygen -o /home/drew/.config/sops/age/keys.txt
+      # stderr is the private key. dont want to keep coments (so sops nix works) so remote with awk
+      age-keygen 2>/dev/null | awk '!/#/' > /home/drew/.config/sops/age/keys.txt 
     '';
   };
 }
