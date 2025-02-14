@@ -1,6 +1,7 @@
 keys:
   - &nix-darwin age10z776utsv2h97fwq93q2cqxqdvjmt7f4ffcrq582yj2qtnft796q879gn6
   - &proxmox_vm age1clwp295hjrrmufpjgqgasgsr7r6fdaew4f2c9xfgp5azzvx6mqhqdkqwaw
+  - &drew-lin-desktop age1hu4du8pygnmadptmvurw6s06rpmrj9tfe7k89yejajxynp743ufqrfz5ue
 creation_rules:
   - path_regex: etc/nix-darwin/*
     key_groups:
@@ -10,4 +11,7 @@ creation_rules:
     key_groups:
     - age:
       - *proxmox_vm
- 
+  - path_regex: etc/nixos/desktop/*
+    key_groups:
+    - age:
+      - *drew-lin-desktop
