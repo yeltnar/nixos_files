@@ -145,7 +145,10 @@ in {
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedUDPPorts = [ 
+    # allow nebula 
+    4242
+  ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
