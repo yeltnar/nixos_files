@@ -56,7 +56,11 @@ in
 
   # Enable the GNOME Desktop Environment.
   # disable xterm
-  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.displayManager.gdm = {
+    enalbe = true;
+    # prevent suspend before the user logs in 
+    autoSuspend = false;
+  };
   services.xserver.desktopManager.gnome = {
     enable = true;
   };
@@ -98,6 +102,9 @@ in
 
     obs-studio
   ];
+
+  # TLS certificates to install as system certs 
+  # security.pki.certificates = [];   
 
   # remember to create sub volumes and mount points... some need to be created on the mounted volume
   fileSystems."/media/btrfs_top" = {
