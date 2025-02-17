@@ -57,7 +57,7 @@ in
   # Enable the GNOME Desktop Environment.
   # disable xterm
   services.xserver.displayManager.gdm = {
-    enalbe = true;
+    enable = true;
     # prevent suspend before the user logs in 
     autoSuspend = false;
   };
