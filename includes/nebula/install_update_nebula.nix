@@ -37,13 +37,8 @@
   JmH3busCICZnli09FnPU9/3mt6Kf1AhEF6X3evM+J/P1gEGOqM9u
   -----END CERTIFICATE-----
   '';
-in {
-  # TODO move this to systemctl
-  systemd.services.setup_nebula_env = {
-    after = ["sysinit-reactivation.target"];
-    wantedBy = ["basic.target"];
-    partOf = ["sysinit-reactivation.target"]; 
-    script = /*bash*/ ''
+  
+  update_script = /*bash*/ ''
 
       # create update_nebula dir if not there
       if [ ! -d ${vardir} ]; then
@@ -93,6 +88,14 @@ in {
         popd;
       fi
     '';
+
+in {
+  # TODO move this to systemctl
+  systemd.services.setup_nebula_env = {
+    after = ["sysinit-reactivation.target"];
+    wantedBy = ["basic.target"];
+    partOf = ["sysinit-reactivation.target"]; 
+    script = update_script;
     serviceConfig = {
       Type = "oneshot"; 
       WorkingDirectory = "/home/${user}";
