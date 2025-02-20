@@ -43,8 +43,15 @@ in {
 
     # ../../../includes/vm/vm.nix
     ../../../includes/nbdkit/nbdkit.entry.nix
+    ../../../includes/rclone_mounts/mini-minio.nix
   ];
 
+  # TODO move this block 
+  sops.defaultSopsFile = ./secrets/secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+  sops.age.keyFile = "/home/${leUser}/.config/sops/age/keys.txt";
+  sops.secrets."mnt-minio.env" = {};
+  
   nix.settings.trusted-users = [ "drew" ];
 
   # Enable the X11 windowing system.
@@ -90,11 +97,11 @@ in {
   system.stateVersion = "23.11"; # Did you read the comment?
 
   # this allows any user (not just user who mounted) to access fuse (rclone) files 
-  # environment.etc = {
-  #   "fuse.conf".text = ''
-  #   user_allow_other
-  #   '';
-  # };
+  environment.etc = {
+    "fuse.conf".text = ''
+    user_allow_other
+    '';
+  };
 
   networking.hostName = getName {}; # Define your hostname.
 }
