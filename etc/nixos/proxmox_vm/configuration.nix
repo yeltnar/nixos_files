@@ -43,6 +43,7 @@ in {
 
     # ../../../includes/vm/vm.nix
     ../../../includes/nbdkit/nbdkit.entry.nix
+    ../../../includes/rclone_mounts/mini-minio.nix
   ];
 
   nix.settings.trusted-users = [ "drew" ];
@@ -90,11 +91,11 @@ in {
   system.stateVersion = "23.11"; # Did you read the comment?
 
   # this allows any user (not just user who mounted) to access fuse (rclone) files 
-  # environment.etc = {
-  #   "fuse.conf".text = ''
-  #   user_allow_other
-  #   '';
-  # };
+  environment.etc = {
+    "fuse.conf".text = ''
+    user_allow_other
+    '';
+  };
 
   networking.hostName = getName {}; # Define your hostname.
 }
