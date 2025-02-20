@@ -1,18 +1,19 @@
-{ pkgs, ...}:
+{ pkgs, config, ...}:
 let
-  s3-access-key-id=
-  ; 
-  s3-secret-access-key=
-  ;
-  s3-endpoint="https://minio-db.h.lan";
   s3-certificate=
+  ''
+    -----BEGIN CERTIFICATE-----
+    MIIBozCCAUqgAwIBAgIRAPZn1/oD/c0M9GhKndrWbmcwCgYIKoZIzj0EAwIwMDEu
+    MCwGA1UEAxMlQ2FkZHkgTG9jYWwgQXV0aG9yaXR5IC0gMjAyMSBFQ0MgUm9vdDAe
+    Fw0yMTEwMDMwNDIzNDdaFw0zMTA4MTIwNDIzNDdaMDAxLjAsBgNVBAMTJUNhZGR5
+    IExvY2FsIEF1dGhvcml0eSAtIDIwMjEgRUNDIFJvb3QwWTATBgcqhkjOPQIBBggq
+    hkjOPQMBBwNCAAR4V9bn+bmOJfWlIGkNZyy+FzHCxIZiU3Ko6f+MgY9fbZddVvZU
+    +qUMqdj1jOOSHGb2oksfABkhrJAnNcqtafH9o0UwQzAOBgNVHQ8BAf8EBAMCAQYw
+    EgYDVR0TAQH/BAgwBgEB/wIBATAdBgNVHQ4EFgQUGxw7vsSlsHoIbX3fqTwnH8+8
+    Ni0wCgYIKoZIzj0EAwIDRwAwRAIgAPmMzq8t6N9H6wUyxEjYZY870ysKNxtrBrmK
+    JmH3busCICZnli09FnPU9/3mt6Kf1AhEF6X3evM+J/P1gEGOqM9u
+    -----END CERTIFICATE-----''
     ;
-
-    env_file = pkgs.writeText "mnt-minio.systemd.env" ''
-    RCLONE_S3_SECRET_ACCESS_KEY=${s3-secret-access-key}
-    RCLONE_S3_ACCESS_KEY_ID=${s3-access-key-id}
-    RCLONE_S3_ENDPOINT=${s3-endpoint}
-    '';
 in {
 
   # certificate from caddy that adds https
@@ -30,7 +31,7 @@ in {
       "nofail"
     ]);
     mountConfig = {
-      EnvironmentFile = env_file;
+      EnvironmentFile = config.sops.secrets."mnt-minio.env".path;
     };
   }];
 }

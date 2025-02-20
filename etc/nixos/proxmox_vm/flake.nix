@@ -4,6 +4,10 @@
   inputs = {
     # nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
+    sops-nix = { 
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     wedding_site = {
       # # can either pick 'url' or the other options 
       # url = "../../../includes/wedding_site/";
@@ -16,7 +20,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, ... } @ inputs: 
+  outputs = { self, nixpkgs, sops-nix, ... } @ inputs: 
   let
     system = "x86_64-linux";
     config = self.config;
@@ -37,6 +41,7 @@
         modules = [
           ./configuration.nix
           (import inputs.wedding_site.cfg ( {inherit config; inherit pkgs; }))
+          sops-nix.nixosModules.sops
         ];
       };
     };
