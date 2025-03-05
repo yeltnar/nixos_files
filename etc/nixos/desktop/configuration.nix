@@ -32,6 +32,7 @@ in
 
       ../../../includes/flatpak/flatpak.nix
 
+      ../../../includes/rclone_mounts/mini-minio.nix
       # ../../../includes/makemkv/makemkv.nix
     ] 
     ++
@@ -45,6 +46,12 @@ in
    
   # Do I need this for remote build? 
   # nix.settings.trusted-users = ["drew"];
+
+  # TODO move this block 
+  sops.defaultSopsFile = ./secrets/secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+  sops.age.keyFile = "/home/${leUser}/.config/sops/age/keys.txt";
+  sops.secrets."mnt-minio.env" = {};
 
   # Bootloader.
   boot.loader.grub.enable = true;
