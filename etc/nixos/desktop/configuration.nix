@@ -52,6 +52,11 @@ in
   sops.defaultSopsFormat = "yaml";
   sops.age.keyFile = "/home/${leUser}/.config/sops/age/keys.txt";
   sops.secrets."mnt-minio.env" = {};
+  sops.secrets."mnt-minio2.env" = {};
+  sops.secrets."k" = {
+    owner = "drew";
+    path = "/home/drew/fmd.from.sops";
+  };
 
   # Bootloader.
   boot.loader.grub.enable = true;
