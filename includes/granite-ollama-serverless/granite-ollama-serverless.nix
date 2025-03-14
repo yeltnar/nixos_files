@@ -3,7 +3,10 @@
   # config,
   pkgs,
   ...
-}: {
+}: let
+  code_parent_dir="/home/drew/playin";
+  code_dir="${code_parent_dir}/granite-ollama";  
+in {
   networking.firewall.allowedTCPPorts = [
   8080 # port for container
   # 11434 # port for container
@@ -40,7 +43,7 @@
     requires = [
       # "network-online.target"
       "default.target"
-    ]; # TODO make sure this is there, if starting at boot 
+    ]; 
     wantedBy = [
       "default.target"
       "sockets.target"
@@ -74,7 +77,7 @@
     requires = [
       # "network-online.target"
       "default.target"
-    ]; # TODO make sure this is there, if starting at boot 
+    ]; 
     wantedBy = [
       "default.target"
       "sockets.target"
@@ -115,15 +118,15 @@
     after = ["basic.target" "network-online.target"];
     wantedBy = ["multi-user.target"];
     unitConfig = {
-      ConditionPathExists = "!/tmp/granite-ollama";
+      ConditionPathExists = "!${code_dir}";
     };
     script = ''
-      /run/wrappers/bin/su - drew -s /bin/sh -c 'cd /tmp/; git clone https://github.com/yeltnar/granite-ollama';
+      /run/wrappers/bin/su - drew -s /bin/sh -c 'cd ${code_parent_dir}/; git clone https://github.com/yeltnar/granite-ollama';
     '';
     serviceConfig = {
       Type = "oneshot";
       SyslogIdentifier = "granite-ollama";
-      WorkingDirectory = "/tmp";
+      WorkingDirectory = "${code_parent_dir}";
       # ExecStartPost = "systemctl start granite-ollama_start.service";
     };
   };
@@ -162,12 +165,12 @@
       StopWhenUnneeded = "yes";
       StartLimitInterval = 30;
       StartLimitBurst = 3;
-      ConditionPathExists = "/tmp/granite-ollama";
+      ConditionPathExists = "${code_dir}";
       RequiresMountsFor = "/run/user/1000/containers";
     };
     serviceConfig = {
       Type = "notify";
-      WorkingDirectory = "/tmp/granite-ollama"; # TODO change repo location
+      WorkingDirectory = "${code_dir}";
       Restart = "always";
       NotifyAccess = "all";
       PIDFile = "/tmp/systemd_proxy_ollama_podman.pid"; # TODO change pid location 
@@ -207,13 +210,13 @@
       StopWhenUnneeded = "yes";
       StartLimitInterval = 30;
       StartLimitBurst = 3;
-      ConditionPathExists = "/tmp/granite-ollama";
+      ConditionPathExists = "${code_dir}";
       RequiresMountsFor = "/run/user/1000/containers";
     };
     serviceConfig = {
       Type = "notify";
       # ExecStop = ""; # TODO 
-      WorkingDirectory = "/tmp/granite-ollama"; # TODO change repo location
+      WorkingDirectory = "${code_dir}"; # TODO change repo location
       Restart = "always";
       NotifyAccess = "all";
       PIDFile = "/tmp/systemd_proxy_open-webui_podman.pid"; # TODO change pid location  
