@@ -64,6 +64,19 @@ with lib.hm.gvariant; {
       sleep-inactive-battery-type = "nothing";
     };
 
+    "org/gnome/shell" = {
+      enabled-extensions = [ "space-bar@luchrioh" "switcher@landau.fi" "tactile@lundal.io" "system-monitor@gnome-shell-extensions.gcampax.github.com" ];
+      welcome-dialog-last-shown-version = "47.2";
+    };
+
+    "org/gnome/shell/extensions/space-bar/appearance" = {
+      application-styles = ".space-bar {n  -natural-hpadding: 12px;n}nn.space-bar-workspace-label.active {n  margin: 0 4px;n  background-color: rgba(255,255,255,0.3);n  color: rgba(255,255,255,1);n  border-color: rgba(0,0,0,0);n  font-weight: 700;n  border-radius: 4px;n  border-width: 0px;n  padding: 3px 8px;n}nn.space-bar-workspace-label.inactive {n  margin: 0 4px;n  background-color: rgba(0,0,0,0);n  color: rgba(255,255,255,1);n  border-color: rgba(0,0,0,0);n  font-weight: 700;n  border-radius: 4px;n  border-width: 0px;n  padding: 3px 8px;n}nn.space-bar-workspace-label.inactive.empty {n  margin: 0 4px;n  background-color: rgba(0,0,0,0);n  color: rgba(255,255,255,0.5);n  border-color: rgba(0,0,0,0);n  font-weight: 700;n  border-radius: 4px;n  border-width: 0px;n  padding: 3px 8px;n}";
+    };
+
+    "org/gnome/shell/extensions/space-bar/state" = {
+      version = 32;
+    };
+
     "org/gnome/shell/world-clocks" = {
       locations = [];
     };

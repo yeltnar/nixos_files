@@ -72,6 +72,15 @@ in {
 
     ( import ./includes/open.nix { inherit pkgs; } )
     ( import ./includes/chrome-nix-tmp.nix { inherit pkgs; } )
+
+    ## check the Gnome Extensions app for settings 
+    # better workspace management 
+    gnomeExtensions.space-bar
+    # 'spotlight' with Super+W
+    gnomeExtensions.switcher
+    # settings with Shift+Super+T
+    # grid overlay with Super+T
+    gnomeExtensions.tactile
        
     xclip
     ghostty
