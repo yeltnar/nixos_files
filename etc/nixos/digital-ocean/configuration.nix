@@ -31,7 +31,7 @@ in {
   networking.networkmanager.enable = true;
 
   # Set your time zone.
-  time.timeZone = "America/Chicago";
+  # moved to generic
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
