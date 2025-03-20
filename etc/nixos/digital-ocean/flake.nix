@@ -4,11 +4,16 @@
   inputs = {
     # nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
+    sops-nix = { 
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs }: 
+  outputs = { self, nixpkgs, sops-nix, ... } @ inputs: 
   let
     system = "x86_64-linux";
+    config = self.config;
 
     pkgs = import nixpkgs {
     	inherit system;
@@ -25,6 +30,7 @@
 
         modules = [
           ./configuration.nix
+          sops-nix.nixosModules.sops
         ];
       };
     };
