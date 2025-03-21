@@ -86,16 +86,20 @@ in {
         chown ${user}:${group} ${vardir}/process_tar.sh;
       fi
 
-      # generate id_rsa keypair if it is not there 
-      if [ ! -e ${vardir}/id_rsa ]; then
-        pushd ${vardir};
-        ${pkgs.openssh}/bin/ssh-keygen -t rsa -m PEM -N "" -q -f "${vardir}/id_rsa" -b 4096;
-        popd;
-      fi
+      # # this is replaced by sops
+      # # generate id_rsa keypair if it is not there 
+      # if [ ! -e ${vardir}/id_rsa ]; then
+      #   pushd ${vardir};
+      #   ${pkgs.openssh}/bin/ssh-keygen -t rsa -m PEM -N "" -q -f "${vardir}/id_rsa" -b 4096;
+      #   popd;
+      # fi
     '';
     serviceConfig = {
       Type = "oneshot"; 
       WorkingDirectory = "/home/${user}";
     };
+  };
+  sops.secrets."yeltnar_nebula_id_rsa" = {
+    path = "/var/yeltnar-nebula/id_rsa";
   };
 }

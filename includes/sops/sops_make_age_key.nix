@@ -14,7 +14,7 @@
     after = ["basic.target"];
     wantedBy = ["multi-user.target"];
     unitConfig = {
-      ConditionPathExists = "!/home/drew/.config/sops/age/keys.txt";
+      ConditionPathExists = "!/etc/sops/age/keys.txt";
     };
     serviceConfig = {
       User = "drew";
@@ -23,9 +23,9 @@
     };
     script = ''
       # TODO change path to use username
-      mkdir -p /home/drew/.config/sops/age/
+      mkdir -p /etc/sops/age/
       # stderr is the private key. dont want to keep coments (so sops nix works) so remote with awk
-      age-keygen 2>/dev/null | awk '!/#/' > /home/drew/.config/sops/age/keys.txt 
+      age-keygen 2>/dev/null | awk '!/#/' > /etc/sops/age/keys.txt 
     '';
   };
 }

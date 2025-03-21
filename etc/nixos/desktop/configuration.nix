@@ -50,9 +50,14 @@ in
   # TODO move this block 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
-  sops.age.keyFile = "/home/${leUser}/.config/sops/age/keys.txt";
+  # this has to be available when booting, so watch for mount sequence
+  sops.age.keyFile = "/etc/sops/age/keys.txt";
   sops.secrets."mnt-minio.env" = {};
   sops.secrets."mnt-minio2.env" = {};
+  sops.secrets."yeltnar_nebula_id_rsa" = {
+    # set path in file for nebula
+    # path = "/var/yeltnar-nebula/id_rsa";
+  };
   sops.secrets."k" = {
     owner = "drew";
     path = "/home/drew/fmd.from.sops";
