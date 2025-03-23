@@ -54,6 +54,12 @@ in
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
+  # TODO move this block 
+  sops.defaultSopsFile = ./secrets/secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+  sops.age.keyFile = "/home/${leUser}/.config/sops/age/keys.txt";
+  sops.secrets.yeltnar_nebula.id_rsa = {};
+
   # Enable the GNOME Desktop Environment.
   # disable xterm
   services.xserver.displayManager.gdm = {
