@@ -57,8 +57,10 @@ in
   # TODO move this block 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
-  sops.age.keyFile = "/home/${leUser}/.config/sops/age/keys.txt";
-  sops.secrets.yeltnar_nebula.id_rsa = {};
+  sops.age.keyFile = "/etc/sops/age/keys.txt";
+  # sops.secrets."mnt-minio.env" = {};
+  sops.secrets.yeltnar_nebula_id_rsa = {
+  };
 
   # Enable the GNOME Desktop Environment.
   # disable xterm
