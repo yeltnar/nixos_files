@@ -10,7 +10,8 @@ in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ( import ../../../includes/nebula/nebula.nix ( args // { user = leUser; SECONDARY_HOST ="hot.andbrant.com"; } ) )
+      ( import ../../../includes/nebula/nebula.nix ( args // { user = leUser; SECONDARY_HOST="hot.andbrant.com"; SECONDARY_CURL_OPTIONS=""; } ) )
+      ( import ../../../includes/sops/sops_make_age_key.nix (args // { leUser = leUser; }))
     ];
 
   nix.settings.trusted-users = [leUser];
@@ -22,6 +23,17 @@ in {
 
   networking.hostName = "do-nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  # TODO move this block 
+  sops.defaultSopsFile = ./secrets/secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+  # this has to be available when booting, so watch for mount sequence
+  # sops.age.keyFile = "/etc/sops/age/keys.txt";
+  sops.age.keyFile = "/etc/sops/age/keys.txt";
+  sops.secrets."yeltnar_nebula_id_rsa" = {
+    # set path in file for nebula
+    # path = "/var/yeltnar-nebula/id_rsa";
+  };
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
