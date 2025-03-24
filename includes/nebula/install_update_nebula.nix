@@ -8,23 +8,16 @@
   user,
   group ? "100",
   SECONDARY_HOST ? "hot.h.lan",
-  ...
-}: let
-  cloned_repo = builtins.fetchGit {
-    url = "https://github.com/yeltnar/nebula-ansible";
-    rev = "5f674ec95c8656f10d86cdc7913b82af0256ec13";
-  };
-  vardir = "/var/yeltnar-nebula";
-  HOST="10.10.10.8";
-  PORT="2323";
-  CURL_OPTIONS="--cacert ./knownca.pem";
-  SECONDARY_PORT="443";
-  SECONDARY_CURL_OPTIONS="--cacert ./knownca.pem";
-  DEVICE_NAME="${config.networking.hostName}" ;
-  DATE_FILE_PATH="/var/yeltnar-nebula/tar_stuff/remote_updated.date";
-  var_dir="/var/yeltnar-nebula";
-  nebula_config_client_folder="/etc/nebula";
-  cacert=''
+  HOST ? "10.10.10.8",
+  PORT ? "2323",
+  CURL_OPTIONS ? "--cacert ./knownca.pem",
+  SECONDARY_PORT ? "443",
+  SECONDARY_CURL_OPTIONS ? "--cacert ./knownca.pem",
+  DEVICE_NAME ? "${config.networking.hostName}" ,
+  DATE_FILE_PATH ? "/var/yeltnar-nebula/tar_stuff/remote_updated.date",
+  var_dir ? "/var/yeltnar-nebula",
+  nebula_config_client_folder ? "/etc/nebula",
+  cacert ? ''
   -----BEGIN CERTIFICATE-----
   MIIBozCCAUqgAwIBAgIRAPZn1/oD/c0M9GhKndrWbmcwCgYIKoZIzj0EAwIwMDEu
   MCwGA1UEAxMlQ2FkZHkgTG9jYWwgQXV0aG9yaXR5IC0gMjAyMSBFQ0MgUm9vdDAe
@@ -36,7 +29,14 @@
   Ni0wCgYIKoZIzj0EAwIDRwAwRAIgAPmMzq8t6N9H6wUyxEjYZY870ysKNxtrBrmK
   JmH3busCICZnli09FnPU9/3mt6Kf1AhEF6X3evM+J/P1gEGOqM9u
   -----END CERTIFICATE-----
-  '';
+  '',
+  ...
+}: let
+  cloned_repo = builtins.fetchGit {
+    url = "https://github.com/yeltnar/nebula-ansible";
+    rev = "5f674ec95c8656f10d86cdc7913b82af0256ec13";
+  };
+  vardir = "/var/yeltnar-nebula";
 in {
   # TODO move this to systemctl
   systemd.services.setup_nebula_env = {

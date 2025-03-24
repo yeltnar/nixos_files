@@ -20,7 +20,6 @@ in
       ../../../includes/gaming.nix
       ../../../includes/libvirt/libvirt.nix
       # ../../../includes/systemd-proxy/systemd-proxy.nix
-
       
       ( import ../../../includes/nebula/nebula.nix (args // {
         user = leUser; 
@@ -237,6 +236,11 @@ in
     audacity
 
     superTuxKart
+
+    nix-output-monitor
+
+    # TODO check if it works 
+    snapper
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
