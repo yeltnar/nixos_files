@@ -17,9 +17,9 @@
       ConditionPathExists = "!/etc/sops/age/keys.txt";
     };
     serviceConfig = {
-      User = "drew";
+      # User = "drew";
       SyslogIdentifier = "sops_make_age_key";
-      WorkingDirectory = "/home/drew/playin";
+      # WorkingDirectory = "/home/drew/playin";
     };
     script = ''
       # TODO change path to use username
