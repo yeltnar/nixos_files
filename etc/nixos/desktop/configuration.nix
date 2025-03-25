@@ -61,6 +61,11 @@ in
     owner = "drew";
     path = "/home/drew/fmd.from.sops";
   };
+  sops.secrets."digital_ocean_sops_key" = {
+    owner = leUser;
+    sopsFile = ../digital-ocean/secrets/secrets.yaml;
+    path = "/home/drew/playin/nixos_files/etc/nixos/digital-ocean/keys.txt";
+  };
 
   # Bootloader.
   boot.loader.grub.enable = true;

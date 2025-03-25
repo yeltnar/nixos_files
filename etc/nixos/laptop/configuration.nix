@@ -61,6 +61,11 @@ in
   # sops.secrets."mnt-minio.env" = {};
   sops.secrets.yeltnar_nebula_id_rsa = {
   };
+  sops.secrets."digital_ocean_sops_key" = {
+    owner = leUser;
+    sopsFile = ../digital-ocean/secrets/secrets.yaml;
+    path = "/home/drew/playin/nixos_files/etc/nixos/digital-ocean/keys.txt";
+  };
 
   # Enable the GNOME Desktop Environment.
   # disable xterm
