@@ -26,7 +26,7 @@ in
     # ../../../includes/drewdate/drewdate.nix
 
     ../../../includes/rclone_mounts/rclone_mini.laptop.nix
-    ../../../includes/libvirt/libvirt.nix
+    # ../../../includes/libvirt/libvirt.nix
 
     # ../../../includes/makemkv/makemkv.entry.nix
   ];
@@ -112,7 +112,20 @@ in
   ];
 
   # TLS certificates to install as system certs 
-  # security.pki.certificates = [];   
+  security.pki.certificates = [
+  ''
+    -----BEGIN CERTIFICATE-----
+    MIIBozCCAUqgAwIBAgIRAPZn1/oD/c0M9GhKndrWbmcwCgYIKoZIzj0EAwIwMDEu
+    MCwGA1UEAxMlQ2FkZHkgTG9jYWwgQXV0aG9yaXR5IC0gMjAyMSBFQ0MgUm9vdDAe
+    Fw0yMTEwMDMwNDIzNDdaFw0zMTA4MTIwNDIzNDdaMDAxLjAsBgNVBAMTJUNhZGR5
+    IExvY2FsIEF1dGhvcml0eSAtIDIwMjEgRUNDIFJvb3QwWTATBgcqhkjOPQIBBggq
+    hkjOPQMBBwNCAAR4V9bn+bmOJfWlIGkNZyy+FzHCxIZiU3Ko6f+MgY9fbZddVvZU
+    +qUMqdj1jOOSHGb2oksfABkhrJAnNcqtafH9o0UwQzAOBgNVHQ8BAf8EBAMCAQYw
+    EgYDVR0TAQH/BAgwBgEB/wIBATAdBgNVHQ4EFgQUGxw7vsSlsHoIbX3fqTwnH8+8
+    Ni0wCgYIKoZIzj0EAwIDRwAwRAIgAPmMzq8t6N9H6wUyxEjYZY870ysKNxtrBrmK
+    JmH3busCICZnli09FnPU9/3mt6Kf1AhEF6X3evM+J/P1gEGOqM9u
+    -----END CERTIFICATE-----''
+  ];   
 
   # remember to create sub volumes and mount points... some need to be created on the mounted volume
   fileSystems."/media/btrfs_top" = {
