@@ -12,6 +12,7 @@ in {
       ./hardware-configuration.nix
       ( import ../../../includes/nebula/nebula.nix ( args // { user = leUser; SECONDARY_HOST="hot.andbrant.com"; SECONDARY_CURL_OPTIONS=""; } ) )
       ( import ../../../includes/sops/sops_make_age_key.nix (args // { leUser = leUser; }))
+      ../../../includes/custom_bashrc.nix
     ];
 
   nix.settings.trusted-users = [leUser];
@@ -85,7 +86,9 @@ in {
     ripgrep # nvim search 
     lua-language-server
     # nixd
+    tmux
 
+    openssl
     curl
     git
     lazygit
