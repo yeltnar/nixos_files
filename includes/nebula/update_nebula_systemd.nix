@@ -25,6 +25,10 @@
       gzip
     ];
 
+    unitConfig = {
+      ConditionPathExists = "/var/yeltnar-nebula/compare_date.sh";
+    };
+
     environment =
       config.nix.envVars
       // {
