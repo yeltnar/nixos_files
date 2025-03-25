@@ -16,9 +16,13 @@
     serviceConfig = {
       User = "drew";
       SyslogIdentifier = "custom_bashrc";
-      WorkingDirectory = "/home/drew/playin";
-      ExecStart = "/run/current-system/sw/bin/git clone https://github.com/yeltnar/custom_bashrc";
+      # TODO why is this not nix syntax
     };
+    script =''
+      mkdir -p /home/drew/playin
+      cd /home/drew/playin
+      ${pkgs.git}/bin/git clone https://github.com/yeltnar/custom_bashrc
+    '';
   };
 
   # system.activationScripts.setup_bash_profile = {
