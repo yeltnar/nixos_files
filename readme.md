@@ -23,6 +23,8 @@ _add new entry to .sops.yaml_
 
 _create new keypair in nebula orchestrator directory for the new machine_
 - ssh-keygen -t rsa -m PEM -N "" -q -b 4096 -f id_rsa
+ 
+_create new entry in other_hosts.yaml for nebula generator ansible_
 
 _create sops file for new machine_
 - sops ./secrets/secrets.yaml
