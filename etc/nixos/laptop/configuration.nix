@@ -66,6 +66,11 @@ in
     sopsFile = ../digital-ocean/secrets/secrets.yaml;
     path = "/home/drew/playin/nixos_files/etc/nixos/digital-ocean/keys.txt";
   };
+  sops.secrets."nixos2_sops_key" = {
+    owner = leUser;
+    sopsFile = ../nixos2/secrets/secrets.yaml;
+    path = "/home/drew/playin/nixos_files/etc/nixos/nixos2/keys.txt";
+  };
 
   # Enable the GNOME Desktop Environment.
   # disable xterm
