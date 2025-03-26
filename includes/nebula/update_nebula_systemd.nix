@@ -5,6 +5,7 @@
 }: {
   systemd.timers."update_nebula_timer" = {
     wantedBy = ["timers.target"];
+    requires = [ "setup_nebula_env.service" ];
     timerConfig = {
       OnBootSec = "5m";
       OnUnitActiveSec = "2m";

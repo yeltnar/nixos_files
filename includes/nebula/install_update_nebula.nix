@@ -68,7 +68,7 @@ in {
       export SECONDARY_CURL_OPTIONS="${SECONDARY_CURL_OPTIONS}";
       
       # Make sure this device name matches the one on the server  
-      export DEVICE_NAME="${config.networking.hostName}" 
+      export DEVICE_NAME="${DEVICE_NAME}" 
       export DATE_FILE_PATH="${DATE_FILE_PATH}";
       export var_dir="${var_dir}";
       export nebula_config_client_folder="${nebula_config_client_folder}";
@@ -93,6 +93,8 @@ in {
       #   ${pkgs.openssh}/bin/ssh-keygen -t rsa -m PEM -N "" -q -f "${vardir}/id_rsa" -b 4096;
       #   popd;
       # fi
+
+      systemctl restart nebula.service
     '';
     serviceConfig = {
       Type = "oneshot"; 
