@@ -22,7 +22,9 @@
             default = pkgs.mkShell {
               packages = with pkgs; [  google-chrome ];
               shellHook= ''
-                google-chrome-stable --user-data-dir=/tmp/chrome-user-data; exit; 
+                data_path=$HOME/tmp/chrome-user-data
+                mkdir -p $data_path
+                google-chrome-stable --user-data-dir=$data_path; exit; 
               '';
             };
           }
