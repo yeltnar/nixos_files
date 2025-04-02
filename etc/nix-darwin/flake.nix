@@ -22,6 +22,14 @@
           openssh
           sops
           age # for sops encryption 
+          jq
+          yq
+          tldr
+
+          # for OpenAPI language server
+          spectral-language-server
+
+          lua-language-server
         ];
 
       # Necessary for using flakes on this system.
