@@ -152,6 +152,7 @@ in {
 
     tree
     duf
+    tldr
 
     bcache-tools
     bcachefs-tools
