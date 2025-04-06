@@ -10,7 +10,7 @@ in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ( import ../../../includes/nebula/nebula.nix ( args // { user = leUser; SECONDARY_HOST="hot.h.lan"; DEVICE_NAME="nixos2"; } ) )
+      ( import ../../../includes/nebula/nebula.nix ( args // { user = leUser; SECONDARY_HOST="hot.h.lan"; DEVICE_NAME="nixos3"; } ) )
       ( import ../../../includes/sops/sops_make_age_key.nix (args // { leUser = leUser; }))
       ../../../includes/custom_bashrc.nix
     ];
@@ -22,7 +22,7 @@ in {
   boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.useOSProber = true;
 
-  networking.hostName = "nixos2"; # Define your hostname.
+  networking.hostName = "nixos3"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # TODO move this block 
