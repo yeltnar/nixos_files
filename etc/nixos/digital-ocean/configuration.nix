@@ -102,6 +102,7 @@ in {
     openssl
     curl
     git
+    dig
     lazygit
     tmux
     nebula
