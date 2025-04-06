@@ -37,6 +37,7 @@ in {
     ../../../includes/rclone_mounts/rclone_mini.proxmoxvm.nix
 
     ../../../includes/ntfy_report_ip_timer.nix
+    ../../../includes/jellyfin/jellyfin.nix
 
     ../../../includes/derivation_test/derivation_test.nix
     # ../../../includes/nextcloud/nextcloud.nix
