@@ -1,10 +1,11 @@
 keys:
   - &nix-darwin age10z776utsv2h97fwq93q2cqxqdvjmt7f4ffcrq582yj2qtnft796q879gn6
-  - &proxmox_vm age1p5zqt5xclvfy5h78euuql7un9ujjprxz632wf0kgt8nt5cxvwu3stqvu3j
+  - &proxmox_vm age1l4vr6dfrrckenwsyqt4rg999fmztnh7528mxjcw9wtw50p8dcavq34lz4f
   - &drew-lin-desktop age1hu4du8pygnmadptmvurw6s06rpmrj9tfe7k89yejajxynp743ufqrfz5ue
   - &drew-lin-laptop age1lvg4ywtqshnztlhvqxgy83434l4kjffrwmeg5dz5qh5v32lfg9eqzl406g
   - &do-nixos age1jdwddh9v3phpast5gwtruyq2s77r3gvtvvrhczs5wnp3ryv08ekqv2yeua
   - &nixos2 age12f65ngun52j3ttyxtp8ychm9rf6zgxd63h973el448y76j3uyyvs47evvr
+  - &nixos3 age1qlxfhqz06ya6s6zklj7cpw6g8x0x6m3wgztvstg8kc0aggzuqcqsemkvf5
 creation_rules:
   - path_regex: etc/nix-darwin/*
     key_groups:
@@ -14,6 +15,8 @@ creation_rules:
     key_groups:
     - age:
       - *proxmox_vm
+      - *drew-lin-laptop
+      - *drew-lin-desktop
   - path_regex: etc/nixos/desktop/*
     key_groups:
     - age:
@@ -34,3 +37,9 @@ creation_rules:
       - *drew-lin-desktop
       - *drew-lin-laptop
       - *nixos2
+  - path_regex: etc/nixos/nixos3/*
+    key_groups:
+    - age:
+      - *drew-lin-desktop
+      - *drew-lin-laptop
+      - *nixos3
