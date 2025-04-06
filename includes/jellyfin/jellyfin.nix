@@ -8,8 +8,7 @@
   code_dir="${code_parent_dir}/jellyfin";  
 in {
   networking.firewall.allowedTCPPorts = [
-    80
-    443 
+    8096
   ];
 
   # enable lingering so service starts before user logs in
