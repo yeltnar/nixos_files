@@ -13,9 +13,16 @@ in {
       ( import ../../../includes/nebula/nebula.nix ( args // { user = leUser; SECONDARY_HOST="hot.andbrant.com"; SECONDARY_CURL_OPTIONS=""; } ) )
       ( import ../../../includes/sops/sops_make_age_key.nix (args // { leUser = leUser; }))
       ../../../includes/custom_bashrc.nix
+      ../../../includes/ntfy-server/ntfy-server.nix
+      ../../../includes/caddy-server/do-nixos-caddy-server.nix
     ];
 
   nix.settings.trusted-users = [leUser];
+
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Bootloader.
   boot.loader.grub.enable = true;
@@ -81,6 +88,8 @@ in {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    home-manager
+
     neovim
     clang # needed to compile c # used in nvim 
     ripgrep # nvim search 
@@ -88,6 +97,8 @@ in {
     # nixd
     tmux
 
+    jq
+    yq
     openssl
     curl
     git
@@ -100,6 +111,13 @@ in {
     age
     rclone 
   ];
+
+  programs.neovim = {
+    enable = true; 
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+  };
 
   virtualisation = {
     docker = {
