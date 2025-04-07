@@ -12,7 +12,7 @@ in {
   ];
 
   # enable lingering so service starts before user logs in
-  # users.users.drew.linger = true;
+  users.users.drew.linger = true;
 
   systemd.services.jellyfin-git-repo = {
     path = with pkgs; [
