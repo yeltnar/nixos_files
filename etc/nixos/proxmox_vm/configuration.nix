@@ -53,11 +53,6 @@ in {
   sops.age.keyFile = "/etc/sops/age/keys.txt";
   sops.secrets."mnt-minio.env" = {};
 
-  sops.secrets."jellyfin.env" = {
-    owner = "drew";
-    path = "/home/drew/playin/jellyfin/changeme.env";
-  };
-  
   nix.settings.trusted-users = [ "drew" ];
 
   # Enable the X11 windowing system.

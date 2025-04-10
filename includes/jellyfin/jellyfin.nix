@@ -11,6 +11,16 @@ in {
     8096
   ];
 
+  # TODO move to jellyfin file
+  sops.secrets."jellyfin.env" = {
+    owner = "drew";
+    path = "/home/drew/playin/jellyfin/changeme.env";
+  };
+  sops.secrets."jellyfin_backup.env" = {
+    owner = "drew";
+    path = "/home/drew/playin/jellyfin/backup.env";
+  };
+  
   # enable lingering so service starts before user logs in
   users.users.drew.linger = true;
 
