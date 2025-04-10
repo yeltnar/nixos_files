@@ -27,6 +27,7 @@ in {
     type = "rclone";
     options = concatStrings (intersperse "," [ 
       "allow-other=true"
+      "vfs-cache-mode=full"
       "s3-provider=Minio"
       "nofail"
     ]);
