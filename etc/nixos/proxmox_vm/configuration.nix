@@ -45,6 +45,7 @@ in {
     # ../../../includes/vm/vm.nix
     ../../../includes/nbdkit/nbdkit.entry.nix
     ../../../includes/rclone_mounts/mini-minio.nix
+    ../../../includes/jellyfin/backup.timer.nix
   ];
 
   # TODO move this block 
