@@ -8,16 +8,16 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    wedding_site = {
-      # # can either pick 'url' or the other options 
-      # url = "../../../includes/wedding_site/";
-      type = "github";
-      owner = "yeltnar";
-      repo = "nixos_files";
-      dir = "includes/wedding_site";
-      ref = "main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # wedding_site = {
+    #   # # can either pick 'url' or the other options 
+    #   # url = "../../../includes/wedding_site/";
+    #   type = "github";
+    #   owner = "yeltnar";
+    #   repo = "nixos_files";
+    #   dir = "includes/wedding_site";
+    #   ref = "main";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
   };
 
   outputs = { self, nixpkgs, sops-nix, ... } @ inputs: 
@@ -40,7 +40,7 @@
 
         modules = [
           ./configuration.nix
-          (import inputs.wedding_site.cfg ( {inherit config; inherit pkgs; }))
+          # (import inputs.wedding_site.cfg ( {inherit config; inherit pkgs; }))
           sops-nix.nixosModules.sops
         ];
       };
