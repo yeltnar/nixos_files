@@ -3,12 +3,14 @@
   pkgs,
   ...
 }: {
-  systemd.timers."backup.jellyfin" = {
+  systemd.user.timers."backup.jellyfin" = {
     wantedBy = ["timers.target"];
+    unitConfig = {
+      ConditionPathExists = "/home/drew/playin/jellyfin/config";
+    };
     timerConfig = {
       # TODO DELETE BOOT SEC AND REPLWCE WITH DEPEND
-      OnBootSec = "5m";
-      OnCalendar = "6h";
+      OnUnitInactiveSec = "6h";
       Unit = "backup.jellyfin.service";
     };
   };
@@ -30,6 +32,9 @@
     script = ''
       ./backup.sh
     '';
+    unitConfig = {
+      ConditionPathExists = "/home/drew/playin/jellyfin/config";
+    };
     serviceConfig = {
       WorkingDirectory = "/home/drew/playin/jellyfin";
       Type = "oneshot";
