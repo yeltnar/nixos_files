@@ -13,7 +13,8 @@
     };
   };
 
-  systemd.services."backup.jellyfin" = {
+
+  systemd.user.services."backup.jellyfin" = {
     environment =
       config.nix.envVars
       // {
@@ -32,7 +33,32 @@
     serviceConfig = {
       WorkingDirectory = "/home/drew/playin/jellyfin";
       Type = "oneshot";
-      User = "drew";
+      # User = "drew";
+    };
+  };
+
+  systemd.user.services."restore.jellyfin" = {
+    environment =
+      config.nix.envVars
+      // {
+        inherit (config.environment.sessionVariables) NIX_PATH;
+        HOME = "/home/drew";
+      }
+      // config.networking.proxy.envVars;
+
+    path = with pkgs; [
+      borgbackup
+    ];
+
+    script = ''
+      export RESTORE_DIR="$HOME/playin/jellyfin"
+      ./restore.sh
+    '';
+    serviceConfig = {
+      WorkingDirectory = "/home/drew/playin/jellyfin";
+      Type = "oneshot";
+      ExecStop = "systemctl --user start jellyfin_start.service";
+      # User = "drew";
     };
   };
 }

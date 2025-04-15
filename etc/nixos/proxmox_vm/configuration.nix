@@ -34,6 +34,7 @@ in {
       user = leUser; 
       group = "100"; 
     }))
+
     ../../../includes/rclone_mounts/rclone_mini.proxmoxvm.nix
 
     ../../../includes/ntfy_report_ip_timer.nix
@@ -45,7 +46,7 @@ in {
     # ../../../includes/vm/vm.nix
     ../../../includes/nbdkit/nbdkit.entry.nix
     ../../../includes/rclone_mounts/mini-minio.nix
-    ../../../includes/jellyfin/backup.timer.nix
+    ../../../includes/jellyfin/backup_restore.timer.nix
   ];
 
   # TODO move this block 
