@@ -5,14 +5,15 @@
 }: {
   systemd.timers."ntfy_report_ip" = {
     wantedBy = ["timers.target"];
+    requires = ["network-online.target"];
     timerConfig = {
-      OnBootSec = "5m";
       OnUnitActiveSec = "2m";
       Unit = "ntfy_report_ip.service";
     };
   };
 
   systemd.services."ntfy_report_ip" = {
+    requires = ["network-online.target"];
     environment =
       config.nix.envVars
       // {
