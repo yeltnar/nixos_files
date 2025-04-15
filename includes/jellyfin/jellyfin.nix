@@ -45,8 +45,10 @@ in {
       Type = "oneshot";
       SyslogIdentifier = "jellyfin";
       WorkingDirectory = "${code_parent_dir}";
-      ExecStop = "systemctl --user start restore.jellyfin.service";
     };
+    onSuccess = [
+      "restore.jellyfin.service"
+    ];
   };
   
   # TODO fix this path shiz

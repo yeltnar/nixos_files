@@ -62,8 +62,10 @@
     serviceConfig = {
       WorkingDirectory = "/home/drew/playin/jellyfin";
       Type = "oneshot";
-      ExecStop = "systemctl --user start jellyfin_start.service";
       # User = "drew";
     };
+    onSuccess = [
+      "jellyfin_start.service"
+    ];
   };
 }
