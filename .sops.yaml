@@ -1,4 +1,5 @@
 keys:
+  - &backup-key age19t8h67m3fe60yc65fg6fgtp4xp9xexk24qh0qxn75a3kxeua9q6sjlhg8u
   - &nix-darwin age10z776utsv2h97fwq93q2cqxqdvjmt7f4ffcrq582yj2qtnft796q879gn6
   - &proxmox_vm age1l4vr6dfrrckenwsyqt4rg999fmztnh7528mxjcw9wtw50p8dcavq34lz4f
   - &drew-lin-desktop age1hu4du8pygnmadptmvurw6s06rpmrj9tfe7k89yejajxynp743ufqrfz5ue
@@ -11,35 +12,42 @@ creation_rules:
     key_groups:
     - age:
       - *nix-darwin
+      - *backup-key
   - path_regex: etc/nixos/proxmox_vm/*
     key_groups:
     - age:
+      - *backup-key
       - *proxmox_vm
       - *drew-lin-laptop
       - *drew-lin-desktop
   - path_regex: etc/nixos/desktop/*
     key_groups:
     - age:
+      - *backup-key
       - *drew-lin-desktop
   - path_regex: etc/nixos/laptop/*
     key_groups:
     - age:
+      - *backup-key
       - *drew-lin-laptop
   - path_regex: etc/nixos/digital-ocean/*
     key_groups:
     - age:
+      - *backup-key
       - *drew-lin-desktop
       - *drew-lin-laptop
       - *do-nixos
   - path_regex: etc/nixos/nixos2/*
     key_groups:
     - age:
+      - *backup-key
       - *drew-lin-desktop
       - *drew-lin-laptop
       - *nixos2
   - path_regex: etc/nixos/nixos3/*
     key_groups:
     - age:
+      - *backup-key
       - *drew-lin-desktop
       - *drew-lin-laptop
       - *nixos3
