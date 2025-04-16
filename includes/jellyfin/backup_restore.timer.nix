@@ -4,13 +4,14 @@
   ...
 }: {
   systemd.user.timers."backup.jellyfin" = {
-    wantedBy = ["timers.target"];
-    unitConfig = {
-      ConditionPathExists = "/home/drew/playin/jellyfin/config";
-    };
+    wantedBy = [
+      "timers.target"
+    ];
     timerConfig = {
-      # TODO DELETE BOOT SEC AND REPLWCE WITH DEPEND
+      # run service based on how long it last ran 
       OnUnitInactiveSec = "6h";
+      # start service when timer starts
+      OnActiveSec = "0s";
       Unit = "backup.jellyfin.service";
     };
   };
