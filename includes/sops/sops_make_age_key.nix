@@ -12,30 +12,32 @@
   sops_etc_file="${sops_etc_dir}/keys.txt";
   shell_script = pkgs.writeShellScript "create_sops_key" ''
 
-    if [ -e ${sops_etc_file} ]; then
-      exit;
-    fi
-
-    cp ${sops_home_file} ${sops_home_file}.bk
-
     mkdir -p ${sops_etc_dir};
     mkdir -p ${sops_home_dir};
 
-    # if the .config exsists, copy it to /etc, delete .config, and link .config to /etc
-    # if exsists and is not a ling 
-    if [ -e ${sops_home_file} ] && [ ! -L ${sops_home_file} ]; then 
-      cp ${sops_home_file} ${sops_etc_file} && rm ${sops_home_file}; 
-    fi 
+    if [ ! -e ${sops_home_file} ]; then
+      ln -s ${sops_etc_file} ${sops_home_file};
+    fi
 
+    # check if the etc file exsists!
     if [ ! -e ${sops_etc_file} ]; then
-      # stderr is the private key. dont want to keep coments (so sops nix works) so remote with awk
-      age-keygen 2>/dev/null | awk '!/#/' > ${sops_etc_file} ;
-      age-keygen -y ${sops_etc_file} > pub.${sops_etc_file} ;
+
+      # if the .config exsists and is not a link, copy it to /etc and replace the file with link to etc
+      # otherwise, generate a new key 
+      # note: this is in a block where the etc version is know not to exsist 
+      if [ -e ${sops_home_file} ] && [ ! -L ${sops_home_file} ]; then 
+        cp ${sops_home_file} ${sops_home_file}.bk
+        cp ${sops_home_file} ${sops_etc_file} && rm ${sops_home_file}; 
+      else
+        # stderr is the private key. dont want to keep coments (so sops nix works) so remove with awk
+        age-keygen 2>/dev/null | awk '!/#/' > ${sops_etc_file} ;
+        age-keygen -y ${sops_etc_file} > pub.${sops_etc_file} ;
+      fi 
+
     else
       echo "${sops_etc_file} exsists... not creating new key";
     fi
 
-    ln -s ${sops_etc_file} ${sops_home_file};
   '';
 in {
   systemd.services.sops_make_age_key = {
