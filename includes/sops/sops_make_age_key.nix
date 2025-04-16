@@ -17,6 +17,8 @@
 
     if [ ! -e ${sops_home_file} ]; then
       ln -s ${sops_etc_file} ${sops_home_file};
+    else
+      echo "${sops_home_file} exsists... not creating link";
     fi
 
     # check if the etc file exsists!
@@ -26,8 +28,9 @@
       # otherwise, generate a new key 
       # note: this is in a block where the etc version is know not to exsist 
       if [ -e ${sops_home_file} ] && [ ! -L ${sops_home_file} ]; then 
-        cp ${sops_home_file} ${sops_home_file}.bk
+        cp -a ${sops_home_file} ${sops_home_file}.bk
         cp ${sops_home_file} ${sops_etc_file} && rm ${sops_home_file}; 
+        ln -s ${sops_etc_file} ${sops_home_file};
       else
         # stderr is the private key. dont want to keep coments (so sops nix works) so remove with awk
         age-keygen 2>/dev/null | awk '!/#/' > ${sops_etc_file} ;
@@ -50,7 +53,11 @@ in {
     after = ["basic.target"];
     wantedBy = ["multi-user.target"];
     unitConfig = {
-      ConditionPathExists = "!/etc/sops/age/keys.txt";
+      ConditionPathExists = [
+        # add pipe symbol to result in OR logic
+        "|!/etc/sops/age/keys.txt"
+        "|!/home/drew/.config/sops/age/keys.txt"
+      ];
     };
     serviceConfig = {
       # User = "drew";
