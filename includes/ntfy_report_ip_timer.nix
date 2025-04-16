@@ -8,6 +8,8 @@
     requires = ["network-online.target"];
     timerConfig = {
       OnUnitActiveSec = "2m";
+      # start service when timer starts
+      OnActiveSec = "0s";
       Unit = "ntfy_report_ip.service";
     };
   };
