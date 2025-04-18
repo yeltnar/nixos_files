@@ -33,6 +33,9 @@ in
 
       ../../../includes/rclone_mounts/mini-minio.nix
       # ../../../includes/makemkv/makemkv.nix
+
+      # ../../../includes/jellyfin/jellyfin.nix
+      # ../../../includes/jellyfin/backup_restore.timer.nix
     ] 
     ++
     lib.fileset.toList (
