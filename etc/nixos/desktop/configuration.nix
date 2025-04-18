@@ -54,7 +54,6 @@ in
   sops.defaultSopsFormat = "yaml";
   # this has to be available when booting, so watch for mount sequence
   sops.age.keyFile = "/etc/sops/age/keys.txt";
-  sops.secrets."mnt-minio.env" = {};
   sops.secrets."mnt-minio2.env" = {};
   sops.secrets."yeltnar_nebula_id_rsa" = {
     # set path in file for nebula

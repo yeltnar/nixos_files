@@ -19,6 +19,8 @@ in {
   # certificate from caddy that adds https
   security.pki.certificates = [ s3-certificate ];
 
+  sops.secrets."mnt-minio.env" = {};
+
   systemd.mounts = with pkgs.lib.strings; [{
     requires = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
