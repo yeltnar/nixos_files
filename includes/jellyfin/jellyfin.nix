@@ -6,6 +6,8 @@
 }: let
   code_parent_dir="/home/drew/playin";
   code_dir="${code_parent_dir}/jellyfin";  
+  run_env_file = "/home/drew/.config/jellyfin/changeme.env";
+  backup_env_file = "/home/drew/.config/jellyfin/backup.env";
 in {
   networking.firewall.allowedTCPPorts = [
     8096
@@ -14,11 +16,11 @@ in {
   # TODO move to jellyfin file
   sops.secrets."jellyfin.env" = {
     owner = "drew";
-    path = "/home/drew/.config/jellyfin/changeme.env";
+    path = run_env_file;
   };
   sops.secrets."jellyfin_backup.env" = {
     owner = "drew";
-    path = "/home/drew/.config/jellyfin/backup.env";
+    path = backup_env_file;
   };
   
   # enable lingering so service starts before user logs in
@@ -71,7 +73,7 @@ in {
       ${pkgs.podman-compose}/bin/podman-compose down
       # ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/jellyfin.podman.pid" up --no-recreate -d
       # ${pkgs.podman-compose}/bin/podman-compose up  -d
-      ${pkgs.podman-compose}/bin/podman-compose --env-file  changeme.env --verbose up --build -d |& tee log.txt
+      ${pkgs.podman-compose}/bin/podman-compose --env-file ${run_env_file} --verbose up --build -d |& tee log.txt
     '';
     unitConfig = {
       StartLimitInterval = 30;
