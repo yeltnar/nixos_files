@@ -14,7 +14,14 @@ in {
       ( import ../../../includes/sops/sops_make_age_key.nix (args // { leUser = leUser; }))
       ../../../includes/custom_bashrc.nix
       ../../../includes/ntfy-server/ntfy-server.nix
+
+      ../../../includes/rclone_mounts/mini-minio.nix
+
       ../../../includes/caddy-server/do-nixos-caddy-server.nix
+      ../../../includes/caddy-server/backup_restore.timer.nix
+
+      ../../../includes/ntfy-server/ntfy-server.nix
+      ../../../includes/ntfy-server/backup_restore.timer.nix
     ];
 
   nix.settings.trusted-users = [leUser];
@@ -107,6 +114,7 @@ in {
     tmux
     nebula
     podman-compose
+    borgbackup
 
     sops
     age
@@ -121,14 +129,14 @@ in {
   };
 
   virtualisation = {
-    docker = {
-      enable = false;
-    };
+    # docker = {
+    #   enable = false;
+    # };
     podman = {
       enable = true;
 
       # Create a `docker` alias for podman, to use it as a drop-in replacement
-      dockerCompat = true;
+      # dockerCompat = true;
 
       # Required for containers under podman-compose to be able to talk to each other.
       defaultNetwork.settings.dns_enabled = true;
