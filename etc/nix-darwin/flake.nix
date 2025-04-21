@@ -25,6 +25,7 @@
           jq
           yq
           tldr
+          lima
 
           # for OpenAPI language server
           spectral-language-server
