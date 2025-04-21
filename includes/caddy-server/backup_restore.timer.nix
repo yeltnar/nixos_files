@@ -12,8 +12,8 @@
       echo "WORKDIR is undefined... exiting";
       exit;
     fi
-    if [ -z "$SRC_DIR" ]; then
-      echo "SRC_DIR is undefined... exiting";
+    if [ -n "$SRC_DIR" ]; then
+      echo "\$SRC_DIR is replaced with \$FILES_TO_BACKUP... exiting";
       exit;
     fi
     if [ -z "$BORG_REPO" ]; then
@@ -31,7 +31,8 @@
 
     cd "$WORKDIR";
 
-    borg info $BORG_REPO >& /dev/null
+    # if this does not have a 0 exit code, the whole thing blows up... I just wanted to check the exit code 
+    borg info $BORG_REPO # >& /dev/null
     info_exit_code=$?;
 
     if [ $info_exit_code -gt 0 ]; then
@@ -39,7 +40,15 @@
       borg init $BORG_REPO --encryption=$ENCRYPTION
     fi
 
-    borg create --stats --progress --compression lz4 ::{user}-{now}  $SRC_DIR
+    if [ -z "$FILES_TO_BACKUP" ]; then
+      echo "backing up $FILES_TO_BACKUP";
+    else
+      echo "\$FILES_TO_BACKUP is empty... backing up everything";
+    fi
+
+    echo "borg create --stats --progress --compression lz4 ::{user}-{now} $FILES_TO_BACKUP"
+    # if FILES_TO_BACKUP is empty, it will backup everything 
+    borg create --stats --progress --compression lz4 ::{user}-{now} $FILES_TO_BACKUP
 
     borg prune -v --list --keep-within=1d --keep-daily=7 --keep-weekly="5" --keep-monthly="12" --keep-yearly="2"
   '';
