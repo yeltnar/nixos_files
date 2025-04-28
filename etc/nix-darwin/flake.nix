@@ -24,7 +24,8 @@
           sops
           age # for sops encryption 
           jq
-          yq
+          # yq
+          yq-go
           tldr
           lima
 
