@@ -14,6 +14,7 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages = with pkgs; 
         [ 
+          ( import ./open-hoppscotch.nix { inherit pkgs; } )
           neovim
           # podman # can't get virt going with nix-darwin
           podman-compose
