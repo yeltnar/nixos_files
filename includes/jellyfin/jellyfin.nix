@@ -18,10 +18,6 @@ in {
     owner = "drew";
     path = run_env_file;
   };
-  sops.secrets."jellyfin_backup.env" = {
-    owner = "drew";
-    path = backup_env_file;
-  };
   
   # enable lingering so service starts before user logs in
   users.users.drew.linger = true;

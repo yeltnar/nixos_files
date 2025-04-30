@@ -31,22 +31,21 @@
 
     cd "$WORKDIR";
 
-    # if this does not have a 0 exit code, the whole thing blows up... I just wanted to check the exit code 
-    borg info $BORG_REPO # >& /dev/null
-    info_exit_code=$?;
+    info_exit_code=$(borg info $BORG_REPO >& /dev/null; echo $?)
 
     if [ $info_exit_code -gt 0 ]; then
       echo "repo does not exsist; creating now";
       borg init $BORG_REPO --encryption=$ENCRYPTION
     fi
 
+    echo "FILES_TO_BACKUP is $FILES_TO_BACKUP";
+
     if [ -z "$FILES_TO_BACKUP" ]; then
-      echo "backing up $FILES_TO_BACKUP";
-    else
       echo "\$FILES_TO_BACKUP is empty... backing up everything";
+    else
+      echo "backing up $FILES_TO_BACKUP";
     fi
 
-    echo "borg create --stats --progress --compression lz4 ::{user}-{now} $FILES_TO_BACKUP"
     # if FILES_TO_BACKUP is empty, it will backup everything 
     borg create --stats --progress --compression lz4 ::{user}-{now} $FILES_TO_BACKUP
 
@@ -54,12 +53,12 @@
   '';
 in {
 
-  sops.secrets."caddy-cloud_backup.env" = {
+  sops.secrets."${unit_id}_backup.env" = {
     owner = "drew";
     path = backup_env_file;
   };
   
-  systemd.timers."backup.caddy-cloud" = {
+  systemd.timers."backup.${unit_id}" = {
     requires = ["network-online.target"];
     after = ["default.target" "network-online.target"];
     wantedBy = [
@@ -71,12 +70,12 @@ in {
       OnUnitInactiveSec = "6h";
       # start service when timer starts
       OnActiveSec = "0s";
-      Unit = "backup.caddy-cloud.service";
+      Unit = "backup.${unit_id}.service";
     };
   };
 
 
-  systemd.services."backup.caddy-cloud" = {
+  systemd.user.services."backup.${unit_id}" = {
     environment =
       config.nix.envVars
       // {
@@ -91,16 +90,16 @@ in {
 
     script = backup_script;
     unitConfig = {
-      ConditionPathExists = "/home/drew/playin/caddy-cloud";
+      ConditionPathExists = "/home/drew/playin/${unit_id}";
     };
     serviceConfig = {
-      WorkingDirectory = "/home/drew/playin/caddy-cloud";
+      WorkingDirectory = "/home/drew/playin/${unit_id}";
       Type = "oneshot";
       # User = "drew";
     };
   };
 
-  systemd.services."restore.caddy-cloud" = {
+  systemd.user.services."restore.${unit_id}" = {
     environment =
       config.nix.envVars
       // {
@@ -114,19 +113,19 @@ in {
     ];
 
     script = ''
-      export RESTORE_DIR="$HOME/playin/caddy-cloud"
+      export RESTORE_DIR="$HOME/playin/${unit_id}"
       ./restore.sh
     '';
     serviceConfig = {
-      WorkingDirectory = "/home/drew/playin/caddy-cloud";
+      WorkingDirectory = "/home/drew/playin/${unit_id}";
       Type = "oneshot";
       # User = "drew";
     };
     # unitConfig = {
-    #   ConditionPathExists = "/home/drew/playin/caddy-cloud";
+    #   ConditionPathExists = "/home/drew/playin/${unit_id}";
     # };
     onSuccess = [
-      "caddy-cloud_start.service"
+      "${unit_id}_start.service"
     ];
   };
 }
