@@ -23,8 +23,6 @@ in {
       git
     ];
     description = "${name}-git-repo";
-    requires = ["network-online.target"];
-    after = ["default.target" "network-online.target"];
     wantedBy = [
       "default.target"
       "multi-user.target"
@@ -40,6 +38,9 @@ in {
       SyslogIdentifier = "${name}";
       WorkingDirectory = "${code_parent_dir}";
     };
+    onSuccess = [
+      "restore.uptime-kuma.service"
+    ];
   };
   
   # TODO fix this path shiz

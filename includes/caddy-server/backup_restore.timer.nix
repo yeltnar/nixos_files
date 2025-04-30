@@ -4,79 +4,32 @@
   ...
 }: let
   unit_id = "caddy-cloud";
-  backup_env_file = "/home/drew/.config/${unit_id}/backup.env";
-  backup_script = ''
-    source ${backup_env_file}
-
-    if [ -z "$WORKDIR" ]; then
-      echo "WORKDIR is undefined... exiting";
-      exit;
-    fi
-    if [ -n "$SRC_DIR" ]; then
-      echo "\$SRC_DIR is replaced with \$FILES_TO_BACKUP... exiting";
-      exit;
-    fi
-    if [ -z "$BORG_REPO" ]; then
-      echo "BORG_REPO is undefined... exiting";
-      exit;
-    fi
-    if [ -z "$BORG_PASSPHRASE" ]; then
-      echo "BORG_PASSPHRASE is undefined... exiting";
-      exit;
-    fi
-    if [ -z "$ENCRYPTION" ]; then
-      echo "ENCRYPTION is undefined... exiting";
-      exit;
-    fi
-
-    cd "$WORKDIR";
-
-    # if this does not have a 0 exit code, the whole thing blows up... I just wanted to check the exit code 
-    borg info $BORG_REPO # >& /dev/null
-    info_exit_code=$?;
-
-    if [ $info_exit_code -gt 0 ]; then
-      echo "repo does not exsist; creating now";
-      borg init $BORG_REPO --encryption=$ENCRYPTION
-    fi
-
-    if [ -z "$FILES_TO_BACKUP" ]; then
-      echo "backing up $FILES_TO_BACKUP";
-    else
-      echo "\$FILES_TO_BACKUP is empty... backing up everything";
-    fi
-
-    echo "borg create --stats --progress --compression lz4 ::{user}-{now} $FILES_TO_BACKUP"
-    # if FILES_TO_BACKUP is empty, it will backup everything 
-    borg create --stats --progress --compression lz4 ::{user}-{now} $FILES_TO_BACKUP
-
-    borg prune -v --list --keep-within=1d --keep-daily=7 --keep-weekly="5" --keep-monthly="12" --keep-yearly="2"
-  '';
+  scripts = ( import ../helpers/backup_restore_scripts.nix ) { inherit unit_id; };
+  backup_script = scripts.backup_script;
+  restore_script = scripts.restore_script; 
+  backup_env_file = scripts.backup_env_file;
 in {
 
-  sops.secrets."caddy-cloud_backup.env" = {
+  sops.secrets."${unit_id}_backup.env" = {
     owner = "drew";
     path = backup_env_file;
   };
   
-  systemd.timers."backup.caddy-cloud" = {
-    requires = ["network-online.target"];
-    after = ["default.target" "network-online.target"];
+  systemd.user.timers."backup.${unit_id}" = {
     wantedBy = [
-      "default.target"
-      "multi-user.target"
+      "timers.target"
     ];
     timerConfig = {
       # run service based on how long it last ran 
       OnUnitInactiveSec = "6h";
       # start service when timer starts
       OnActiveSec = "0s";
-      Unit = "backup.caddy-cloud.service";
+      Unit = "backup.${unit_id}.service";
     };
   };
 
 
-  systemd.services."backup.caddy-cloud" = {
+  systemd.user.services."backup.${unit_id}" = {
     environment =
       config.nix.envVars
       // {
@@ -91,16 +44,17 @@ in {
 
     script = backup_script;
     unitConfig = {
-      ConditionPathExists = "/home/drew/playin/caddy-cloud";
+      ConditionPathExists = "/home/drew/playin/${unit_id}";
     };
     serviceConfig = {
-      WorkingDirectory = "/home/drew/playin/caddy-cloud";
+      WorkingDirectory = "/home/drew/playin/${unit_id}";
       Type = "oneshot";
       # User = "drew";
     };
   };
 
-  systemd.services."restore.caddy-cloud" = {
+  # this should not have a trigger so it only fires after the source code is downloaded 
+  systemd.user.services."restore.${unit_id}" = {
     environment =
       config.nix.envVars
       // {
@@ -112,21 +66,17 @@ in {
     path = with pkgs; [
       borgbackup
     ];
-
-    script = ''
-      export RESTORE_DIR="$HOME/playin/caddy-cloud"
-      ./restore.sh
-    '';
+    script = restore_script;
     serviceConfig = {
-      WorkingDirectory = "/home/drew/playin/caddy-cloud";
+      WorkingDirectory = "/home/drew/playin/${unit_id}";
       Type = "oneshot";
       # User = "drew";
     };
     # unitConfig = {
-    #   ConditionPathExists = "/home/drew/playin/caddy-cloud";
+    #   ConditionPathExists = "/home/drew/playin/${unit_id}";
     # };
     onSuccess = [
-      "caddy-cloud_start.service"
+      "${unit_id}_start.service"
     ];
   };
 }
