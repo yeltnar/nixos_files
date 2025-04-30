@@ -28,7 +28,7 @@ in {
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ( import ../../../generic_configuration.nix (args // { leUser = leUser; }))
-    ../../../desktop.nix
+    # ../../../desktop.nix
 
     ( import ../../../includes/nebula/nebula.nix (args // {
       user = leUser; 
@@ -63,6 +63,7 @@ in {
     gparted
     
     borgbackup    
+    lazygit
   ];
 
   # TODO add proxmos_vm specific stuff here
