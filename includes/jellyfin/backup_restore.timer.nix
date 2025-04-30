@@ -51,6 +51,55 @@
 
     borg prune -v --list --keep-within=1d --keep-daily=7 --keep-weekly="5" --keep-monthly="12" --keep-yearly="2"
   '';
+  restore_script = ''
+    export RESTORE_DIR="$HOME/playin/${unit_id}"
+    source ~/.config/jellyfin/backup.env
+
+    if [ -z "$RESTORE_DIR" ]; then
+      echo "RESTORE_DIR is undefined... exiting";
+      exit;
+    fi
+
+    if [ -z "$WORKDIR" ]; then
+      echo "WORKDIR is undefined... exiting";
+      exit;
+    fi
+    if [ -n "$SRC_DIR" ]; then
+      echo "\$SRC_DIR is replaced with \$FILES_TO_BACKUP... exiting";
+      exit;
+    fi
+    if [ -z "$BORG_REPO" ]; then
+      echo "BORG_REPO is undefined... exiting";
+      exit;
+    fi
+    if [ -z "$BORG_PASSPHRASE" ]; then
+      echo "BORG_PASSPHRASE is undefined... exiting";
+      exit;
+    fi
+    if [ -z "$ENCRYPTION" ]; then
+      echo "ENCRYPTION is undefined... exiting";
+      exit;
+    fi
+
+    cd "$WORKDIR";
+
+    borg info $BORG_REPO >& /dev/null
+    info_exit_code=$?;
+
+    if [ $info_exit_code -gt 0 ]; then
+      echo "repo does not exsist; exiting";
+      exit 1;
+    fi
+
+    archive_name=$(borg list --sort-by timestamp --last 1 --format "{archive}")
+    echo $archive_name
+
+    # borg extract user@host:path/to/repo_directory::Monday path/to/target_directory --exclude '*.ext'
+
+    cd $RESTORE_DIR
+
+    borg extract "$BORG_REPO::$archive_name"
+  '';
 in {
 
   sops.secrets."${unit_id}_backup.env" = {
@@ -96,6 +145,7 @@ in {
     };
   };
 
+  # this should not have a trigger so it only fires after the source code is downloaded 
   systemd.user.services."restore.${unit_id}" = {
     environment =
       config.nix.envVars
@@ -108,11 +158,7 @@ in {
     path = with pkgs; [
       borgbackup
     ];
-
-    script = ''
-      export RESTORE_DIR="$HOME/playin/${unit_id}"
-      ./restore.sh
-    '';
+    script = restore_script;
     serviceConfig = {
       WorkingDirectory = "/home/drew/playin/${unit_id}";
       Type = "oneshot";
