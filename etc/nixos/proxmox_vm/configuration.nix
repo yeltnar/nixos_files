@@ -39,6 +39,7 @@ in {
 
     ../../../includes/ntfy_report_ip_timer.nix
     ../../../includes/jellyfin/jellyfin.nix
+    ../../../includes/uptime-kuma/uptime-kuma-server.nix
 
     ../../../includes/derivation_test/derivation_test.nix
     # ../../../includes/nextcloud/nextcloud.nix
