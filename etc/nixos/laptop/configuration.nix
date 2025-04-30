@@ -51,9 +51,6 @@ in
 
   networking.hostName = "drew-lin-lap"; # Define your hostname.
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
   # TODO move this block 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
@@ -74,23 +71,8 @@ in
 
   # Enable the GNOME Desktop Environment.
   # disable xterm
-  services.xserver.displayManager.gdm = {
-    enable = true;
-    # prevent suspend before the user logs in 
-    autoSuspend = false;
-  };
-  services.xserver.desktopManager.gnome = {
-    enable = true;
-  };
-
-  # Configure keymap in X11
-  services.xserver = {
-    xkb.layout = "us";
-    xkb.variant = "";
-  };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  # prevent suspend before the user logs in 
+  services.xserver.displayManager.gdm.autoSuspend = false;
 
   ### some power mgmt stuff ### 
   # this seems to work 

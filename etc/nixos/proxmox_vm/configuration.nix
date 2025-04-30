@@ -57,16 +57,6 @@ in {
 
   nix.settings.trusted-users = [ "drew" ];
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  # disable xterm
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome = {
-    enable = true;
-  };
-
   environment.systemPackages = with pkgs; [
     libnbd
     # (import /home/drew/playin/nixos_files/includes/nbdkit/nbdkit.nix)
@@ -74,17 +64,6 @@ in {
     
     borgbackup    
   ];
-
-  # Configure keymap in X11
-  services.xserver = {
-    xkb = {
-      layout = "us";
-      variant = "";
-    };
-  };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
   # TODO add proxmos_vm specific stuff here
   boot.loader.grub.enable = true;

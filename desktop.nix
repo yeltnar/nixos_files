@@ -85,6 +85,15 @@ in {
     xclip
     ghostty
   ];
+  
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+
+  # Enable the GNOME Desktop Environment.
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome = {
+    enable = true;
+  };
 
   services.xserver.excludePackages = [pkgs.xterm];
   environment.gnome.excludePackages =
@@ -99,6 +108,14 @@ in {
       seahorse
       gnome-music
     ]);
+
+  # Configure keymap in X11
+  services.xserver = {
+    xkb = {
+      layout = "us";
+      variant = "";
+    };
+  };
 
   # system.activationScripts.code_symlink = {
   #   text = ''

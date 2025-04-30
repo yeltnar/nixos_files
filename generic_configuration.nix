@@ -162,7 +162,6 @@ in {
     age # for sops encryption 
   ];
 
-  services.xserver.excludePackages = [pkgs.xterm];
   environment.gnome.excludePackages =
     (with pkgs; [
       gnome-tour

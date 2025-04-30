@@ -133,26 +133,7 @@ in
 
 
 
-  services.xserver = {
-
-    # Enable the X11 windowing system.
-    enable = true;
-
-    # Enable the GNOME Desktop Environment.
-    displayManager.gdm = {
-      enable = true;
-      # prevent suspend before user logs in 
-      autoSuspend = false;
-    };
-    desktopManager.gnome.enable = true;
-
-    # Configure keymap in X11
-    xkb = {
-      layout = "us";
-      variant = "";
-    };
-
-  };
+  services.xserver.displayManager.gdm.autoSuspend = false;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -172,9 +153,6 @@ in
     # no need to redefine it in your config for now)
     #media-session.enable = true;
   };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
   programs.adb.enable = true;
 
