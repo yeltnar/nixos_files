@@ -48,6 +48,7 @@ in {
     ../../../includes/nbdkit/nbdkit.entry.nix
     ../../../includes/rclone_mounts/mini-minio.nix
     ../../../includes/jellyfin/backup_restore.timer.nix
+    ../../../includes/uptime-kuma/backup_restore.timer.nix
   ];
 
   # TODO move this block 
