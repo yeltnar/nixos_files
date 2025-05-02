@@ -9,10 +9,8 @@
   code_dir="${code_parent_dir}/${name}";  
 in {
   networking.firewall.allowedTCPPorts = [
-  8080 # port for container
-  # 11434 # port for container
-  8443 # port for user service  
-  443 # port for system service
+    # port for container
+    4001
   ];
 
   # enable lingering so service starts before user logs in
