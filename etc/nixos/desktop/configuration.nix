@@ -226,6 +226,8 @@ in
 
     # TODO check if it works 
     snapper
+    lima
+    ulauncher 
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

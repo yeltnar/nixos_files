@@ -90,6 +90,7 @@ in {
 
       yq-go
       openssl
+      chafa
     ];
 
     # this has been replaced with ssh certificates 
