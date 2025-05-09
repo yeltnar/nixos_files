@@ -48,7 +48,7 @@ let
     borg prune -v --list --keep-within=1d --keep-daily=7 --keep-weekly="5" --keep-monthly="12" --keep-yearly="2"
   '';
   restore_script = ''
-    export RESTORE_DIR="$HOME/playin/${unit_id}"
+    export RESTORE_DIR="/home/drew/playin/${unit_id}"
     source ${backup_env_file}
 
     if [ -z "$RESTORE_DIR" ]; then
@@ -91,6 +91,9 @@ let
     echo $archive_name
 
     # borg extract user@host:path/to/repo_directory::Monday path/to/target_directory --exclude '*.ext'
+
+    echo "restoring"
+    borg list "$BORG_REPO::$archive_name"
 
     cd $RESTORE_DIR
 
