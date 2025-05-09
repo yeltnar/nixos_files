@@ -84,6 +84,7 @@ in {
        
     xclip
     ghostty
+    borgbackup
   ];
   
   # Enable the X11 windowing system.
