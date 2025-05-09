@@ -26,6 +26,7 @@ in
     # ../../../includes/drewdate/drewdate.nix
 
     ../../../includes/rclone_mounts/rclone_mini.laptop.nix
+    ../../../includes/rclone_mounts/mini-minio.nix
     # ../../../includes/libvirt/libvirt.nix
 
     # ../../../includes/makemkv/makemkv.entry.nix
