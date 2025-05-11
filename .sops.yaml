@@ -51,3 +51,11 @@ creation_rules:
       - *drew-lin-desktop
       - *drew-lin-laptop
       - *nixos3
+  # app data
+  - path_regex: includes/babybuddy/*
+    key_groups:
+    - age:
+      - *backup-key
+      - *drew-lin-laptop
+      - *drew-lin-desktop
+      - *proxmox_vm

@@ -13,6 +13,12 @@ in {
     8000
   ];
 
+  sops.secrets."babybuddy_backup.env" = {
+    owner = "drew";
+    sopsFile = ./secrets.yaml;
+    path = "/home/drew/.config/babybuddy/backup.env";
+  };
+
   # enable lingering so service starts before user logs in
   users.users.drew.linger = true;
 

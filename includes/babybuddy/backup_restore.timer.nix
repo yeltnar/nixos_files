@@ -21,7 +21,7 @@ in {
     ];
     timerConfig = {
       # run service based on how long it last ran 
-      OnUnitInactiveSec = "6h";
+      OnUnitInactiveSec = "1h";
       # start service when timer starts
       OnActiveSec = "0s";
       Unit = "backup.${unit_id}.service";
