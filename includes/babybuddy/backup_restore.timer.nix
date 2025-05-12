@@ -65,13 +65,14 @@ in {
 
     path = with pkgs; [
       borgbackup
+      coreutils-full 
     ];
     script = restore_script;
     serviceConfig = {
       WorkingDirectory = "/home/drew/playin/${unit_id}";
       Type = "oneshot";
       # User = "drew";
-      ExecStartPost = "systemctl --user -M drew@ start babybuddy_start.service";
+      ExecStartPost = pkgs.writeShellScript "poststart" "chown -R 100910:100910 config; systemctl --user -M drew@ start babybuddy_start.service";
     };
     # unitConfig = {
     #   ConditionPathExists = "/home/drew/playin/${unit_id}";
