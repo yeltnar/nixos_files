@@ -17,6 +17,7 @@ in {
   sops.secrets."jellyfin.env" = {
     owner = "drew";
     path = run_env_file;
+    sopsFile = ./secrets.yaml;
   };
   
   # enable lingering so service starts before user logs in

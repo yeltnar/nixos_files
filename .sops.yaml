@@ -52,6 +52,20 @@ creation_rules:
       - *drew-lin-laptop
       - *nixos3
   # app data
+  - path_regex: includes/uptime-kuma/*
+    key_groups:
+    - age:
+      - *backup-key
+      - *drew-lin-laptop
+      - *drew-lin-desktop
+      - *proxmox_vm
+  - path_regex: includes/jellyfin/*
+    key_groups:
+    - age:
+      - *backup-key
+      - *drew-lin-laptop
+      - *drew-lin-desktop
+      - *proxmox_vm
   - path_regex: includes/babybuddy/*
     key_groups:
     - age:
