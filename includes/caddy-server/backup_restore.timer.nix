@@ -13,9 +13,10 @@ in {
   sops.secrets."${unit_id}_backup.env" = {
     owner = "drew";
     path = backup_env_file;
+    sopsFile = ./secrets.yaml;
   };
   
-  systemd.user.timers."backup.${unit_id}" = {
+  systemd.timers."backup.${unit_id}" = {
     wantedBy = [
       "timers.target"
     ];
@@ -29,7 +30,7 @@ in {
   };
 
 
-  systemd.user.services."backup.${unit_id}" = {
+  systemd.services."backup.${unit_id}" = {
     environment =
       config.nix.envVars
       // {
