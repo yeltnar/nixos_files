@@ -22,7 +22,7 @@ in {
   fonts = { 
     enableDefaultPackages = true;
     packages = with pkgs; [(
-      nerdfonts.override { fonts = [ "BitstreamVeraSansMono" ]; }  # may need to change to "BitstreamWeraSansMono" 
+      nerd-fonts._0xproto
     )];
     # fontconfig = {
     #   defaultFonts = {
@@ -36,7 +36,7 @@ in {
 
   # Enable sound with pipewire.
   # sound.enable = true # removed at request of nixos-rebuild;
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -101,13 +101,12 @@ in {
     (with pkgs; [
       gnome-tour
       xterm
-    ])
-    ++ (with pkgs; [
       epiphany
       totem
       geary
       seahorse
       gnome-music
+      decibels
     ]);
 
   # Configure keymap in X11
