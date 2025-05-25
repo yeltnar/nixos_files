@@ -88,6 +88,8 @@ in
     
     ( import ../../../includes/force_charge.nix { inherit pkgs; } )
 
+    qemu
+
     gparted
 
     keybase
@@ -96,7 +98,7 @@ in
     element-desktop
 
     mullvad-vpn
-    gimp-with-plugins
+    gimp3-with-plugins
     endeavour # gnome tasks app 
 
     betaflight-configurator

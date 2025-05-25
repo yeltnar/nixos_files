@@ -214,7 +214,7 @@ in
     slack
     element-desktop
 
-    gimp-with-plugins
+    gimp3-with-plugins
     betaflight-configurator
     obs-studio
 
