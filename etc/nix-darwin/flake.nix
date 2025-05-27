@@ -6,13 +6,33 @@
     # nixpkgs_unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin/nix-darwin-24.11";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+
+    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    homebrew-core = { url = "github:homebrew/homebrew-core"; flake = false; };
+    homebrew-cask = { url = "github:homebrew/homebrew-cask"; flake = false; };
+    homebrew-bundle = { url = "github:homebrew/homebrew-bundle"; flake = false; };
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs }:
+  outputs = inputs@{ self, nix-darwin, nix-homebrew, homebrew-core, homebrew-cask, homebrew-bundle, nixpkgs }:
   let
     configuration = { pkgs, ... }: {
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
+
+      homebrew.enable = true; 
+      homebrew.brews = [
+        "podman"
+        "qemu"
+        "openjdk"
+      ];
+      homebrew.casks = [
+        "chromium"
+        "ghostty"
+        "macfuse"
+        "vscodium"
+        "podman-desktop"
+      ];
+
       environment.systemPackages = with pkgs; 
         [ 
 
@@ -20,25 +40,34 @@
           # ( import ./open-hoppscotch.nix { pkgs, nixpkgs = nixpkgs-unstable }; )
 
           neovim
-          # podman # can't get virt going with nix-darwin
           podman-compose
-          podman-desktop
           nixd
           openssh
           nebula
           sops
           age # for sops encryption 
           jq
-          # yq
+          # yq # dont use this one
           yq-go
           tldr
           lima
+          bash # mac bash is dead
+          borgbackup
 
-          # for OpenAPI language server
-          spectral-language-server
+          ffmpeg
+          fzf
+          gawk
+          gnupg
+          lazygit
+          ripgrep
+          rsync
+          tmux
+          tree
+          curl
+          
+          spectral-language-server # for OpenAPI language server
           lua-language-server
 
-          jdk
           k9s
         ];
 
@@ -63,7 +92,29 @@
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#drew-mbp
     darwinConfigurations."drew-mbp" = nix-darwin.lib.darwinSystem {
-      modules = [ configuration ];
+      modules = [
+        configuration 
+        # nix-homebrew.darwinModules.nix-homebrew {
+        #   nix-homebrew = {
+        #     enable = true; 
+        #
+        #     # run x86 versions on mac 
+        #     # enableRosetta = true; 
+        #
+        #     user = "drew";
+        #
+        #     taps = {
+        #       "homebrew/homebrew-core" = inputs.homebrew-core;
+        #       "homebrew/homebrew-cask" = inputs.homebrew-cask;
+        #     };
+        #
+        #     # TODO change this to be false
+        #     # mutableTaps = true; 
+        #     autoMigrate = true;
+        #
+        #   };
+        # }
+      ];
     };
   };
 }
