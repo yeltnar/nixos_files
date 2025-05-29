@@ -4,7 +4,6 @@
 {
   config,
   pkgs,
-  lib, 
   ...
 }: 
 let
@@ -12,19 +11,11 @@ let
     (builtins.fetchTarball {
       url = "https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable";
       sha256 = "0fxl020s1fmxygvi5bj8w30jq1bwynrn2xclwm5ahynw0nv9v6pv";
-    })
-    # reuse the current configuration
-    { config = config.nixpkgs.config; };
-    # desktop_environment = lib.mkDefault "gnome";
-    desktop_environment = "gnome";
-    # desktop_environment = "cosmic";
+    });
 in {
   imports = [
     ./includes/yeltnar_dev.nix
-  ] ++ lib.optionals (desktop_environment=="gnome") [
-    ./includes/desktop/gnome.nix
-  ] ++ lib.optionals (desktop_environment=="cosmic") [
-    ./includes/desktop/cosmic.nix
+    ./includes/desktop/desktop_switch.nix
   ];
 
   fonts = { 
