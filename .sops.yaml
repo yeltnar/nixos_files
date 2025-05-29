@@ -87,3 +87,10 @@ creation_rules:
       - *drew-lin-laptop
       - *drew-lin-desktop
       - *do-nixos
+  - path_regex: includes/wireguard_server/*
+    key_groups:
+    - age:
+      - *backup-key
+      - *drew-lin-laptop
+      - *drew-lin-desktop
+      - *do-nixos
