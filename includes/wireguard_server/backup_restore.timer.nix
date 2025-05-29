@@ -13,6 +13,7 @@ in {
   sops.secrets."${unit_id}_backup.env" = {
     owner = "drew";
     path = backup_env_file;
+    sopsFile = ./secrets.yaml;
   };
   
   systemd.user.timers."backup.${unit_id}" = {
