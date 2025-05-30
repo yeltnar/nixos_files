@@ -11,12 +11,11 @@ let
     (builtins.fetchTarball {
       url = "https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable";
       sha256 = "0fxl020s1fmxygvi5bj8w30jq1bwynrn2xclwm5ahynw0nv9v6pv";
-    })
-    # reuse the current configuration
-    { config = config.nixpkgs.config; };
+    });
 in {
   imports = [
     ./includes/yeltnar_dev.nix
+    ./includes/desktop/desktop_switch.nix
   ];
 
   fonts = { 
@@ -72,15 +71,6 @@ in {
 
     ( import ./includes/open.nix { inherit pkgs; } )
     ( import ./includes/chrome-nix-tmp.nix { inherit pkgs; } )
-
-    ## check the Gnome Extensions app for settings 
-    # better workspace management 
-    gnomeExtensions.space-bar
-    # 'spotlight' with Super+W
-    gnomeExtensions.switcher
-    # settings with Shift+Super+T
-    # grid overlay with Super+T
-    gnomeExtensions.tactile
        
     xclip
     ghostty
@@ -89,25 +79,7 @@ in {
   
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome = {
-    enable = true;
-  };
-
   services.xserver.excludePackages = [pkgs.xterm];
-  environment.gnome.excludePackages =
-    (with pkgs; [
-      gnome-tour
-      xterm
-      epiphany
-      totem
-      geary
-      seahorse
-      gnome-music
-      decibels
-    ]);
 
   # Configure keymap in X11
   services.xserver = {
