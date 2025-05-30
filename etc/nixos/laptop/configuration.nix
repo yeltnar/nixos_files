@@ -32,6 +32,9 @@ in
     # ../../../includes/makemkv/makemkv.entry.nix
   ];
 
+  # TODO make them all under yeltnar?
+  services.desktop_environment.selection = "cosmic";
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
