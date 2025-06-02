@@ -4,26 +4,27 @@
   pkgs,
   ...
 }: let
+  unit_id="ntfy_server";
   code_parent_dir="/home/drew/playin";
-  code_dir="${code_parent_dir}/ntfy_server";  
+  code_dir="${code_parent_dir}/${unit_id}";  
 in {
-  networking.firewall.allowedTCPPorts = [
-  8080 # port for container
-  # 11434 # port for container
-  8443 # port for user service  
-  443 # port for system service
-  ];
+  # networking.firewall.allowedTCPPorts = [
+  # 8080 # port for container
+  # # 11434 # port for container
+  # 8443 # port for user service  
+  # 443 # port for system service
+  # ];
 
   # enable lingering so service starts before user logs in
   users.users.drew.linger = true;
 
-  systemd.services.ntfy-servergit-repo = {
+  systemd.user.services."${unit_id}-git-repo" = {
     path = with pkgs; [
       git
     ];
-    description = "ntfy-server-git-repo";
-    requires = ["network-online.target"];
-    after = ["default.target" "network-online.target"];
+    description = "${unit_id}-git-repo";
+    # requires = ["network-online.target"];
+    # after = ["default.target" "network-online.target"];
     wantedBy = [
       "default.target"
       "multi-user.target"
@@ -32,13 +33,16 @@ in {
       ConditionPathExists = "!${code_dir}";
     };
     script = ''
-      /run/wrappers/bin/su - drew -s /bin/sh -c 'cd ${code_parent_dir}/; git clone https://github.com/yeltnar/ntfy_server';
+      cd ${code_parent_dir}/; git clone https://github.com/yeltnar/${unit_id};
     '';
     serviceConfig = {
       Type = "oneshot";
-      SyslogIdentifier = "ntfy_server";
+      SyslogIdentifier = "${unit_id}";
       WorkingDirectory = "${code_parent_dir}";
     };
+    onSuccess = [
+      "restore.${unit_id}.service"
+    ];
   };
   
   # TODO fix this path shiz
@@ -46,7 +50,7 @@ in {
     DefaultEnvironment="PATH=/run/current-system/sw/bin"
   '';
 
-  systemd.user.services.ntfy_server_start = {
+  systemd.user.services."${unit_id}_start" = {
     path = with pkgs; [
       podman
       podman-compose
@@ -59,7 +63,7 @@ in {
     script = ''
       PATH="$PATH:${pkgs.podman}/bin";
       ${pkgs.podman-compose}/bin/podman-compose down
-      # ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_ntfy_server_podman.pid --gpus=all" up --no-recreate -d
+      # ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_${unit_id}_podman.pid --gpus=all" up --no-recreate -d
       ${pkgs.podman-compose}/bin/podman-compose up  -d
 
 
@@ -86,8 +90,8 @@ in {
       WorkingDirectory = "${code_dir}";
       Restart = "always";
       NotifyAccess = "all";
-      PIDFile = "/tmp/systemd_ntfy_server_podman.pid"; # TODO change pid location 
-      ExecStop = pkgs.writeShellScript "stop-ntfy_server_start" ''
+      PIDFile = "/tmp/systemd_${unit_id}_podman.pid"; # TODO change pid location 
+      ExecStop = pkgs.writeShellScript "stop-${unit_id}_start" ''
         PATH="$PATH:${pkgs.podman}/bin";
         ${pkgs.podman-compose}/bin/podman-compose down
       '';
