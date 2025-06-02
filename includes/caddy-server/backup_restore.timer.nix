@@ -55,7 +55,7 @@ in {
   };
 
   # this should not have a trigger so it only fires after the source code is downloaded 
-  systemd.user.services."restore.${unit_id}" = {
+  systemd.services."restore.${unit_id}" = {
     environment =
       config.nix.envVars
       // {

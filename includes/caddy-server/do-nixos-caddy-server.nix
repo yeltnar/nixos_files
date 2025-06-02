@@ -4,8 +4,9 @@
   pkgs,
   ...
 }: let
+  unit_id = "caddy-cloud";
   code_parent_dir="/home/drew/playin";
-  code_dir="${code_parent_dir}/caddy-cloud";  
+  code_dir="${code_parent_dir}/${unit_id}";  
 in {
   networking.firewall.allowedTCPPorts = [
     80
@@ -15,11 +16,11 @@ in {
   # enable lingering so service starts before user logs in
   # users.users.drew.linger = true;
 
-  systemd.services.caddy-cloud-git-repo = {
+  systemd.services."${unit_id}-git-repo" = {
     path = with pkgs; [
       git
     ];
-    description = "caddy-cloud-git-repo";
+    description = "${unit_id}-git-repo";
     requires = ["network-online.target"];
     after = ["default.target" "network-online.target"];
     wantedBy = [
@@ -30,13 +31,16 @@ in {
       ConditionPathExists = "!${code_dir}";
     };
     script = ''
-      /run/wrappers/bin/su - drew -s /bin/sh -c 'cd ${code_parent_dir}/; git clone https://github.com/yeltnar/caddy-cloud';
+      /run/wrappers/bin/su - drew -s /bin/sh -c 'cd ${code_parent_dir}/; git clone https://github.com/yeltnar/${unit_id}';
     '';
     serviceConfig = {
       Type = "oneshot";
-      SyslogIdentifier = "caddy-cloud";
+      SyslogIdentifier = "${unit_id}";
       WorkingDirectory = "${code_parent_dir}";
     };
+    onSuccess = [
+      "restore.${unit_id}.service" 
+    ];
   };
   
   # TODO fix this path shiz
@@ -44,7 +48,7 @@ in {
     DefaultEnvironment="PATH=/run/current-system/sw/bin"
   '';
 
-  systemd.services.caddy-cloud_start = {
+  systemd.services."${unit_id}_start" = {
     path = with pkgs; [
       podman
       podman-compose
@@ -57,7 +61,7 @@ in {
     script = ''
       PATH="$PATH:${pkgs.podman}/bin";
       ${pkgs.podman-compose}/bin/podman-compose down
-      # ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_caddy-cloud_podman.pid" up --no-recreate -d
+      # ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_${unit_id}_podman.pid" up --no-recreate -d
       ${pkgs.podman-compose}/bin/podman-compose up  -d
 
 
@@ -84,8 +88,8 @@ in {
       WorkingDirectory = "${code_dir}";
       Restart = "always";
       NotifyAccess = "all";
-      PIDFile = "/tmp/systemd_caddy-cloud_podman.pid"; # TODO change pid location 
-      ExecStop = pkgs.writeShellScript "stop-caddy-cloud_start" ''
+      PIDFile = "/tmp/systemd_${unit_id}_podman.pid"; # TODO change pid location 
+      ExecStop = pkgs.writeShellScript "stop-${unit_id}_start" ''
         PATH="$PATH:${pkgs.podman}/bin";
         ${pkgs.podman-compose}/bin/podman-compose down
       '';
