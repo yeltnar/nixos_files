@@ -27,12 +27,14 @@
     path = with pkgs; [
       curl
       git
+      gawk
+      nettools
     ];
 
     script = ''
       # env;
       command -v curl
-      curl https://do.andbrant.com 2>/dev/null
+      curl https://ip.andbrant.com 2>/dev/null
       export PATH=$PATH;
       mkdir -p /home/drew/cron
       export bashrc_folder=/home/drew/playin/custom_bashrc;
@@ -41,6 +43,12 @@
     serviceConfig = {
       Type = "oneshot";
       User = "drew";
+    };
+    unitConfig = {
+      ConditionPathExists = [
+        "/home/drew/playin/custom_bashrc/gitignore/ntfy_endpoint"
+        "/home/drew/playin/custom_bashrc/gitignore/ntfy_token"
+      ];
     };
   };
 }

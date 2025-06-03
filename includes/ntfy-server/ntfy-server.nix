@@ -15,6 +15,11 @@ in {
   # 443 # port for system service
   # ];
 
+  # expose to nebula devices
+  networking.firewall.interfaces."nebula1".allowedTCPPorts = [
+    8981 
+  ];
+
   # enable lingering so service starts before user logs in
   users.users.drew.linger = true;
 
