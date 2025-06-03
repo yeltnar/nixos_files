@@ -39,7 +39,6 @@ in {
       # TODO do the restore, then start the service 
       # "restore.${name}.service"
       "restore.${name}.service"
-      "${name}-start.service"
     ];
   };
   

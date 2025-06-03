@@ -43,7 +43,20 @@ let
     fi
 
     # if FILES_TO_BACKUP is empty, it will backup everything 
-    borg create --stats --progress --compression lz4 ::{user}-{now} $FILES_TO_BACKUP
+    # we make a little function with a subshell so we can always get a good exit code
+    backup_log_file="/tmp/$$"
+    create_code=$(borg create --stats --verbose --show-rc --progress --compression lz4 ::{user}-{now} $FILES_TO_BACKUP >$backup_log_file 2>&1; echo $?;);
+    echo $create_code
+    cat $backup_log_file;
+    rm $backup_log_file;
+    # echo create_code $create_code
+    if [ $create_code -eq 1 ]; then
+      echo "Borg has a warning";
+      # systemd-notify --ready --status="warning with borg backup"
+    else
+      echo "Borg backup had errors."
+      exit $backup_exit_code;
+    fi
 
     borg prune -v --list --keep-within=1d --keep-daily=7 --keep-weekly="5" --keep-monthly="12" --keep-yearly="2"
   '';

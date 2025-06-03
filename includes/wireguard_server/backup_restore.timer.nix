@@ -77,7 +77,7 @@ in {
     #   ConditionPathExists = "/home/drew/playin/${unit_id}";
     # };
     onSuccess = [
-      "${unit_id}_start.service"
+      "${unit_id}-start.service"
     ];
   };
 }
