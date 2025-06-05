@@ -102,6 +102,7 @@ in {
     lua-language-server
     # nixd
     tmux
+    tree
 
     jq
     yq
