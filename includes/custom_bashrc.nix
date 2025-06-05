@@ -4,17 +4,19 @@
   pkgs,
   ...
 }: {
-  systemd.services.custom_bashrc-git-repo = {
+  imports = [ ./nm-online.service.nix ];
+
+  systemd.user.services.custom_bashrc-git-repo = {
     description = "custom_bashrc-git-repo";
     wants = ["basic.target"];
-    requires = ["network-online.target"];
-    after = ["basic.target" "network-online.target"];
-    wantedBy = ["multi-user.target"];
+    after = ["basic.target" "network-online.target" "nm-online.service"];
+    wantedBy = [
+      "default.target"
+    ];
     unitConfig = {
       ConditionPathExists = "!/home/drew/playin/custom_bashrc";
     };
     serviceConfig = {
-      User = "drew";
       SyslogIdentifier = "custom_bashrc";
       # TODO why is this not nix syntax
     };
