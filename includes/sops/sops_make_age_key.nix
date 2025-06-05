@@ -5,7 +5,10 @@
   ...
 }: let
   # TODO make the usename variable 
-  sops_home_dir="/home/drew/.config/sops/age";
+  user="drew";
+  group="users";
+  config_dir="/home/${user}/.config";
+  sops_home_dir="${config_dir}/sops/age";
   # TODO make variable so it can stay in sync with sops configuration 
   sops_home_file="${sops_home_dir}/keys.txt";
   sops_etc_dir="/etc/sops/age";
@@ -14,6 +17,7 @@
 
     mkdir -p ${sops_etc_dir};
     mkdir -p ${sops_home_dir};
+    chown -R ${user}:${group} ${config_dir}
 
     if [ ! -e ${sops_home_file} ]; then
       ln -s ${sops_etc_file} ${sops_home_file};
