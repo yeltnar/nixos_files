@@ -22,4 +22,25 @@
       ${pkgs.git}/bin/git clone https://github.com/yeltnar/nixos_files
     '';
   };
+
+  systemd.user.services.run-home-manager = {
+    description = "run-home-manager";
+    after = ["nixos_files.service"];
+    wantedBy = [
+      "default.target"
+    ];
+    unitConfig = {
+      ConditionPathExists = "!/home/drew/.config/home-manager";
+    };
+    path = with pkgs; [
+      nix
+      home-manager
+    ];
+    script =''
+      ln -s /home/drew/playin/nixos_files/home-manager /home/drew/.config/home-manager 
+      whoami
+      ls ~/.config
+      ${pkgs.home-manager}/bin/home-manager switch --flake /home/drew/.config/home-manager
+    '';
+  };
 }
