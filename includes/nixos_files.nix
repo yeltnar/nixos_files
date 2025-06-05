@@ -32,6 +32,9 @@
     unitConfig = {
       ConditionPathExists = "!/home/drew/.config/home-manager";
     };
+    serviceConfig = { 
+      Type = "oneshot";
+    };
     path = with pkgs; [
       nix
       home-manager
@@ -40,7 +43,7 @@
       ln -s /home/drew/playin/nixos_files/home-manager /home/drew/.config/home-manager 
       whoami
       ls ~/.config
-      ${pkgs.home-manager}/bin/home-manager switch --flake /home/drew/.config/home-manager
+      home-manager switch --flake /home/drew/.config/home-manager
     '';
   };
 }
