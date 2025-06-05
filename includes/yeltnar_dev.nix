@@ -7,7 +7,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     lazygit
-    nodejs_20
+    nodejs_24
     dig
     websocat
     ansible
