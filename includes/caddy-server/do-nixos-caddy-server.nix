@@ -31,12 +31,11 @@ in {
       ConditionPathExists = "!${code_dir}";
     };
     script = ''
-      /run/wrappers/bin/su - drew -s /bin/sh -c 'cd ${code_parent_dir}/; git clone https://github.com/yeltnar/${unit_id}';
+      /run/wrappers/bin/su - drew -s /bin/sh -c 'mkdir -p ${code_parent_dir}; cd ${code_parent_dir}/; git clone https://github.com/yeltnar/${unit_id}';
     '';
     serviceConfig = {
       Type = "oneshot";
       SyslogIdentifier = "${unit_id}";
-      WorkingDirectory = "${code_parent_dir}";
     };
     onSuccess = [
       "restore.${unit_id}.service" 

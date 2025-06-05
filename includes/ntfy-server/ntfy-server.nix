@@ -15,6 +15,8 @@ in {
   # 443 # port for system service
   # ];
 
+  imports = [ ../nm-online.service.nix ];
+
   # expose to nebula devices
   networking.firewall.interfaces."nebula1".allowedTCPPorts = [
     8981 
@@ -29,7 +31,7 @@ in {
     ];
     description = "${unit_id}-git-repo";
     # requires = ["network-online.target"];
-    # after = ["default.target" "network-online.target"];
+    after = ["nm-online.service"];
     wantedBy = [
       "default.target"
       "multi-user.target"
@@ -38,12 +40,13 @@ in {
       ConditionPathExists = "!${code_dir}";
     };
     script = ''
-      cd ${code_parent_dir}/; git clone https://github.com/yeltnar/${unit_id};
+      mkdir -p ${code_parent_dir}; 
+      cd ${code_parent_dir}/; 
+      git clone https://github.com/yeltnar/${unit_id};
     '';
     serviceConfig = {
       Type = "oneshot";
       SyslogIdentifier = "${unit_id}";
-      WorkingDirectory = "${code_parent_dir}";
     };
     onSuccess = [
       "restore.${unit_id}.service"

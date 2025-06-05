@@ -12,6 +12,8 @@ in {
     51820
   ];
 
+  imports = [ ../nm-online.service.nix ];
+
   # enable lingering so service starts before user logs in
   users.users.drew.linger = true;
 
@@ -20,6 +22,7 @@ in {
       git
     ];
     description = "${name}-git-repo";
+    after = ["nm-online.service"];
     wantedBy = [
       "default.target"
       "multi-user.target"
@@ -28,12 +31,12 @@ in {
       ConditionPathExists = "!${code_dir}";
     };
     script = ''
+      mkdir -p ${code_parent_dir}/; 
       cd ${code_parent_dir}/; git clone https://github.com/yeltnar/${name};
     '';
     serviceConfig = {
       Type = "oneshot";
       SyslogIdentifier = "${name}";
-      WorkingDirectory = "${code_parent_dir}";
     };
     onSuccess = [
       # TODO do the restore, then start the service 

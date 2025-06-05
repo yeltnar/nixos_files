@@ -32,16 +32,16 @@ in {
       "default.target"
       "multi-user.target"
     ];
+    after = ["default.target" "network-online.target"];
     unitConfig = {
       ConditionPathExists = "!${code_dir}";
     };
     script = ''
-      ${pkgs.util-linux}/bin/runuser -u drew -- ${pkgs.bash}/bin/bash -c 'cd ${code_parent_dir}/; git clone https://github.com/yeltnar/${name}';
+      ${pkgs.util-linux}/bin/runuser -u drew -- ${pkgs.bash}/bin/bash -c 'mkdir -p ${code_parent_dir}; cd ${code_parent_dir}/; git clone https://github.com/yeltnar/${name}';
     '';
     serviceConfig = {
       Type = "oneshot";
       SyslogIdentifier = "${name}";
-      WorkingDirectory = "${code_parent_dir}";
     };
     onSuccess = [
       # TODO change back to restore
