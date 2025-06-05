@@ -86,6 +86,7 @@ in {
     description = leUser;
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [];
+    initialHashedPassword = "$y$j9T$2qm7KFnheAT0Ydn6.B6gy/$yQqev5ru7b2.qHwt4Kw4zNGAwwFB3Lwm5o8TUfnjXq8";
   };
 
   # Allow unfree packages
