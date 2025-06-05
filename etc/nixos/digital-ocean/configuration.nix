@@ -13,6 +13,7 @@ in {
       ( import ../../../includes/nebula/nebula.nix ( args // { user = leUser; SECONDARY_HOST="hot.andbrant.com"; SECONDARY_CURL_OPTIONS=""; } ) )
       ( import ../../../includes/sops/sops_make_age_key.nix (args // { leUser = leUser; }))
       ../../../includes/custom_bashrc.nix
+      ../../../includes/nixos_files.nix
       ../../../includes/ntfy-server/ntfy-server.nix
 
       ../../../includes/rclone_mounts/mini-minio.nix
