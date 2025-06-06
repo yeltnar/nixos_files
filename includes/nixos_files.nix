@@ -16,10 +16,37 @@
     unitConfig = {
       ConditionPathExists = "!/home/drew/playin/nixos_files";
     };
+    serviceConfig = { 
+      Type = "oneshot";
+    };
     script =''
       mkdir -p /home/drew/playin
       cd /home/drew/playin
       ${pkgs.git}/bin/git clone https://github.com/yeltnar/nixos_files
+    '';
+  };
+
+  systemd.user.services.run-home-manager = {
+    description = "run-home-manager";
+    after = ["nixos_files-git-repo.service"];
+    wantedBy = [
+      "default.target"
+    ];
+    unitConfig = {
+      ConditionPathExists = "!/home/drew/.config/home-manager";
+    };
+    serviceConfig = { 
+      Type = "oneshot";
+    };
+    path = with pkgs; [
+      nix
+      home-manager
+    ];
+    script =''
+      ln -s /home/drew/playin/nixos_files/home-manager /home/drew/.config/home-manager 
+      whoami
+      ls ~/.config
+      home-manager switch --flake /home/drew/.config/home-manager
     '';
   };
 }
