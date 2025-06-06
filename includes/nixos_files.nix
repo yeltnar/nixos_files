@@ -16,6 +16,9 @@
     unitConfig = {
       ConditionPathExists = "!/home/drew/playin/nixos_files";
     };
+    serviceConfig = { 
+      Type = "oneshot";
+    };
     script =''
       mkdir -p /home/drew/playin
       cd /home/drew/playin
@@ -25,7 +28,7 @@
 
   systemd.user.services.run-home-manager = {
     description = "run-home-manager";
-    after = ["nixos_files.service"];
+    after = ["nixos_files-git-repo.service"];
     wantedBy = [
       "default.target"
     ];
