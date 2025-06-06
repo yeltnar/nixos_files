@@ -40,6 +40,7 @@ in {
     ../../../includes/ntfy_report_ip_timer.nix
     ../../../includes/jellyfin/jellyfin.nix
     ../../../includes/uptime-kuma/uptime-kuma-server.nix
+    ../../../includes/babybuddy/babybuddy.nix
 
     ../../../includes/derivation_test/derivation_test.nix
     # ../../../includes/nextcloud/nextcloud.nix
@@ -49,6 +50,7 @@ in {
     ../../../includes/rclone_mounts/mini-minio.nix
     ../../../includes/jellyfin/backup_restore.timer.nix
     ../../../includes/uptime-kuma/backup_restore.timer.nix
+    ../../../includes/babybuddy/backup_restore.timer.nix
   ];
 
   # TODO move this block 
