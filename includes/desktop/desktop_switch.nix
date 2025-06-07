@@ -9,9 +9,13 @@
 }: {
 
   options.services.desktop_environment.selection = lib.mkOption {
-      type = lib.types.str;
-      default = "gnome";
-      description = "pick desktop";
+    type = lib.types.enum [
+      "gnome"
+      "cosmic"
+      "none"
+    ];
+    default = "none";
+    description = "pick desktop";
   };
 
   imports = [
