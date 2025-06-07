@@ -11,6 +11,7 @@
   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "sr_mod" "virtio_blk" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelParams = [ "console=ttyS0,115200n8" ];
   boot.extraModulePackages = [ ];
 
   fileSystems = lib.mkDefault {
