@@ -11,6 +11,7 @@ qemu-system-x86_64 \
 -nographic \
 -serial mon:stdio \
 -m 2048 \
--nic user,model=virtio,hostfwd=tcp::8022-:22 \
+-netdev user,id=net0,hostfwd=tcp::8022-:22,hostfwd=udp::51820-:51820 \
+-device virtio-net,netdev=net0 \
 -drive file=$new_img,media=disk,if=virtio
 
