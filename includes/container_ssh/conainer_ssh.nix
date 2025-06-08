@@ -5,7 +5,7 @@
   ...
 }: let
   unit_id="container_ssh";
-  git_repo_name="docker_ssh";
+  git_repo_name=unit_id;
   git_remote="https://github.com/yeltnar/${git_repo_name}";
   code_parent_dir="/home/drew/playin";
   code_dir="${code_parent_dir}/${git_repo_name}";  
