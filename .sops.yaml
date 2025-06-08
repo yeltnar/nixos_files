@@ -94,3 +94,10 @@ creation_rules:
       - *drew-lin-laptop
       - *drew-lin-desktop
       - *do-nixos
+  - path_regex: includes/container_ssh/*
+    key_groups:
+    - age:
+      - *backup-key
+      - *drew-lin-laptop
+      - *drew-lin-desktop
+      - *do-nixos
