@@ -27,6 +27,8 @@ in {
       ../../../includes/wireguard_server/wireguard_server.nix
       ../../../includes/wireguard_server/backup_restore.timer.nix
 
+      ../../../includes/container_ssh/conainer_ssh.nix
+
       ../../../includes/ntfy_report_ip_timer.nix
     ];
 
