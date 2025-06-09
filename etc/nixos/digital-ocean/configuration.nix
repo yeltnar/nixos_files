@@ -105,6 +105,7 @@ in {
     # nixd
     tmux
     tree
+    fzf
 
     jq
     yq
