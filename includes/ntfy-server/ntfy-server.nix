@@ -75,7 +75,7 @@ in {
       ${pkgs.podman-compose}/bin/podman-compose up  -d
 
 
-      podman-compose logs 2>&1 | while IFS= read -r line; do
+      podman-compose logs -f 2>&1 | while IFS= read -r line; do
         # Process the line
         if [[ "$line" == *"Listening on"* ]]; then
           echo "Found a match: $line"
