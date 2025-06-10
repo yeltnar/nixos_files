@@ -62,19 +62,6 @@ in {
       ${pkgs.podman-compose}/bin/podman-compose down
       # ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_${unit_id}_podman.pid" up --no-recreate -d
       ${pkgs.podman-compose}/bin/podman-compose up  -d
-
-
-      # podman-compose logs 2>&1 | while IFS= read -r line; do
-      #   # Process the line
-      #   if [[ "$line" == *"Listening on"* ]]; then
-      #     echo "Found a match: $line"
-      #     # Take action, e.g., run another command
-      #     systemd-notify --ready --status="container up"
-      #   else
-      #     echo "x-$line"
-      #   fi
-      # done
-      #
     '';
     unitConfig = {
       StartLimitInterval = 30;

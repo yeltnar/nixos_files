@@ -81,6 +81,7 @@ in {
           echo "Found a match: $line"
           # Take action, e.g., run another command
           systemd-notify --ready --status="container up"
+          break
         else
           echo "x-$line"
         fi
