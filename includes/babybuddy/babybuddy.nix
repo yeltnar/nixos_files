@@ -8,6 +8,8 @@
   code_parent_dir="/home/drew/playin";
   code_dir="${code_parent_dir}/${name}";  
 in {
+  imports = [ ./nm-online.service.nix ];
+
   networking.firewall.allowedTCPPorts = [
     # port for container
     8000
@@ -32,7 +34,7 @@ in {
       "default.target"
       "multi-user.target"
     ];
-    after = ["default.target" "network-online.target"];
+    after = ["default.target" "nm-online.service"];
     unitConfig = {
       ConditionPathExists = "!${code_dir}";
     };
