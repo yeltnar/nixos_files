@@ -195,7 +195,7 @@ in {
 
       podman-compose logs -f open-webui 2>&1 | while IFS= read -r line; do
         # Process the line
-        if [[ "$line" == *"Uvicorn running on"* ]]; then
+        if [[ "$line" == *"Started server process"* ]]; then
           echo "Found a match: $line"
           # Take action, e.g., run another command
           systemd-notify --ready --status="container up"
