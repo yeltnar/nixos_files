@@ -8,7 +8,7 @@
   code_parent_dir="/home/drew/playin";
   code_dir="${code_parent_dir}/${name}";  
 in {
-  imports = [ ./nm-online.service.nix ];
+  imports = [ ../nm-online.service.nix ];
 
   networking.firewall.allowedTCPPorts = [
     # port for container
