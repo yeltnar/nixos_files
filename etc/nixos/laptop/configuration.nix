@@ -14,7 +14,7 @@ in
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ( import ../../../generic_configuration.nix (args // { leUser = leUser; }))
-    ../../../desktop.nix
+    ../../../includes/desktop/desktop.nix
 
     ( import ../../../includes/nebula/nebula.nix (args // {
       user = leUser; 

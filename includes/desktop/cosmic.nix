@@ -1,15 +1,15 @@
 {
   config,
-  pkgs,
-  lib, 
-  ...
+    pkgs,
+    lib, 
+    ...
 }:
 let 
-    desktop_environment = config.services.desktop_environment.selection;
+  desktop_environment = config.services.desktop_environment.selection;
 in {
 
   config = lib.mkIf ( "cosmic" == desktop_environment ) {
-    # Enable the Cosmic Desktop Environment.
+  # Enable the Cosmic Desktop Environment.
     services = {
       displayManager.cosmic-greeter.enable = true;
       desktopManager.cosmic.enable = true;

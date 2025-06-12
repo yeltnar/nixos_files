@@ -16,7 +16,7 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ( import ../../../generic_configuration.nix (args // { leUser = leUser; }))
-      ../../../desktop.nix
+      ../../../includes/desktop/desktop.nix
       ../../../includes/gaming.nix
       ../../../includes/libvirt/libvirt.nix
       # ../../../includes/systemd-proxy/systemd-proxy.nix
@@ -141,7 +141,7 @@ in
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # moved to desktop.nix in root folder
+  # moved to includes/desktop/desktop.nix
   # Enable sound with pipewire.
   # hardware.pulseaudio.enable = false;
   # security.rtkit.enable = true;

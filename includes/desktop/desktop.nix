@@ -19,8 +19,9 @@
   };
 
   imports = [
+    ../yeltnar_dev.nix
     ./gnome.nix
     ./cosmic.nix
+    ./generic.nix 
   ];
-
 }
