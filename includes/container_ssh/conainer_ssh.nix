@@ -1,0 +1,109 @@
+# man systemd-socket-proxyd
+{
+  # config,
+  pkgs,
+  ...
+}: let
+  unit_id="container_ssh";
+  git_repo_name=unit_id;
+  git_remote="https://github.com/yeltnar/${git_repo_name}";
+  code_parent_dir="/home/drew/playin";
+  code_dir="${code_parent_dir}/${git_repo_name}";  
+in {
+  # networking.firewall.allowedTCPPorts = [
+  # 8080 # port for container
+  # # 11434 # port for container
+  # 8443 # port for user service  
+  # 443 # port for system service
+  # ];
+
+  imports = [ ../nm-online.service.nix ];
+
+  # expose to nebula devices
+  networking.firewall.interfaces."nebula1".allowedTCPPorts = [
+    9022 
+  ];
+
+  # enable lingering so service starts before user logs in
+  users.users.drew.linger = true;
+
+  systemd.services."${unit_id}-git-repo" = {
+    path = with pkgs; [
+      git
+    ];
+    description = "${unit_id}-git-repo";
+    requires = ["network-online.target"];
+    after = ["network-online.target"];
+    wantedBy = [
+      "default.target"
+      "multi-user.target"
+    ];
+    unitConfig = {
+      ConditionPathExists = "!${code_dir}";
+    };
+    script = ''
+      mkdir -p ${code_parent_dir}; 
+      cd ${code_parent_dir}/; 
+      git clone ${git_remote};
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      SyslogIdentifier = "${unit_id}";
+      User = "drew";
+    };
+    onSuccess = [
+      "restore.${unit_id}.service"
+    ];
+  };
+  
+  # TODO fix this path shiz
+  systemd.user.extraConfig = ''
+    DefaultEnvironment="PATH=/run/current-system/sw/bin"
+  '';
+
+  systemd.user.services."${unit_id}_start" = {
+    path = with pkgs; [
+      podman
+      podman-compose
+    ];
+    wantedBy = [
+      "default.target"
+      "multi-user.target"
+    ];
+    requires = ["podman.service" "podman.socket"];
+    script = ''
+      PATH="$PATH:${pkgs.podman}/bin";
+      ${pkgs.podman-compose}/bin/podman-compose down
+      ${pkgs.podman-compose}/bin/podman-compose up  -d
+
+      podman-compose logs 2>&1 | while IFS= read -r line; do
+        # Process the line
+        if [[ "$line" == *"ssh server started"* ]]; then
+          echo "Found a match: $line"
+          # Take action, e.g., run another command
+          systemd-notify --ready --status="container up"
+        else
+          echo "x-$line"
+        fi
+      done
+
+    '';
+    unitConfig = {
+      StartLimitInterval = 30;
+      StartLimitBurst = 3;
+      ConditionPathExists = "${code_dir}";
+      RequiresMountsFor = "/run/user/1000/containers";
+    };
+    serviceConfig = {
+      Type = "notify";
+      WorkingDirectory = "${code_dir}";
+      Restart = "always";
+      NotifyAccess = "all";
+      PIDFile = "/tmp/systemd_${unit_id}_podman.pid"; # TODO change pid location 
+      ExecStop = pkgs.writeShellScript "stop-${unit_id}_start" ''
+        PATH="$PATH:${pkgs.podman}/bin";
+        ${pkgs.podman-compose}/bin/podman-compose down
+      '';
+    };
+  };
+}
