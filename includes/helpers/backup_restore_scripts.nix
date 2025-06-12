@@ -26,6 +26,7 @@ let
     fi
 
     cd "$WORKDIR";
+    pwd
 
     info_exit_code=$(borg info $BORG_REPO >& /dev/null; echo $?)
 
@@ -55,7 +56,7 @@ let
       # systemd-notify --ready --status="warning with borg backup"
     else
       echo "Borg backup had errors."
-      exit $backup_exit_code;
+      exit $create_code;
     fi
 
     borg prune -v --list --keep-within=1d --keep-daily=7 --keep-weekly="5" --keep-monthly="12" --keep-yearly="2"
