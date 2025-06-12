@@ -16,7 +16,7 @@ in {
     sopsFile = ./secrets.yaml;
   };
   
-  systemd.user.timers."backup.${unit_id}" = {
+  systemd.timers."backup.${unit_id}" = {
     wantedBy = [
       "timers.target"
     ];
@@ -30,7 +30,7 @@ in {
   };
 
 
-  systemd.user.services."backup.${unit_id}" = {
+  systemd.services."backup.${unit_id}" = {
     environment =
       config.nix.envVars
       // {
@@ -55,7 +55,7 @@ in {
   };
 
   # this should not have a trigger so it only fires after the source code is downloaded 
-  systemd.user.services."restore.${unit_id}" = {
+  systemd.services."restore.${unit_id}" = {
     environment =
       config.nix.envVars
       // {
@@ -72,12 +72,10 @@ in {
       WorkingDirectory = "/home/drew/playin/${unit_id}";
       Type = "oneshot";
       # User = "drew";
+      ExecStartPost = pkgs.writeShellScript "poststart" "systemctl --user -M drew@ start ${unit_id}_start.service";
     };
     # unitConfig = {
     #   ConditionPathExists = "/home/drew/playin/${unit_id}";
     # };
-    onSuccess = [
-      "${unit_id}_start.service"
-    ];
   };
 }

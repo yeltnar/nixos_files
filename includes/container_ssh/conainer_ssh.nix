@@ -27,13 +27,13 @@ in {
   # enable lingering so service starts before user logs in
   users.users.drew.linger = true;
 
-  systemd.user.services."${unit_id}-git-repo" = {
+  systemd.services."${unit_id}-git-repo" = {
     path = with pkgs; [
       git
     ];
     description = "${unit_id}-git-repo";
-    # requires = ["network-online.target"];
-    after = ["nm-online.service"];
+    requires = ["network-online.target"];
+    after = ["network-online.target"];
     wantedBy = [
       "default.target"
       "multi-user.target"
@@ -49,10 +49,10 @@ in {
     serviceConfig = {
       Type = "oneshot";
       SyslogIdentifier = "${unit_id}";
+      User = "drew";
     };
     onSuccess = [
-      # "restore.${unit_id}.service"
-      "${unit_id}_start.service"
+      "restore.${unit_id}.service"
     ];
   };
   
