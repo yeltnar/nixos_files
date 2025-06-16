@@ -13,6 +13,7 @@ in
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./L13_yoga.nix
     ( import ../../../generic_configuration.nix (args // { leUser = leUser; }))
     ../../../includes/desktop/desktop.nix
 
@@ -30,6 +31,7 @@ in
     # ../../../includes/libvirt/libvirt.nix
 
     # ../../../includes/makemkv/makemkv.entry.nix
+
   ];
 
   # TODO make them all under yeltnar?
@@ -90,6 +92,7 @@ in
   environment.systemPackages = with pkgs; [
     
     ( import ../../../includes/force_charge.nix { inherit pkgs; } )
+    ( import ../../../includes/fix-trackpad.nix { inherit pkgs; } )
 
     qemu
 
