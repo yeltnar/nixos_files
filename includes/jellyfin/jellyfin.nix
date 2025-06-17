@@ -13,7 +13,6 @@ in {
     8096
   ];
 
-  # TODO move to jellyfin file
   sops.secrets."jellyfin.env" = {
     owner = "drew";
     path = run_env_file;

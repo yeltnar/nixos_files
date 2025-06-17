@@ -46,7 +46,6 @@ in {
       SyslogIdentifier = "${name}";
     };
     onSuccess = [
-      # TODO change back to restore
       "restore.babybuddy.service"
     ];
   };

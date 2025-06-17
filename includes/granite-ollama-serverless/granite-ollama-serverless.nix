@@ -217,8 +217,7 @@ in {
     };
     serviceConfig = {
       Type = "notify";
-      # ExecStop = ""; # TODO 
-      WorkingDirectory = "${code_dir}"; # TODO change repo location
+      WorkingDirectory = "${code_dir}"; 
       Restart = "always";
       NotifyAccess = "all";
       PIDFile = "/tmp/systemd_proxy_open-webui_podman.pid"; # TODO change pid location  

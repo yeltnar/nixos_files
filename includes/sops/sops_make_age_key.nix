@@ -4,7 +4,6 @@
   pkgs,
   ...
 }: let
-  # TODO make the usename variable 
   user="drew";
   group="users";
   config_dir="/home/${user}/.config";
@@ -60,24 +59,15 @@ in {
       ConditionPathExists = [
         # add pipe symbol to result in OR logic
         "|!/etc/sops/age/keys.txt"
-        "|!/home/drew/.config/sops/age/keys.txt"
+        "|!/home/${user}/.config/sops/age/keys.txt"
       ];
     };
     serviceConfig = {
-      # User = "drew";
+      # User = "${user}";
       SyslogIdentifier = "sops_make_age_key";
-      # WorkingDirectory = "/home/drew/playin";
+      # WorkingDirectory = "/home/${user}/playin";
     };
 
     script = "${shell_script}";
-    # script = ''
-    #   # TODO make variable so it can stay in sync with sops configuration 
-    #   mkdir -p /etc/sops/age/
-    #   # stderr is the private key. dont want to keep coments (so sops nix works) so remote with awk
-    #   age-keygen 2>/dev/null | awk '!/#/' > /etc/sops/age/keys.txt 
-    #
-    #   # TODO make the usename variable 
-    #   ln -s /etc/sops/age/keys.txt ${sops_home_file}
-    # '';
   };
 }

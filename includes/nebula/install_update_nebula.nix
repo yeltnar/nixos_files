@@ -38,7 +38,6 @@
   };
   vardir = "/var/yeltnar-nebula";
 in {
-  # TODO move this to systemctl
   systemd.services.setup_nebula_env = {
     after = ["sysinit-reactivation.target"];
     wantedBy = ["basic.target"];

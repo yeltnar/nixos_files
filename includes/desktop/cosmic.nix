@@ -10,6 +10,7 @@ in {
 
   config = lib.mkIf ( "cosmic" == desktop_environment ) {
 
+    # TODO remove when patched upstream 
     services.geoclue2.enable = true;
     services.geoclue2.enableDemoAgent = false;
 

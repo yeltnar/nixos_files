@@ -48,7 +48,6 @@ in {
   networking.hostName = "do-nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # TODO move this block 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
   # this has to be available when booting, so watch for mount sequence

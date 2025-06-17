@@ -34,7 +34,6 @@ in
 
   ];
 
-  # TODO make them all under yeltnar?
   services.desktop_environment.selection = "cosmic";
 
   boot.loader.systemd-boot.enable = true;
@@ -57,7 +56,6 @@ in
 
   networking.hostName = "drew-lin-lap"; # Define your hostname.
 
-  # TODO move this block 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
   sops.age.keyFile = "/etc/sops/age/keys.txt";

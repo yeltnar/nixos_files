@@ -55,7 +55,6 @@ in {
 
   services.desktop_environment.selection = "none";
 
-  # TODO move this block 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
   sops.age.keyFile = "/etc/sops/age/keys.txt";
@@ -72,7 +71,7 @@ in {
     lazygit
   ];
 
-  # TODO add proxmos_vm specific stuff here
+  # add proxmos_vm specific stuff here
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.useOSProber = true;

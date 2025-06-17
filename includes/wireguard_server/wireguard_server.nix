@@ -39,8 +39,6 @@ in {
       SyslogIdentifier = "${name}";
     };
     onSuccess = [
-      # TODO do the restore, then start the service 
-      # "restore.${name}.service"
       "restore.${name}.service"
     ];
   };
@@ -64,8 +62,6 @@ in {
       PATH="$PATH:${pkgs.podman}/bin";
       ${pkgs.podman-compose}/bin/podman-compose down
       ${pkgs.podman-compose}/bin/podman-compose up  -d
-
-      # TODO see if get signal that it is up without the looping below 
 
       str="All tunnels are now active";
 

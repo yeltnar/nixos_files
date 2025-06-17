@@ -49,10 +49,8 @@ in
   # Do I need this for remote build? 
   # nix.settings.trusted-users = ["drew"];
 
-  # TODO make them all under yeltnar?
   services.desktop_environment.selection = "cosmic";
 
-  # TODO move this block 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
   # this has to be available when booting, so watch for mount sequence

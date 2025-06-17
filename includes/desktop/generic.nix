@@ -15,9 +15,6 @@ in {
       desktopManager.cosmic.enable = true;
       desktopManager.cosmic.xwayland.enable = true;
     };
-    # TODO remove when patched upstream 
-    services.geoclue2.enable = true;
-    services.geoclue2.enableDemoAgent = false;
 
     fonts = { 
       enableDefaultPackages = true;

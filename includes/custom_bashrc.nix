@@ -18,7 +18,6 @@
     };
     serviceConfig = {
       SyslogIdentifier = "custom_bashrc";
-      # TODO why is this not nix syntax
     };
     script =''
       mkdir -p /home/drew/playin
