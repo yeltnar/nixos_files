@@ -53,6 +53,8 @@ in {
     ../../../includes/babybuddy/backup_restore.timer.nix
   ];
 
+  services.desktop_environment.selection = "none";
+
   # TODO move this block 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
