@@ -32,6 +32,7 @@ in
 
     # ../../../includes/makemkv/makemkv.entry.nix
 
+    ../../../includes/fix-trackpad.nix 
   ];
 
   services.desktop_environment.selection = "cosmic";
@@ -90,7 +91,6 @@ in
   environment.systemPackages = with pkgs; [
     
     ( import ../../../includes/force_charge.nix { inherit pkgs; } )
-    ( import ../../../includes/fix-trackpad.nix { inherit pkgs; } )
 
     qemu
 
