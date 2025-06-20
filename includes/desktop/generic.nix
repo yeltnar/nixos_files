@@ -8,13 +8,8 @@ let
     desktop_environment = config.services.desktop_environment.selection;
 in {
 
+  # config for all options 
   config = lib.mkIf ( "none" != desktop_environment ) {
-    # config for all options 
-    services = {
-      displayManager.cosmic-greeter.enable = true;
-      desktopManager.cosmic.enable = true;
-      desktopManager.cosmic.xwayland.enable = true;
-    };
 
     fonts = { 
       enableDefaultPackages = true;
