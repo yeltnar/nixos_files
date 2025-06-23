@@ -6,6 +6,7 @@
   unit_id = "ntfy_report_ip_check"; 
   code_parent_dir="/home/drew/playin";
   code_dir="${code_parent_dir}/${unit_id}";  
+  git_uri="https://github.com/yeltnar/device_report_ntfy_check.git";
 in {
 
   imports = [ ../nm-online.service.nix ];
@@ -27,14 +28,14 @@ in {
     script = ''
       mkdir -p ${code_parent_dir}; 
       cd ${code_parent_dir}/; 
-      git clone https://github.com/yeltnar/${unit_id};
+      git clone "${git_uri}"
     '';
     serviceConfig = {
       Type = "oneshot";
       SyslogIdentifier = "${unit_id}";
     };
     onSuccess = [
-      "restore.${unit_id}.service"
+      # "restore.${unit_id}.service"
     ];
   };
 
@@ -50,30 +51,20 @@ in {
   };
 
   systemd.user.services."ntfy_report_ip_check" = {
-    requires = ["nm-online.service"];
-    environment =
-      config.nix.envVars
-      // {
-        inherit (config.environment.sessionVariables) NIX_PATH;
-        HOME = "/home/drew";
-      }
-      // config.networking.proxy.envVars;
-
+    requires = ["nm-online.service" "podman.service" "podman.socket"];
     path = with pkgs; [
-      # curl
-      # git
-      # gawk
-      # nettools
-      nodejs_24
+      podman
+      podman-compose
     ];
 
     script = ''
-      cd /root/playin/device_report_ntfy_check;
-      node main.js
+      PATH="$PATH:${pkgs.podman}/bin";
+      podman-compose up
     '';
     serviceConfig = {
       Type = "oneshot";
-      User = "drew";
+      # User = "drew";
+      WorkingDirectory = "/home/drew/playin/device_report_ntfy_check";
     };
     unitConfig = {
       ConditionPathExists = [
