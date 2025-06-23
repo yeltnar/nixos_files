@@ -107,4 +107,5 @@ creation_rules:
       - *backup-key
       - *drew-lin-laptop
       - *drew-lin-desktop
-      - *proxmox_vm
+      # - *proxmox_vm
+      - *do-nixos

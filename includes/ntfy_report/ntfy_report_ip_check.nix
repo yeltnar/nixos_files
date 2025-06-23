@@ -41,7 +41,7 @@ in {
       SyslogIdentifier = "${unit_id}";
     };
     onSuccess = [
-      # "restore.${unit_id}.service"
+      "ntfy_report_ip_check.timer"
     ];
   };
 

@@ -30,7 +30,8 @@ in {
       ../../../includes/container_ssh/conainer_ssh.nix
       ../../../includes/container_ssh/backup_restore.timer.nix
 
-      ../../../includes/ntfy_report_ip_timer.nix
+      ../../../includes/ntfy_report/ntfy_report_ip_timer.nix
+      ../../../includes/ntfy_report/ntfy_report_ip_check.nix
     ];
 
   nix.settings.trusted-users = [leUser];
