@@ -10,6 +10,12 @@
 in {
 
   imports = [ ../nm-online.service.nix ];
+
+  sops.secrets."local.json" = {
+    owner = "drew";
+    # path = backup_env_file;
+    sopsFile = ./secrets.yaml;
+  };
   
   systemd.user.services."${unit_id}-git-repo" = {
     path = with pkgs; [
@@ -28,7 +34,7 @@ in {
     script = ''
       mkdir -p ${code_parent_dir}; 
       cd ${code_parent_dir}/; 
-      git clone "${git_uri}"
+      git clone "${git_uri}" ${code_dir};
     '';
     serviceConfig = {
       Type = "oneshot";
@@ -59,16 +65,21 @@ in {
 
     script = ''
       PATH="$PATH:${pkgs.podman}/bin";
+
+      # we want a real file, not a link so we replace it every time 
+      rm -rf "${code_dir}/config/local.json";
+      cat ${config.sops.secrets."local.json".path} > "${code_dir}/config/local.json";
+
       podman-compose up
     '';
     serviceConfig = {
       Type = "oneshot";
       # User = "drew";
-      WorkingDirectory = "/home/drew/playin/device_report_ntfy_check";
+      WorkingDirectory = "${code_dir}";
     };
     unitConfig = {
       ConditionPathExists = [
-        "/home/drew/playin/device_report_ntfy_check"
+        "${code_dir}"
       ];
     };
   };
