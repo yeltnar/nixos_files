@@ -37,7 +37,7 @@ in {
 
     ../../../includes/rclone_mounts/rclone_mini.proxmoxvm.nix
 
-    ../../../includes/ntfy_report_ip_timer.nix
+    ../../../includes/ntfy_report/ntfy_report_ip_timer.nix
     ../../../includes/jellyfin/jellyfin.nix
     ../../../includes/uptime-kuma/uptime-kuma-server.nix
     ../../../includes/babybuddy/babybuddy.nix
@@ -51,6 +51,8 @@ in {
     ../../../includes/jellyfin/backup_restore.timer.nix
     ../../../includes/uptime-kuma/backup_restore.timer.nix
     ../../../includes/babybuddy/backup_restore.timer.nix
+
+    ../../../includes/ntfy_report/ntfy_report_ip_check.nix
   ];
 
   services.desktop_environment.selection = "none";
