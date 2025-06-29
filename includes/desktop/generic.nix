@@ -67,6 +67,7 @@ in {
          
       xclip
       ghostty
+      chafa
       borgbackup
     ];
     
