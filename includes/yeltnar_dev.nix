@@ -13,6 +13,7 @@
     ansible
     python3
     netcat-gnu
+    systemctl-tui
 
     wireshark
     usbutils # has lsusb
