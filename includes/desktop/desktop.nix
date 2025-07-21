@@ -12,6 +12,7 @@
     type = lib.types.enum [
       "gnome"
       "cosmic"
+      "hyprland"
       "none"
     ];
     default = "none";
@@ -22,6 +23,7 @@
     ../yeltnar_dev.nix
     ./gnome.nix
     ./cosmic.nix
+    ./hyprland.nix
     ./generic.nix 
   ];
 }
