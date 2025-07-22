@@ -23,6 +23,11 @@ in {
 
     environment.systemPackages = [
       pkgs.waybar
+      # pkgs.hyprlandPlugins.hyprspace
+    ];
+
+    programs.hyprland.plugins [
+      pkgs.hyprlandPlugins.hyprspace
     ];
 
     programs.hyprlock.enable = true;
