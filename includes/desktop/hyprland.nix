@@ -6,29 +6,45 @@
 }:
 let 
   desktop_environment = config.services.desktop_environment.selection;
-in {
+  hyprspaceConfig =''
+    plugin = ${pkgs.hyprlandPlugins.hyprspace}/lib/libhyprspace.so
+  '';
+  hyprexpoConfig =''
+    plugin = ${pkgs.hyprlandPlugins.hyprexpo}/lib/libhyprexpo.so
+  '';
+  wallpaper = pkgs.fetchurl {
+    url = "https://hot.andbrant.com/milkyway+C&H-nix.jpg";
+    sha256 = "sha256-Xzlv420zq3SOcjDJU0mc7Cew9dNql0IvhQcSvTVbziM=";
+  };
+in
+{
 
   config = lib.mkIf ( "hyprland" == desktop_environment ) {
 
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
+    # TODO add settings to nix 
     programs.hyprland = {
       enable = true;
       xwayland.enable = true;
     };
 
     hardware = {
-      opengl.enable = true;
+      graphics.enable = true;
       nvidia.modesetting.enable = true;
     };
 
-    environment.systemPackages = [
-      pkgs.waybar
-      # pkgs.hyprlandPlugins.hyprspace
+    environment.systemPackages = with pkgs; [
+      waybar # TODO add settings to nix 
+      hyprlandPlugins.hyprspace
+      hyprlandPlugins.hyprexpo
+      wofi # TODO add settings to nix 
+      hyprpaper
+      playerctl
     ];
 
-    programs.hyprland.plugins [
-      pkgs.hyprlandPlugins.hyprspace
-    ];
+    # programs.hyprland.plugins = [
+    #   pkgs.hyprlandPlugins.hyprspace
+    # ];
 
     programs.hyprlock.enable = true;
     security.pam.services.hyprlock = {};
@@ -48,9 +64,20 @@ in {
     };
   };
 
-environment.etc."greetd/environments".text = ''
+  environment.etc."greetd/environments".text = ''
     bash
     hyprland
   '';
+  
+  environment.etc."hypr/hyprspace".source = "${pkgs.hyprlandPlugins.hyprspace}/lib/libhyprspace.so";
+  environment.etc."hypr/hyprexpo".source = "${pkgs.hyprlandPlugins.hyprexpo}/hyprexpo/lib/libhyprexpo.so";
+  environment.etc."hypr/wallpaper.jpg".source = "${wallpaper}";
+
+  # Mount the Hyprland configuration file
+  environment.etc."hypr/hyprspace.conf".text = hyprspaceConfig;
+  environment.etc."hypr/hyprexpo.conf".text = hyprexpoConfig;
+
+  # TODO link these files to the correct directory
+
   };
 }
