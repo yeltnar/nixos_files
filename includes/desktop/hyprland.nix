@@ -40,11 +40,9 @@ in
       wofi # TODO add settings to nix 
       hyprpaper
       playerctl
+      wl-clipboard
+      adwaita-icon-theme
     ];
-
-    # programs.hyprland.plugins = [
-    #   pkgs.hyprlandPlugins.hyprspace
-    # ];
 
     programs.hyprlock.enable = true;
     security.pam.services.hyprlock = {};
