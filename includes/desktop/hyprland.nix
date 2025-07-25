@@ -39,8 +39,12 @@ in
       hyprlandPlugins.hyprexpo
       wofi # TODO add settings to nix 
       hyprpaper
+      hypridle
       playerctl
       wl-clipboard
+      networkmanagerapplet
+      blueman # start GUI with blueman-manager
+      pavucontrol # audio control
       adwaita-icon-theme
     ];
 
