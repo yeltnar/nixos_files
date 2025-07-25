@@ -33,6 +33,9 @@ in
       nvidia.modesetting.enable = true;
     };
 
+    # we need a keyring for some app login to work
+    services.gnome.gnome-keyring.enable = true;
+
     environment.systemPackages = with pkgs; [
       waybar # TODO add settings to nix 
       hyprlandPlugins.hyprspace
