@@ -37,6 +37,11 @@ in
 
   services.desktop_environment.selection = "cosmic";
 
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
