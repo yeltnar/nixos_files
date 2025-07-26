@@ -29,6 +29,12 @@ in
       xwayland.enable = true;
     };
 
+    # screensharing from nixos site # TODO verify
+    xdg.portal = {
+      enable = true;
+      extraPortals = with pkgs; [ xdg-desktop-portal-hyprland ];
+    };
+
     hardware = {
       graphics.enable = true;
       nvidia.modesetting.enable = true;
