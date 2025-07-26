@@ -25,6 +25,7 @@ in
     # TODO add settings to nix 
     programs.hyprland = {
       enable = true;
+      withUWSM = true;
       xwayland.enable = true;
     };
 
@@ -46,6 +47,7 @@ in
       playerctl
       brightnessctl
       wl-clipboard
+      uwsm
       networkmanagerapplet
       blueman # start GUI with blueman-manager
       pavucontrol # audio control
@@ -62,7 +64,7 @@ in
         # 'command' tells greetd which greeter to use and what to launch afterwards.
         # We're using agreety, and telling it to execute Hyprland directly.
         # command = "${pkgs.greetd.greetd}/bin/agreety --cmd ${pkgs.hyprland}/bin/hyprland";
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time --cmd ${pkgs.hyprland}/bin/hyprland";
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time --cmd \"${pkgs.uwsm}/bin/uwsm start hyprland-uwsm.desktop\"";
         user = "greeter"; # Or any user you want greetd to run the greeter as
                           # This user doesn't need to exist as a login user,
                           # greetd handles the actual user login.
