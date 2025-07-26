@@ -37,13 +37,14 @@ in
     services.gnome.gnome-keyring.enable = true;
 
     environment.systemPackages = with pkgs; [
-      waybar # TODO add settings to nix 
       hyprlandPlugins.hyprspace
       hyprlandPlugins.hyprexpo
+      waybar # TODO add settings to nix 
       wofi # TODO add settings to nix 
       hyprpaper
       hypridle
       playerctl
+      brightnessctl
       wl-clipboard
       networkmanagerapplet
       blueman # start GUI with blueman-manager
