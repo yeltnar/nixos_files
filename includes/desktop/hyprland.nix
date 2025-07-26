@@ -54,6 +54,34 @@ in
       adwaita-icon-theme
     ];
 
+    # dont need if read from hypr dir
+    # systemd.user.services.hyprpaper = {
+    #   overrideStrategy = "asDropin";
+    #   serviceConfig = { 
+    #     Environment = [
+    #             "XDG_CONFIG_HOME=%h/.config/hypr/hyprpaper"
+    #     ]; 
+    #   };
+    # };
+
+    systemd.user.services.waybar = {
+      overrideStrategy = "asDropin";
+      serviceConfig = { 
+        Environment = [
+                "XDG_CONFIG_HOME=%h/.config/hypr"
+        ]; 
+      };
+    };
+
+    systemd.user.services.hypridle = {
+      overrideStrategy = "asDropin";
+      serviceConfig = { 
+        Environment = [
+                "HYPRIDLE_CONFIG=%h/.config/hypr/hypridle.conf"
+        ]; 
+      };
+    };
+
     programs.hyprlock.enable = true;
     security.pam.services.hyprlock = {};
 
