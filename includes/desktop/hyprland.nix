@@ -22,7 +22,7 @@ in
   config = lib.mkIf ( "hyprland" == desktop_environment ) {
 
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
-    # TODO add settings to nix 
+    # TODO move settings to nix repo
     programs.hyprland = {
       enable = true;
       withUWSM = true;
@@ -40,8 +40,8 @@ in
     environment.systemPackages = with pkgs; [
       hyprlandPlugins.hyprspace
       hyprlandPlugins.hyprexpo
-      waybar # TODO add settings to nix 
-      wofi # TODO add settings to nix 
+      waybar
+      wofi
       hyprpaper
       hypridle
       playerctl
@@ -84,8 +84,6 @@ in
   # Mount the Hyprland configuration file
   environment.etc."hypr/hyprspace.conf".text = hyprspaceConfig;
   environment.etc."hypr/hyprexpo.conf".text = hyprexpoConfig;
-
-  # TODO link these files to the correct directory
 
   };
 }
