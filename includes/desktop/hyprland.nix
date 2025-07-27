@@ -69,7 +69,7 @@ in
       default_session = {
         # 'command' tells greetd which greeter to use and what to launch afterwards.
         # We're using agreety, and telling it to execute Hyprland directly.
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time --cmd \"${pkgs.uwsm}/bin/uwsm start hyprland-uwsm.desktop\"";
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time --time-format \"%b %-d %I:%M:%S\" --cmd \"${pkgs.uwsm}/bin/uwsm start hyprland-uwsm.desktop\"";
         user = "greeter";
       };
     };
