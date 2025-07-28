@@ -1,0 +1,2 @@
+pkill hypridle
+hypridle &

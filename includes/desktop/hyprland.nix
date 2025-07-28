@@ -88,5 +88,12 @@ in
   environment.etc."hypr/hyprspace.conf".text = hyprspaceConfig;
   environment.etc."hypr/hyprexpo.conf".text = hyprexpoConfig;
 
+   
+  system.activationScripts.hypr_ln = {
+    text = ''
+      ln -s /home/drew/playin/nixos_files/includes/desktop/hypr /home/drew/.config/hypr
+    '';
+  };
+
   };
 }

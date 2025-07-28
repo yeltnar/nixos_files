@@ -1,0 +1,9 @@
+make click on network open network management
+
+nwg-displays ?
+
+https://wiki.archlinux.org/title/Hyprland#Universal_Wayland_Session_Manager
+wrap with this?
+"--cmd uwsm start -- hyprland.desktop"
+- note: need to change kill command to be the uswm version
+
