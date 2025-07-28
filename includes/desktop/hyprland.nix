@@ -48,6 +48,7 @@ in
       hyprlandPlugins.hyprexpo
       waybar
       wofi
+      swaynotificationcenter
       hyprpaper
       hypridle
       playerctl
