@@ -59,6 +59,7 @@ in
       blueman # start GUI with blueman-manager
       pavucontrol # audio control
       adwaita-icon-theme
+      hyprshot
     ];
 
     programs.hyprlock.enable = true;
