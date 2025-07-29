@@ -53,6 +53,7 @@
           lima
           bash # mac bash is dead
           borgbackup
+          utm
 
           ffmpeg
           fzf
