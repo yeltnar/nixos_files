@@ -35,7 +35,7 @@ in
     ../../../includes/fix-trackpad.nix 
   ];
 
-  services.desktop_environment.selection = "cosmic";
+  services.desktop_environment.selection = "hyprland";
 
   hardware.bluetooth = {
     enable = true;
