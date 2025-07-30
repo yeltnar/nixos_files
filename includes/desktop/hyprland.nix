@@ -103,7 +103,7 @@ in
       # if it exsists, and is not a link, dont do anything
       link_file="/home/drew/.config/hypr"
       if [ ! -e "$link_file" ]; then
-        ln -s /home/drew/playin/nixos_files/includes/desktop/hypr $link_file
+        /run/wrappers/bin/su - drew -s /bin/sh -c "ln -s ~/playin/nixos_files/includes/desktop/hypr $link_file";
       fi
     '';
   };
@@ -113,7 +113,7 @@ in
       # if it exsists, and is not a link, dont do anything
       link_file="/home/drew/.config/hypr/monitors.conf"
       if [ ! -e "$link_file" ]; then
-        ln -s ${monitor_file} $link_file
+        /run/wrappers/bin/su - drew -s /bin/sh -c "ln -s ${monitor_file} $link_file";
       fi
     '';
   };
