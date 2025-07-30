@@ -16,6 +16,7 @@ let
     url = "https://hot.andbrant.com/milkyway+C&H-nix.jpg";
     sha256 = "sha256-Xzlv420zq3SOcjDJU0mc7Cew9dNql0IvhQcSvTVbziM=";
   };
+  monitor_file = "~/.config/hypr/monitors.${config.networking.hostName}.conf";
 in
 {
 
@@ -60,7 +61,13 @@ in
       pavucontrol # audio control
       adwaita-icon-theme
       hyprshot
+
+      # move dispalys and change settings # make wraper to use specific file
+      (pkgs.writeShellScriptBin "nwg-displays" ''
+        ${nwg-displays}/bin/nwg-displays -m ${monitor_file}
+      '')
     ];
+
 
     programs.hyprlock.enable = true;
     security.pam.services.hyprlock = {};
@@ -94,6 +101,12 @@ in
   system.activationScripts.hypr_ln = {
     text = ''
       ln -s /home/drew/playin/nixos_files/includes/desktop/hypr /home/drew/.config/hypr
+    '';
+  };
+
+  system.activationScripts.hypr_monitor_ln = {
+    text = ''
+      ln -s /home/drew/.config/hypr/monitors.drew-lin-desktop.conf /home/drew/.config/hypr/monitors.conf
     '';
   };
 
