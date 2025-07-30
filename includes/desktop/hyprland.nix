@@ -100,13 +100,21 @@ in
    
   system.activationScripts.hypr_ln = {
     text = ''
-      ln -s /home/drew/playin/nixos_files/includes/desktop/hypr /home/drew/.config/hypr
+      # if it exsists, and is not a link, dont do anything
+      link_file="/home/drew/.config/hypr"
+      if [ ! -e "$link_file" ]; then
+        ln -s /home/drew/playin/nixos_files/includes/desktop/hypr $link_file
+      fi
     '';
   };
 
   system.activationScripts.hypr_monitor_ln = {
     text = ''
-      ln -s /home/drew/.config/hypr/monitors.drew-lin-desktop.conf /home/drew/.config/hypr/monitors.conf
+      # if it exsists, and is not a link, dont do anything
+      link_file="/home/drew/.config/hypr/monitors.conf"
+      if [ ! -e "$link_file" ]; then
+        ln -s ${monitor_file} $link_file
+      fi
     '';
   };
 
