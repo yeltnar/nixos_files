@@ -49,7 +49,7 @@ in
   # Do I need this for remote build? 
   # nix.settings.trusted-users = ["drew"];
 
-  services.desktop_environment.selection = "cosmic";
+  services.desktop_environment.selection = "hyprland";
 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
