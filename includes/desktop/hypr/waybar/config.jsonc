@@ -48,9 +48,9 @@
 
     "clock": {
         "interval":1,
-        "format": "{:%b %d %I:%M:%S}",
+        "format": "{:%a <span color='#bacdf5'>%I:%M:%S</span> %b %d}",
         // "format": "{:%b %d %I:%M:%S}",
-        "format-alt": "󰃮 {:%Y-%m-%d}",
+        // "format-alt": "󰃮 {:%Y-%m-%d}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "calendar": {
             "mode"          : "month",

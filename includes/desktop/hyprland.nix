@@ -61,10 +61,16 @@ in
       pavucontrol # audio control
       adwaita-icon-theme
       hyprshot
+      # hyprshell # TODO add this to repo
 
       # move dispalys and change settings # make wraper to use specific file
       (pkgs.writeShellScriptBin "nwg-displays" ''
         ${nwg-displays}/bin/nwg-displays -m ${monitor_file}
+      '')
+
+      # move dispalys and change settings # make wraper to use specific file
+      (pkgs.writeShellScriptBin "hyprpicker" ''
+        nix-shell -p hyprpicker --command hyprpicker
       '')
     ];
 
@@ -83,6 +89,8 @@ in
       };
     };
   };
+
+  security.pam.services.greetd.enableGnomeKeyring = true;
 
   environment.etc."greetd/environments".text = ''
     bash
