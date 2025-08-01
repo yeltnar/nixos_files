@@ -45,6 +45,7 @@ in
     services.gnome.gnome-keyring.enable = true;
 
     environment.systemPackages = with pkgs; [
+      wayland-pipewire-idle-inhibit
       hyprlandPlugins.hyprspace
       hyprlandPlugins.hyprexpo
       waybar
