@@ -15,12 +15,15 @@
 @define-color cyan #7dcfff;
 @define-color white #a9b1d6;
 @define-color orange #ff9e64;
+@define-color faded-cyan #e3e3ff;
 
 
 /* Module-specific colors */
 @define-color workspaces-color @foreground;
 @define-color workspaces-focused-bg @green;
 @define-color workspaces-focused-fg @cyan;
+@define-color workspaces-focused-bg-faded @green;
+@define-color workspaces-focused-fg-faded @faded-cyan;
 @define-color workspaces-urgent-bg @red;
 @define-color workspaces-urgent-fg @black;
 
@@ -88,9 +91,15 @@ window#waybar {
     box-shadow: inherit;
 }
 
-#workspaces button.active {
+#workspaces button.active.visible {
     box-shadow: inset 0 -2px @workspaces-focused-fg;
     color: @workspaces-focused-fg;
+}
+
+#workspaces button.visible {
+    box-shadow: inset 0 -2px @workspaces-focused-fg;
+    /* color: @workspaces-focused-fg; */
+    color: @workspaces-focused-fg-faded;
 }
 
 #workspaces button.focused {
