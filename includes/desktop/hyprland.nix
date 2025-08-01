@@ -69,7 +69,7 @@ in
         ${nwg-displays}/bin/nwg-displays -m ${monitor_file}
       '')
 
-      # move dispalys and change settings # make wraper to use specific file
+      # select color from screen
       (pkgs.writeShellScriptBin "hyprpicker" ''
         nix-shell -p hyprpicker --command hyprpicker
       '')
