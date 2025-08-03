@@ -50,6 +50,7 @@ in
       hyprlandPlugins.hyprexpo
       waybar
       wofi
+      bemenu
       swaynotificationcenter
       hyprpaper
       hypridle
