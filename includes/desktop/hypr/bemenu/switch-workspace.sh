@@ -22,7 +22,7 @@ fi
 
 workspace_list=$(hyprctl workspaces | awk '/^[a-z]/{print $3}' | sort -g)
 workspace_list=""
-workspace_number=$( echo "$workspace_list" | bemenu -n -p "$prompt" -W .5 --center --fn 32)
+workspace_number=$( echo "$workspace_list" | bemenu -n -p "$prompt"  -W .5 --center --fn 32 --tf '#2DC9E6')
 
 if [[ ! -n "$workspace_number" ]]; then
   # Check if the user entered a number and didn't cancel (wofi returns an empty string on cancel)
