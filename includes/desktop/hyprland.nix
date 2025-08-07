@@ -64,6 +64,7 @@ in
       adwaita-icon-theme
       hyprshot
       # hyprshell # TODO add this to repo
+      kdePackages.dolphin
 
       # move dispalys and change settings # make wraper to use specific file
       (pkgs.writeShellScriptBin "nwg-displays" ''
