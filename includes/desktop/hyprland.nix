@@ -129,5 +129,13 @@ in
     '';
   };
 
+  system.activationScripts.wallpaper = {
+    text = ''
+      link_file="/home/drew/.config/hypr/hyprpaper/wallpaper.jpg"
+      rm $link_file
+      /run/wrappers/bin/su - drew -s /bin/sh -c "ln -s /etc/hypr/wallpaper.jpg $link_file";
+    '';
+  };
+
   };
 }
