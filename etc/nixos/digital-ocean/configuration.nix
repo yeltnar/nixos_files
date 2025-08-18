@@ -198,7 +198,7 @@ in {
     4242
   ];
   networking.firewall.interfaces."nebula1" = { 
-    allowedUDPPortRanges = [ 
+    allowedUDPPorts = [ 
       # allow nebula DNS
       53
     ];
@@ -207,6 +207,7 @@ in {
       53
     ];
   };
+
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
