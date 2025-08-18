@@ -12,14 +12,20 @@
         "nofail"
       ]);
       mountConfig = {
-        EnvironmentFile = pkgs.writeTextFile {
-          name = "enc-test.env";
-          text = ''
-            RCLONE_CRYPT_PASSWORD="R9E5UmqHzpjKbNvlXo0kZjsNTzdBNe4bSjpILa-uDu2qrMPTuPY"
-            RCLONE_CRYPT_PASSWORD2="UjwgXEbTm_s7iPT94EbkkMd9483JwSzJOatqzUSDgPgFkfnxQoM"
-            RCLONE_CRYPT_REMOTE="/tmp/rclone-crypt-test/remote"
-          '';
-        };
+        EnvironmentFile = [
+          config.sops.secrets."mnt-minio.env".path
+          (pkgs.writeTextFile {
+            name = "enc-test.env";
+            text = ''
+              RCLONE_CRYPT_PASSWORD="R9E5UmqHzpjKbNvlXo0kZjsNTzdBNe4bSjpILa-uDu2qrMPTuPY"
+              RCLONE_CRYPT_PASSWORD2="UjwgXEbTm_s7iPT94EbkkMd9483JwSzJOatqzUSDgPgFkfnxQoM"
+              _RCLONE_CRYPT_REMOTE="/tmp/rclone-crypt-test/remote"
+              RCLONE_CRYPT_REMOTE=":s3:/enc"
+
+              RCLONE_S3_PROVIDER="Minio"
+            '';
+          })
+        ];
       };
     }
   ];
