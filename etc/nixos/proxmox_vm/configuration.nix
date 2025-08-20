@@ -38,6 +38,7 @@ in {
     ../../../includes/rclone_mounts/rclone_mini.proxmoxvm.nix
 
     ../../../includes/ntfy_report/ntfy_report_ip_timer.nix
+    ../../../includes/mqtt_report/mqtt_report_ip_timer.nix
     ../../../includes/jellyfin/jellyfin.nix
     ../../../includes/uptime-kuma/uptime-kuma-server.nix
     ../../../includes/babybuddy/babybuddy.nix
@@ -69,6 +70,8 @@ in {
     
     borgbackup    
     lazygit
+
+    mosquitto
   ];
 
   # add proxmos_vm specific stuff here
