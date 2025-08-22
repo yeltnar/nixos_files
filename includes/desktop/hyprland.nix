@@ -23,7 +23,6 @@ in
   config = lib.mkIf ( "hyprland" == desktop_environment ) {
 
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
-    # TODO move settings to nix repo
     programs.hyprland = {
       enable = true;
       withUWSM = true;
@@ -82,16 +81,16 @@ in
     security.pam.services.hyprlock = {};
 
     services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        # 'command' tells greetd which greeter to use and what to launch afterwards.
-        # We're using agreety, and telling it to execute Hyprland directly.
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time --time-format \"%b %-d %I:%M:%S\" --cmd \"${pkgs.uwsm}/bin/uwsm start hyprland-uwsm.desktop\"";
-        user = "greeter";
+      enable = true;
+      settings = {
+        default_session = {
+          # 'command' tells greetd which greeter to use and what to launch afterwards.
+          # We're using agreety, and telling it to execute Hyprland directly.
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time --time-format \"%b %-d %I:%M:%S\" --cmd \"${pkgs.uwsm}/bin/uwsm start hyprland-uwsm.desktop\"";
+          user = "greeter";
+        };
       };
     };
-  };
 
   security.pam.services.greetd.enableGnomeKeyring = true;
 
