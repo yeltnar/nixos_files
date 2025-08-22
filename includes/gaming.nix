@@ -16,11 +16,11 @@
   # };
 
   # hardware.graphics = {
-  hardware.opengl = {
+  # hardware.opengl = {
     # enable = true;
     # enable32Bit = true;
     # driSupport = true; # removed at request of nixos-rebuild
-  };
+  # };
 
   hardware.graphics = {
     enable = true;
@@ -29,6 +29,10 @@
 
   programs.steam.enable = true;
   programs.steam.gamescopeSession.enable = true;
+  programs.gamescope = {
+    enable = true; 
+    capSysNice = true; 
+  };
 
   # TODO move this to a nvidia file? 
   hardware.nvidia.modesetting.enable = true;
