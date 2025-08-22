@@ -81,11 +81,18 @@ in {
     '';
   };
 
+  users.groups.realtime = {};
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."${leUser}" = {
     isNormalUser = true;
     description = leUser;
-    extraGroups = ["networkmanager" "wheel" "docker"];
+    extraGroups = [
+      "networkmanager" 
+      "wheel" 
+      "docker" 
+      "realtime"
+    ];
     packages = with pkgs; [
 
       yq-go
