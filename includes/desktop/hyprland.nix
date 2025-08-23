@@ -23,6 +23,7 @@ in
   config = lib.mkIf ( "hyprland" == desktop_environment ) {
 
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
     programs.hyprland = {
       enable = true;
       withUWSM = true;
@@ -74,6 +75,12 @@ in
       (pkgs.writeShellScriptBin "hyprpicker" ''
         nix-shell -p hyprpicker --command hyprpicker
       '')
+
+      # fix audio breaking up in games... need to auto do this with rtkit somehow
+      (pkgs.writeShellScriptBin "fix-audio-pipewire-pulse" ''
+        sudo renice -n -11 `pgrep pipewire; pgrep wireplumber`
+      '')
+
     ];
 
 
@@ -87,8 +94,16 @@ in
           # 'command' tells greetd which greeter to use and what to launch afterwards.
           # We're using agreety, and telling it to execute Hyprland directly.
           command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time --time-format \"%b %-d %I:%M:%S\" --cmd \"${pkgs.uwsm}/bin/uwsm start hyprland-uwsm.desktop\"";
+          _command = "${pkgs.greetd.regreet}/bin/regreet";
           user = "greeter";
         };
+      };
+    };
+
+    # try to fix showing startup logs on tuigreet
+    systemd.services.greetd = {
+      serviceConfig = {
+        Type = "idle";
       };
     };
 

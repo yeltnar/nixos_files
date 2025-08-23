@@ -187,6 +187,9 @@ in
   # enable nvidia usage inside podman containers... maybe docker too
   hardware.nvidia-container-toolkit.enable = true;
 
+  boot.kernelPackages = pkgs.linuxPackages_zen;
+
+
   hardware.nvidia = {
     modesetting.enable = true;
     powerManagement.enable = true;
