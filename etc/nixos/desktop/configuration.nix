@@ -235,6 +235,45 @@ in
     ulauncher 
   ];
 
+
+
+    services.pipewire = {
+      extraConfig = {
+        "pipewire" = {
+          "context.properties" = {
+            "nice.level" = -11;
+            "rt.prio" = 88;
+            # the clock settings seem to work but not nice/rt
+            "default.clock.quantum" = 4096;
+            "default.clock.min-quantum" = 4096;
+            "default.clock.max-quantum" = 8192;
+          };
+
+          "10-alsa-buffer" = {
+            "context.properties" = {
+              # "api.alsa.period-size" = 1024;
+              # the clock settings seem to work but not nice/rt
+              "api.alsa.period-size" = 4096;
+              "api.alsa.headroom" = 8192;
+            };
+          };
+        };
+
+        "pipewire-pulse" = {
+          "context.modules" = [
+          {
+            name = "libpipewire-module-rtkit";
+            args = {
+              "nice.level" = -11;
+              "rt.prio" = 88;
+            };
+            flags = [ "ifexists" "nofail" ];
+          }
+          ];
+        };
+      };
+    };
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

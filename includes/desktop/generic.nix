@@ -41,21 +41,6 @@ in {
       jack.enable = true;
       wireplumber.enable = true;
 
-      # this is a vibe setting so no idea if its real
-      extraConfig.pipewire = {
-        "10-alsa-buffer" = {
-          "context.properties" = {
-            # This is where you put the settings.
-            # PipeWire expects these to be "dotted" strings.
-            "api.alsa.period-size" = 1024;
-            "api.alsa.headroom" = 8192;
-          };
-        };
-      };
-
-      # use the example session manager (no others are packaged yet so this is enabled by default,
-      # no need to redefine it in your config for now)
-      #media-session.enable = true;
     };
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
