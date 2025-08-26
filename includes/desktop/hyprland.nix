@@ -100,6 +100,7 @@ in
       };
     };
 
+    # this failed at least once
     # try to fix showing startup logs on tuigreet
     systemd.services.greetd = {
       serviceConfig = {

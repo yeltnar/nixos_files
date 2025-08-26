@@ -3,7 +3,8 @@
 {
   systemd.user.services.nm-online = {
     description = "Wait for NetworkManager to report online";
-    after = [ "network-online.target" ];
+    # removed because I don't think it does anything 
+    # after = [ "network-online.target" ];
     wantedBy = [ "default.target" ];
 
     serviceConfig = {
