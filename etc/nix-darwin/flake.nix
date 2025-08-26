@@ -19,6 +19,7 @@
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
 
+      system.primaryUser = "drew"; 
       homebrew.enable = true; 
       homebrew.brews = [
         "podman"
@@ -31,7 +32,10 @@
         "macfuse"
         "vscodium"
         "podman-desktop"
+        "nikitabobko/tap/aerospace"
       ];
+
+      nixpkgs.config.allowUnfree = true;
 
       environment.systemPackages = with pkgs; 
         [ 
@@ -40,6 +44,7 @@
           # ( import ./open-hoppscotch.nix { pkgs, nixpkgs = nixpkgs-unstable }; )
 
           neovim
+          nvimpager
           podman-compose
           nixd
           openssh
@@ -53,7 +58,7 @@
           lima
           bash # mac bash is dead
           borgbackup
-          utm
+          utm # VM manager. Start with `utm`
 
           ffmpeg
           fzf
@@ -87,6 +92,17 @@
 
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
+
+      # system.activationScripts.setGitMain = {
+      system.activationScripts.postActivation = {
+        text = ''
+          echo "hi $(date)" > /tmp/plz.fmd.log
+          git config --file /Users/drew/.gitconfig init.defaultBranch main
+          echo "hi $(date)" >> /tmp/plz.fmd.log
+        '';
+        enable = true;
+      };
+
     };
   in
   {
