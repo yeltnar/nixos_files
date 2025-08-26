@@ -17,6 +17,7 @@ let
     sha256 = "sha256-Xzlv420zq3SOcjDJU0mc7Cew9dNql0IvhQcSvTVbziM=";
   };
   monitor_file = "~/.config/hypr/monitors.${config.networking.hostName}.conf";
+  extra_file = "~/.config/hypr/${config.networking.hostName}.extra.conf";
 in
 {
 
@@ -124,6 +125,18 @@ in
   environment.etc."hypr/hyprexpo.conf".text = hyprexpoConfig;
 
    
+  # this should be the first hyprland activationScripts
+  system.activationScripts.link_hyprland_dir = {
+    text = ''
+      # if it is a directory, replace with link
+      link_file="/home/drew/.config/hypr"
+      if [ -d "$link_file" ] && [ ! -L "$link_file" ]; then
+        rm -rf "$link_file"
+        /run/wrappers/bin/su - drew -s /bin/sh -c "ln -s /home/drew/playin/nixos_files/includes/desktop/hypr $link_file";
+      fi
+    '';
+  };
+
   system.activationScripts.hypr_ln = {
     text = ''
       # if it exsists, and is not a link, dont do anything
@@ -141,13 +154,29 @@ in
       if [ ! -e "$link_file" ]; then
         /run/wrappers/bin/su - drew -s /bin/sh -c "ln -s ${monitor_file} $link_file";
       fi
+      if [ ! -e "${monitor_file}" ]; then
+        /run/wrappers/bin/su - drew -s /bin/sh -c "touch ${monitor_file}";
+      fi
+    '';
+  };
+
+  system.activationScripts.hypr_extra_file = {
+    text = ''
+      # if it exsists, and is not a link, dont do anything
+      link_file="/home/drew/.config/hypr/extra.conf"
+      if [ ! -e "$link_file" ]; then
+        /run/wrappers/bin/su - drew -s /bin/sh -c "ln -s ${extra_file} $link_file";
+      fi
+      if [ ! -e "${extra_file}" ]; then
+        /run/wrappers/bin/su - drew -s /bin/sh -c "touch ${extra_file}";
+      fi
     '';
   };
 
   system.activationScripts.wallpaper = {
     text = ''
       link_file="/home/drew/.config/hypr/hyprpaper/wallpaper.jpg"
-      rm $link_file
+      toss=$(rm -rf $link_file; true)
       /run/wrappers/bin/su - drew -s /bin/sh -c "ln -s /etc/hypr/wallpaper.jpg $link_file";
     '';
   };

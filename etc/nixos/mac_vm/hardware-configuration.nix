@@ -8,25 +8,18 @@
     [ (modulesPath + "/profiles/qemu-guest.nix")
     ];
 
-  hardware.graphics = {
-    enable = true;
-    package = pkgs.mesa;
-    enable32Bit = true;
-    package32 = pkgs.pkgsi686Linux.mesa;
-  };
-
-  boot.initrd.availableKernelModules = [ "xhci_pci" "uhci_hcd" "ehci_pci" "ahci" "usbhid" "sd_mod" "sr_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "virtio_pci" "usbhid" "usb_storage" "sr_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/e9501c02-73ce-4f58-89d7-e660f8a469ce";
+    { device = "/dev/disk/by-uuid/a32cc173-885b-4867-8612-f7483d7a6112";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/4D0D-DAEC";
+    { device = "/dev/disk/by-uuid/C5A7-DDC3";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
@@ -40,5 +33,5 @@
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp0s1.useDHCP = lib.mkDefault true;
 
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
 }

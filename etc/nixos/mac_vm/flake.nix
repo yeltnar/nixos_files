@@ -23,7 +23,7 @@
   # outputs = { self, nixpkgs, sops-nix, ... } @ inputs: 
   outputs = { self, nixpkgs, ... } @ inputs: 
   let
-    system = "x86_64-linux";
+    system = "aarch64-linux";
     config = self.config;
 
     pkgs = import nixpkgs {
