@@ -81,6 +81,12 @@ in {
     '';
   };
 
+  system.activationScripts.git_default_branch = {
+    text = ''
+      ${pkgs.git}/bin/git config --file /home/drew/.gitconfig init.defaultBranch main
+    '';
+  };
+
   users.groups.realtime = {};
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
