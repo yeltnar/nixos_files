@@ -17,7 +17,8 @@ let
     sha256 = "sha256-Xzlv420zq3SOcjDJU0mc7Cew9dNql0IvhQcSvTVbziM=";
   };
   monitor_file = "~/.config/hypr/monitors.${config.networking.hostName}.conf";
-  extra_file = "~/.config/hypr/${config.networking.hostName}.extra.conf";
+  extra_file_start = "~/.config/hypr/${config.networking.hostName}.extra.start.conf";
+  extra_file_end = "~/.config/hypr/${config.networking.hostName}.extra.end.conf";
 in
 {
 
@@ -160,15 +161,22 @@ in
     '';
   };
 
-  system.activationScripts.hypr_extra_file = {
+  system.activationScripts.hypr_extra_files = {
     text = ''
       # if it exsists, and is not a link, dont do anything
-      link_file="/home/drew/.config/hypr/extra.conf"
-      if [ ! -e "$link_file" ]; then
-        /run/wrappers/bin/su - drew -s /bin/sh -c "ln -s ${extra_file} $link_file";
+      link_file_start="/home/drew/.config/hypr/extra_start.conf"
+      link_file_end="/home/drew/.config/hypr/extra_end.conf"
+      if [ ! -e "$link_file_start" ]; then
+        /run/wrappers/bin/su - drew -s /bin/sh -c "ln -s ${extra_file_start} $link_file_start";
       fi
-      if [ ! -e "${extra_file}" ]; then
-        /run/wrappers/bin/su - drew -s /bin/sh -c "touch ${extra_file}";
+      if [ ! -e "$link_file_end" ]; then
+        /run/wrappers/bin/su - drew -s /bin/sh -c "ln -s ${extra_file_end} $link_file_end";
+      fi
+      if [ ! -e "${extra_file_start}" ]; then
+        /run/wrappers/bin/su - drew -s /bin/sh -c "touch ${extra_file_start}";
+      fi
+      if [ ! -e "${extra_file_end}" ]; then
+        /run/wrappers/bin/su - drew -s /bin/sh -c "touch ${extra_file_end}";
       fi
     '';
   };
