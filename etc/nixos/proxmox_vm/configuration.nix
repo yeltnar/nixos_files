@@ -39,19 +39,23 @@ in {
 
     ../../../includes/ntfy_report/ntfy_report_ip_timer.nix
     ../../../includes/mqtt_report/mqtt_report_ip_timer.nix
+
     ../../../includes/jellyfin/jellyfin.nix
+    ../../../includes/jellyfin/backup_restore.timer.nix
+
     ../../../includes/uptime-kuma/uptime-kuma-server.nix
-    ../../../includes/babybuddy/babybuddy.nix
+    ../../../includes/uptime-kuma/backup_restore.timer.nix
+
+    # ../../../includes/babybuddy/babybuddy.nix
+    # ../../../includes/babybuddy/backup_restore.timer.nix
 
     ../../../includes/derivation_test/derivation_test.nix
+
     # ../../../includes/nextcloud/nextcloud.nix
 
     # ../../../includes/vm/vm.nix
     ../../../includes/nbdkit/nbdkit.entry.nix
     ../../../includes/rclone_mounts/mini-minio.nix
-    ../../../includes/jellyfin/backup_restore.timer.nix
-    ../../../includes/uptime-kuma/backup_restore.timer.nix
-    ../../../includes/babybuddy/backup_restore.timer.nix
   ];
 
   services.desktop_environment.selection = "none";
