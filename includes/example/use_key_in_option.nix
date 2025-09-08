@@ -13,6 +13,7 @@
 
   config.environment.systemPackages = lib.mkIf ( config.my.test != null && config.my.test != {} ) 
   (
+    # if want to map the attribute set to attribute set, use builtins.mapAttrs
     lib.attrsets.mapAttrsToList (name: value: pkgs.writeShellScriptBin name "echo \"this is an example of using a key: ${name}\"" ) config.my.test 
   )
   //
