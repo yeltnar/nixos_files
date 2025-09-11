@@ -4,20 +4,18 @@
   pkgs,
   ...
 }:{
-
+  
   imports = [
     ../helpers/compose-systemd.nix
   ];
 
-  custom.compose.user.jellyfin = {
+  custom.compose.user.uptime-kuma = {
     allowedTCPPorts = [
-      8096
+      4001
     ];
-    use_run_env = true;
+    test_string = "Listening on";
+    use_run_env = false;
     backup_restore = true;
   };
-
-  # custom.compose.user.testme2 = {};
-  # custom.compose.system.testme2 = {};
 
 }

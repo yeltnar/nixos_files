@@ -30,6 +30,7 @@
       gawk
       nettools
       mosquitto
+      nebula
     ];
 
     script = ''

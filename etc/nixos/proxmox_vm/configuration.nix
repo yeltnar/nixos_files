@@ -41,10 +41,8 @@ in {
     ../../../includes/mqtt_report/mqtt_report_ip_timer.nix
 
     ../../../includes/jellyfin/jellyfin.nix
-    ../../../includes/jellyfin/backup_restore.timer.nix
 
-    ../../../includes/uptime-kuma/uptime-kuma-server.nix
-    ../../../includes/uptime-kuma/backup_restore.timer.nix
+    ../../../includes/uptime-kuma/uptime-kuma.nix
 
     # ../../../includes/babybuddy/babybuddy.nix
     # ../../../includes/babybuddy/backup_restore.timer.nix

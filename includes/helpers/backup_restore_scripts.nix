@@ -54,7 +54,7 @@ let
     if [ $create_code -eq 1 ]; then
       echo "Borg has a warning";
       # systemd-notify --ready --status="warning with borg backup"
-    else
+    elif [ $create_code -gt 1 ]; then
       echo "Borg backup had errors."
       exit $create_code;
     fi
