@@ -4,47 +4,14 @@
   pkgs,
   ...
 }:
-# TODO can I like import each one and not have to loop over each attribute? 
 let 
   user="drew";
   get_run_env_file = name: "/home/${user}/.config/${name}/changeme.env";
   get_backup_env_file = name: "/home/${user}/.config/${name}/backup.env";
 
   # this returns a list which needs to all be merged together
-  generateServices = name: value: let
-    shared_vars = {
-      code_parent_dir="/home/${user}/playin";
-      code_dir="${shared_vars.code_parent_dir}/${name}";  
-      scripts = ( import ./backup_restore_scripts.nix ) { unit_id = name; };
-      backup_script = shared_vars.scripts.backup_script;
-      restore_script = shared_vars.scripts.restore_script;
-      git_user = "yeltnar";
-      git_server_uri = "https://github.com";
-      run_env_file = get_run_env_file name;
-      backup_env_file = get_backup_env_file name;
-    };
-  in lib.filter ( value: null !=value ) [
-    (if ( value ? start_service && value.start_service != false ) then {
-      name="${name}_start";
-      value=generateStartService name value shared_vars;
-    } else null)
-    (if ( value ? clone_service && value.clone_service != false ) then {
-      name="${name}_clone";
-      value=generateCloneService name value shared_vars;
-    } else null)
-    # TODO allow for disabling
-    (if ( value ? backup_service && value.backup_service != false ) then {
-      name="${name}_backup";
-      value=generateBackupService name value shared_vars;
-    } else null)
-    # TODO allow for disabling
-    (if ( value ? restore_service && value.restore_service != false ) then {
-      name="${name}_restore";
-      value=generateRestoreService name value shared_vars;
-    } else null)
-  ];
   generateStartService = name: value: shared_vars:
-  {
+  lib.mkIf ( value ? enable_start_service && value.enable_start_service != false ) {
     path = with pkgs; [
       podman
       podman-compose
@@ -106,7 +73,7 @@ let
     };
   };
   generateCloneService = name: value: shared_vars: 
-  {
+  lib.mkIf ( value ? enable_clone_service && value.enable_clone_service != false ) {
     path = with pkgs; [
       git
     ];
@@ -134,7 +101,8 @@ let
     ];
   };
   # this needs to be systemd.user.timer.service
-  generateBackupTimerService = name: value: {
+  generateBackupTimerService = name: value:
+  lib.mkIf ( value ? enable_backup_timer_service && value.enable_backup_timer_service != false ) {
     wantedBy = [
       "timers.target"
     ];
@@ -147,7 +115,8 @@ let
       Unit = "${name}_backup.service";
     };
   };
-  generateBackupService = name: value : shared_vars: {
+  generateBackupService = name: value : shared_vars:
+  lib.mkIf ( value ? enable_backup_service && value.enable_backup_service != false ) {
     environment =
       config.nix.envVars
       // {
@@ -171,7 +140,8 @@ let
     };
   };
 
-  generateRestoreService = name: value: shared_vars: {
+  generateRestoreService = name: value: shared_vars:
+  lib.mkIf ( value ? enable_restore_service && value.enable_restore_service != false ) {
     environment =
       config.nix.envVars
       // {
@@ -250,12 +220,6 @@ in {
   # TODO this should be an option that is selected... also need to change within the service spec
   imports = [ ../nm-online.service.nix ];
 
-  # TODO this needs to be an option but that seems like a bunch of 'or' statements
-  # enable lingering so service starts before user logs in
-
-  # map system key to be system services
-
-
   # config.custom.compose.user
 
   # builtins.listToAttrs ( ( lib.flatten ( lib.mapAttrsToList ( generateSops ) config.custom.compose.user ) ) )
@@ -315,6 +279,8 @@ in {
     builtins.listToAttrs ( ( lib.flatten ( lib.mapAttrsToList ( generateSops ) config.custom.compose ) ) )
   );
 
+  # TODO this needs to be an option but that seems like a bunch of 'or' statements
+  # enable lingering so service starts before user logs in
   config.users.users.drew.linger = true;
 
 
