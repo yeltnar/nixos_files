@@ -23,33 +23,25 @@ let
       run_env_file = get_run_env_file name;
       backup_env_file = get_backup_env_file name;
     };
-  in [
-    {
+  in lib.filter ( value: null !=value ) [
+    (if ( value ? start_service && value.start_service != false ) then {
       name="${name}_start";
       value=generateStartService name value shared_vars;
-    }
-    {
+    } else null)
+    (if ( value ? clone_service && value.clone_service != false ) then {
       name="${name}_clone";
       value=generateCloneService name value shared_vars;
-    }
-    # {
-    #   name="timers.${name}_backup";
-    #   value=generateBackupTimerService name value shared_vars;
-    # }
-    # {
-    #   name="timers";
-    #   value={
-    #     "${name}_backup" = generateBackupTimerService name value shared_vars;
-    #   };
-    # }
-    {
+    } else null)
+    # TODO allow for disabling
+    (if ( value ? backup_service && value.backup_service != false ) then {
       name="${name}_backup";
       value=generateBackupService name value shared_vars;
-    }
-    {
+    } else null)
+    # TODO allow for disabling
+    (if ( value ? restore_service && value.restore_service != false ) then {
       name="${name}_restore";
       value=generateRestoreService name value shared_vars;
-    }
+    } else null)
   ];
   generateStartService = name: value: shared_vars:
   {
@@ -237,6 +229,13 @@ let
     else null )
   ];
 
+  
+  import_test = lib.mapAttrsToList ( name: value: {...}:{
+    
+  } ) config.compose.user
+  ;
+
+
 in {
 
   # use like
@@ -244,11 +243,7 @@ in {
   # custom.compose.system.testme2 = {};
   # need example of service which needs to monitor output
 
-  options.custom.compose.user = lib.mkOption {
-    default = null;
-  };
-
-  options.custom.compose.system = lib.mkOption {
+  options.custom.compose = lib.mkOption {
     default = null;
   };
 
@@ -257,38 +252,76 @@ in {
 
   # TODO this needs to be an option but that seems like a bunch of 'or' statements
   # enable lingering so service starts before user logs in
-  config.users.users.drew.linger = true;
 
   # map system key to be system services
-  config.systemd.services = lib.mkIf ( config.custom.compose.system != null && config.custom.compose.system != {} ) 
+
+
+  # config.custom.compose.user
+
+  # builtins.listToAttrs ( ( lib.flatten ( lib.mapAttrsToList ( generateSops ) config.custom.compose.user ) ) )
+  
+  config.systemd = lib.foldl' lib.recursiveUpdate {} ( lib.mapAttrsToList ( name: value: let 
+
+    shared_vars = {
+      code_parent_dir="/home/${user}/playin";
+      code_dir="${shared_vars.code_parent_dir}/${name}";  
+      scripts = ( import ./backup_restore_scripts.nix ) { unit_id = name; };
+      backup_script = shared_vars.scripts.backup_script;
+      restore_script = shared_vars.scripts.restore_script;
+      git_user = "yeltnar";
+      git_server_uri = "https://github.com";
+      run_env_file = get_run_env_file name;
+      backup_env_file = get_backup_env_file name;
+    };
+
+    super_user_clone = false;
+    super_user_restore = false;
+    super_user_start = false;
+    super_user_backup_timer = false;
+    super_user_backup = false;
+
+    clone_name = "${name}_clone";
+    restore_name = "${name}_restore";
+    start_name = "${name}_start";
+    backup_timer_name = "${name}_backup_timer";
+    backup_name = "${name}_backup";
+
+    clone_service = generateCloneService name value shared_vars;
+    restore_service = generateRestoreService name value shared_vars;
+    start_service = generateStartService name value shared_vars;
+    backup_timer_service = generateBackupTimerService name value;
+    backup_service = generateBackupService name value shared_vars;
+
+  in {
+
+    user.services."${clone_name}" = lib.mkIf (!super_user_clone) clone_service;
+    user.services."${restore_name}" = lib.mkIf (!super_user_restore) restore_service;
+    user.services."${start_name}" = lib.mkIf (!super_user_start) start_service;
+    user.services."${backup_name}" = lib.mkIf (!super_user_backup) backup_service;
+
+    user.timers."${backup_timer_name}" = lib.mkIf (!super_user_backup_timer) backup_timer_service;
+
+    services."${clone_name}" = lib.mkIf (super_user_clone) clone_service;
+    services."${restore_name}" = lib.mkIf (super_user_restore) restore_service;
+    services."${start_name}" = lib.mkIf (super_user_start) start_service;
+    services."${backup_name}" = lib.mkIf (super_user_backup) backup_service;
+
+    timers."${backup_timer_name}" = lib.mkIf (super_user_backup_timer) backup_timer_service;
+
+  } ) config.custom.compose );
+
+  config.sops.secrets = lib.mkIf ( config.custom.compose != null && config.custom.compose != {} ) 
   (
-    # this will replace the contents of the value with what is returned from the function. The key will stay the same
-    builtins.listToAttrs ( lib.flatten ( lib.mapAttrsToList ( generateServices ) config.custom.compose.system ) )
+    builtins.listToAttrs ( ( lib.flatten ( lib.mapAttrsToList ( generateSops ) config.custom.compose ) ) )
   );
 
-  # map user key to be user services
-  config.systemd.user.services = lib.mkIf ( config.custom.compose.user != null && config.custom.compose.user != {} ) 
-  (
-    # this will replace the contents of the value with what is returned from the function. The key will stay the same
-    builtins.listToAttrs ( lib.flatten ( lib.mapAttrsToList ( generateServices ) config.custom.compose.user ) )
-  );
+  config.users.users.drew.linger = true;
 
-  # map user key to be user timers
-  config.systemd.user.timers = lib.mkIf ( config.custom.compose.user != null && config.custom.compose.user != {} ) 
-  (
-    # this will replace the contents of the value with what is returned from the function. The key will stay the same
-    builtins.listToAttrs ( lib.flatten ( lib.mapAttrsToList ( generateTimers ) config.custom.compose.user ) )
-  );
-  config.systemd.timers = lib.mkIf ( config.custom.compose.system != null && config.custom.compose.system != {} ) 
-  (
-    # this will replace the contents of the value with what is returned from the function. The key will stay the same
-    builtins.listToAttrs ( lib.flatten ( lib.mapAttrsToList ( generateTimers ) config.custom.compose.system ) )
-  );
 
   # allowed ports (tcp and upd)
   # TODO I know I want to open on a single interface (ie nebula) sometimes but thats a whole other thing
   config.networking.firewall.allowedTCPPorts = 
-  lib.optionals ( config.custom.compose.user != null && config.custom.compose.user != {} ) 
+  lib.optionals ( config.custom.compose != null && config.custom.compose != {} ) 
   (
     lib.flatten (
       lib.mapAttrsToList (
@@ -296,24 +329,12 @@ in {
           if value ? allowedTCPPorts then 
             value.allowedTCPPorts 
           else []
-      ) config.custom.compose.user 
-    )
-  )
-  ++ 
-  lib.optionals ( config.custom.compose.system != null && config.custom.compose.system != {} ) 
-  (
-    lib.flatten (
-      lib.mapAttrsToList (
-        name: value: 
-          if value ? allowedTCPPorts then 
-            value.allowedTCPPorts 
-          else []
-      ) config.custom.compose.system 
+      ) config.custom.compose 
     )
   );
 
   config.networking.firewall.allowedUDPPorts = 
-  lib.optionals ( config.custom.compose.user != null && config.custom.compose.user != {} ) 
+  lib.optionals ( config.custom.compose != null && config.custom.compose != {} ) 
   (
     lib.flatten (
       lib.mapAttrsToList (
@@ -321,27 +342,9 @@ in {
           if value ? allowedUDPPorts then 
             value.allowedUDPPorts 
           else []
-      ) config.custom.compose.user 
-    )
-  )
-  ++ 
-  lib.optionals ( config.custom.compose.system != null && config.custom.compose.system != {} ) 
-  (
-    lib.flatten (
-      lib.mapAttrsToList (
-        name: value: 
-          if value ? allowedUDPPorts then 
-            value.allowedUDPPorts 
-          else []
-      ) config.custom.compose.system 
+      ) config.custom.compose 
     )
   );
-
-  config.sops.secrets = lib.mkIf ( config.custom.compose.user != null && config.custom.compose.user != {} ) 
-  (
-    builtins.listToAttrs ( ( lib.flatten ( lib.mapAttrsToList ( generateSops ) config.custom.compose.user ) ) )
-  );
-
 
   # TODO  need to be able to turn on/off backup and restore
 

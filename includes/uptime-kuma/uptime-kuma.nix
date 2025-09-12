@@ -9,7 +9,7 @@
     ../helpers/compose-systemd.nix
   ];
 
-  custom.compose.user.uptime-kuma = {
+  custom.compose.uptime-kuma = {
     allowedTCPPorts = [
       4001
     ];

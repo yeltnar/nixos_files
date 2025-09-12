@@ -2,14 +2,14 @@
 {
   # config,
   pkgs,
+  lib,
   ...
-}:{
+}: let 
+in {
 
-  imports = [
-    ../helpers/compose-systemd.nix
-  ];
+  imports = [ ../helpers/compose-systemd.nix ];
 
-  custom.compose.user.jellyfin = {
+  custom.compose.jellyfin = {
     allowedTCPPorts = [
       8096
     ];
