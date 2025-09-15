@@ -16,6 +16,7 @@
     test_string = "Listening on";
     use_run_env = false;
     backup_restore = true;
+    files_to_backup="data";
   };
 
 }
