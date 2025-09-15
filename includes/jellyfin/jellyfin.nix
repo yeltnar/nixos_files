@@ -15,6 +15,7 @@ in {
     ];
     use_run_env = true;
     backup_restore = true;
+    files_to_backup="config";
   };
 
   # custom.compose.user.testme2 = {};

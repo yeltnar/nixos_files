@@ -11,7 +11,7 @@ let
 
   # this returns a list which needs to all be merged together
   generateStartService = name: value: shared_vars:
-  lib.mkIf ( value ? enable_start_service && value.enable_start_service != false ) {
+  lib.mkIf ( !(value ? enable_start_service) || value.enable_start_service == false ) {
     path = with pkgs; [
       podman
       podman-compose
@@ -73,7 +73,7 @@ let
     };
   };
   generateCloneService = name: value: shared_vars: 
-  lib.mkIf ( value ? enable_clone_service && value.enable_clone_service != false ) {
+  lib.mkIf ( !(value ? enable_clone_service) || value.enable_clone_service == false ) {
     path = with pkgs; [
       git
     ];
@@ -102,7 +102,7 @@ let
   };
   # this needs to be systemd.user.timer.service
   generateBackupTimerService = name: value:
-  lib.mkIf ( value ? enable_backup_timer_service && value.enable_backup_timer_service != false ) {
+  lib.mkIf ( !(value ? enable_backup_timer_service) || value.enable_backup_timer_service == false ) {
     wantedBy = [
       "timers.target"
     ];
@@ -116,7 +116,7 @@ let
     };
   };
   generateBackupService = name: value : shared_vars:
-  lib.mkIf ( value ? enable_backup_service && value.enable_backup_service != false ) {
+  lib.mkIf ( !(value ? enable_backup_service) || value.enable_backup_service == false ) {
     environment =
       config.nix.envVars
       // {
@@ -141,7 +141,7 @@ let
   };
 
   generateRestoreService = name: value: shared_vars:
-  lib.mkIf ( value ? enable_restore_service && value.enable_restore_service != false ) {
+  lib.mkIf ( !(value ? enable_restore_service) || value.enable_restore_service == false ) {
     environment =
       config.nix.envVars
       // {
@@ -198,14 +198,6 @@ let
     }
     else null )
   ];
-
-  
-  import_test = lib.mapAttrsToList ( name: value: {...}:{
-    
-  } ) config.compose.user
-  ;
-
-
 in {
 
   # use like
@@ -229,15 +221,148 @@ in {
     shared_vars = {
       code_parent_dir="/home/${user}/playin";
       code_dir="${shared_vars.code_parent_dir}/${name}";  
-      scripts = ( import ./backup_restore_scripts.nix ) { unit_id = name; };
-      backup_script = shared_vars.scripts.backup_script;
-      restore_script = shared_vars.scripts.restore_script;
-      git_user = "yeltnar";
-      git_server_uri = "https://github.com";
       run_env_file = get_run_env_file name;
       backup_env_file = get_backup_env_file name;
+
+      backup_WORKDIR="/home/drew/playin/${name}";
+      backup_FILES_TO_BACKUP=value.files_to_backup;
+      backup_BORG_REPO="/mnt/minio/backups/${name}_backup";
+      backup_ENCRYPTION="repokey";
+
+      # for backup this is needed (provided from sops)
+      # BORG_PASSPHRASE
+      
+      # during runtime, this is needed (provided from sops)
+      # s3_access_key_id
+      # s3_secret_access_key
+      # s3_endpoint
+
+      backup_script = ''
+        source ${shared_vars.backup_env_file}
+
+        WORKDIR="${shared_vars.backup_WORKDIR}"
+        export FILES_TO_BACKUP="${shared_vars.backup_FILES_TO_BACKUP}";
+        export BORG_REPO="${shared_vars.backup_BORG_REPO}"
+        export ENCRYPTION="${shared_vars.backup_ENCRYPTION}"
+
+        if [ -z "$WORKDIR" ]; then
+          echo "WORKDIR is undefined... exiting";
+          exit;
+        fi
+        if [ -n "$SRC_DIR" ]; then
+          echo "\$SRC_DIR is replaced with \$FILES_TO_BACKUP... exiting";
+          exit;
+        fi
+        if [ -z "$BORG_REPO" ]; then
+          echo "BORG_REPO is undefined... exiting";
+          exit;
+        fi
+        if [ -z "$BORG_PASSPHRASE" ]; then
+          echo "BORG_PASSPHRASE is undefined... exiting";
+          exit;
+        fi
+        if [ -z "$ENCRYPTION" ]; then
+          echo "ENCRYPTION is undefined... exiting";
+          exit;
+        fi
+
+        cd "$WORKDIR";
+        pwd
+
+        info_exit_code=$(borg info $BORG_REPO >& /dev/null; echo $?)
+
+        if [ $info_exit_code -gt 0 ]; then
+          echo "repo does not exsist; creating now";
+          borg init $BORG_REPO --encryption=$ENCRYPTION
+        fi
+
+        echo "FILES_TO_BACKUP is $FILES_TO_BACKUP";
+
+        if [ -z "$FILES_TO_BACKUP" ]; then
+          echo "\$FILES_TO_BACKUP is empty... backing up everything";
+        else
+          echo "backing up $FILES_TO_BACKUP";
+        fi
+
+        # if FILES_TO_BACKUP is empty, it will backup everything 
+        # we make a little function with a subshell so we can always get a good exit code
+        backup_log_file="/tmp/$$"
+        create_code=$(borg create --stats --verbose --show-rc --progress --compression lz4 ::{user}-{now} $FILES_TO_BACKUP >$backup_log_file 2>&1; echo $?;);
+        echo $create_code
+        cat $backup_log_file;
+        rm $backup_log_file;
+        # echo create_code $create_code
+        if [ $create_code -eq 1 ]; then
+          echo "Borg has a warning";
+          # systemd-notify --ready --status="warning with borg backup"
+        elif [ $create_code -gt 1 ]; then
+          echo "Borg backup had errors."
+          exit $create_code;
+        fi
+
+        borg prune -v --list --keep-within=1d --keep-daily=7 --keep-weekly="5" --keep-monthly="12" --keep-yearly="2"
+      '';
+      restore_script = ''
+        export RESTORE_DIR="/home/drew/playin/${name}"
+        source ${shared_vars.backup_env_file}
+
+        WORKDIR="${shared_vars.backup_WORKDIR}"
+        export FILES_TO_BACKUP="${shared_vars.backup_FILES_TO_BACKUP}";
+        export BORG_REPO="${shared_vars.backup_BORG_REPO}"
+        export ENCRYPTION="${shared_vars.backup_ENCRYPTION}"
+
+        if [ -z "$RESTORE_DIR" ]; then
+          echo "RESTORE_DIR is undefined... exiting";
+          exit;
+        fi
+
+        if [ -z "$WORKDIR" ]; then
+          echo "WORKDIR is undefined... exiting";
+          exit;
+        fi
+        if [ -n "$SRC_DIR" ]; then
+          echo "\$SRC_DIR is replaced with \$FILES_TO_BACKUP... exiting";
+          exit;
+        fi
+        if [ -z "$BORG_REPO" ]; then
+          echo "BORG_REPO is undefined... exiting";
+          exit;
+        fi
+        if [ -z "$BORG_PASSPHRASE" ]; then
+          echo "BORG_PASSPHRASE is undefined... exiting";
+          exit;
+        fi
+        if [ -z "$ENCRYPTION" ]; then
+          echo "ENCRYPTION is undefined... exiting";
+          exit;
+        fi
+
+        cd "$WORKDIR";
+
+        borg info $BORG_REPO >& /dev/null
+        info_exit_code=$?;
+
+        if [ $info_exit_code -gt 0 ]; then
+          echo "repo does not exsist; exiting";
+          exit 1;
+        fi
+
+        archive_name=$(borg list --sort-by timestamp --last 1 --format "{archive}")
+        echo $archive_name
+
+        # borg extract user@host:path/to/repo_directory::Monday path/to/target_directory --exclude '*.ext'
+        echo "restoring"
+        borg list "$BORG_REPO::$archive_name"
+
+        cd $RESTORE_DIR
+
+        borg extract "$BORG_REPO::$archive_name"
+      '';
+      git_user = "yeltnar";
+      git_server_uri = "https://github.com";
     };
 
+    # TODO allow for these to be set from module
     super_user_clone = false;
     super_user_restore = false;
     super_user_start = false;
@@ -247,7 +372,7 @@ in {
     clone_name = "${name}_clone";
     restore_name = "${name}_restore";
     start_name = "${name}_start";
-    backup_timer_name = "${name}_backup_timer";
+    backup_timer_name = "${name}_backup";
     backup_name = "${name}_backup";
 
     clone_service = generateCloneService name value shared_vars;
@@ -283,7 +408,6 @@ in {
   # enable lingering so service starts before user logs in
   config.users.users.drew.linger = true;
 
-
   # allowed ports (tcp and upd)
   # TODO I know I want to open on a single interface (ie nebula) sometimes but thats a whole other thing
   config.networking.firewall.allowedTCPPorts = 
@@ -312,7 +436,7 @@ in {
     )
   );
 
-  # TODO  need to be able to turn on/off backup and restore
+  # TODO script to set up sops?
 
 }
 
