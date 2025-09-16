@@ -404,12 +404,17 @@ in {
     builtins.listToAttrs ( ( lib.flatten ( lib.mapAttrsToList ( generateSops ) config.custom.compose ) ) )
   );
 
-  # TODO this needs to be an option but that seems like a bunch of 'or' statements
   # enable lingering so service starts before user logs in
-  config.users.users.drew.linger = true;
+  config.users.users."${user}" = lib.foldl' lib.recursiveUpdate {} ( lib.mapAttrsToList ( name: value:
+    if (  value ? linger && value.linger == true ) then
+      { linger = true; }
+    else {}
+  ) config.custom.compose );
 
   # allowed ports (tcp and upd)
   # TODO I know I want to open on a single interface (ie nebula) sometimes but thats a whole other thing
+  # networking.firewall.interfaces.<name>.allowedTCPPorts
+
   config.networking.firewall.allowedTCPPorts = 
   lib.optionals ( config.custom.compose != null && config.custom.compose != {} ) 
   (
