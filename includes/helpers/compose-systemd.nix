@@ -23,7 +23,7 @@ let
     requires = ["podman.service" "podman.socket"];
     after = ["nm-online.service"];
     # if the test_string var exsists, use the 'watch the logs' script
-    script = if value ? test_string then 
+    script = if ( value.test_string != "" ) then 
     ''
       PATH="$PATH:${pkgs.podman}/bin";
       ${pkgs.podman-compose}/bin/podman-compose down
@@ -88,9 +88,16 @@ let
     unitConfig = {
       ConditionPathExists = "!${shared_vars.code_dir}";
     };
-    script = ''
-      cd ${shared_vars.code_parent_dir}/; git clone ${shared_vars.git_server_uri}/${shared_vars.git_user}/${name};
-    '';
+
+    script = let 
+      clone_script = "mkdir -p ${shared_vars.code_parent_dir}; cd ${shared_vars.code_parent_dir}/; git clone ${shared_vars.git_server_uri}/${shared_vars.git_user}/${name}";
+    in
+      if ( value.super_user_clone == true ) then
+        "${pkgs.util-linux}/bin/runuser -u ${user} -- ${pkgs.bash}/bin/bash -c '${clone_script}'"
+      else 
+        clone_script
+    ;
+
     serviceConfig = {
       Type = "oneshot";
       SyslogIdentifier = "${name}";
@@ -178,7 +185,7 @@ let
   generateSops = name: value: 
   lib.filter ( value: null != value ) 
   [
-    ( if (value ? use_run_env && value.use_run_env==true) then 
+    ( if ( value.use_run_env==true ) then 
       {
         name="${name}.env";
         value= {
@@ -188,7 +195,7 @@ let
         };
       }
     else null )
-    ( if (value ? backup_restore && value.backup_restore==true) then 
+    ( if ( value.backup_restore==true ) then 
     { name="${name}_backup.env";
       value={
         owner = "${user}";
@@ -198,6 +205,22 @@ let
     }
     else null )
   ];
+
+  composeSystemdOption.options = {
+    super_user_clone = lib.mkOption { type=lib.types.bool; default=false; };
+    super_user_restore = lib.mkOption { type=lib.types.bool; default=false; };
+    super_user_start = lib.mkOption { type=lib.types.bool; default=false; };
+    super_user_backup_timer = lib.mkOption { type=lib.types.bool; default=false; };
+    super_user_backup = lib.mkOption { type=lib.types.bool; default=false; };
+    allowedUDPPorts = lib.mkOption { type=lib.types.listOf lib.types.int; default=[]; };
+    allowedTCPPorts = lib.mkOption { type=lib.types.listOf lib.types.int; default=[]; };
+    files_to_backup = lib.mkOption { type=lib.types.string; default=""; };
+    linger = lib.mkOption { type=lib.types.bool; default=false; };
+    test_string = lib.mkOption { type=lib.types.string; default=""; };
+    use_run_env = lib.mkOption { type=lib.types.bool; default=true; };
+    backup_restore = lib.mkOption { type=lib.types.bool; default=true; };
+  };
+
 in {
 
   # use like
@@ -206,6 +229,7 @@ in {
   # need example of service which needs to monitor output
 
   options.custom.compose = lib.mkOption {
+    type = lib.types.attrsOf (lib.types.submodule composeSystemdOption);
     default = null;
   };
 
@@ -363,11 +387,6 @@ in {
     };
 
     # TODO allow for these to be set from module
-    super_user_clone = false;
-    super_user_restore = false;
-    super_user_start = false;
-    super_user_backup_timer = false;
-    super_user_backup = false;
 
     clone_name = "${name}_clone";
     restore_name = "${name}_restore";
@@ -383,19 +402,19 @@ in {
 
   in {
 
-    user.services."${clone_name}" = lib.mkIf (!super_user_clone) clone_service;
-    user.services."${restore_name}" = lib.mkIf (!super_user_restore) restore_service;
-    user.services."${start_name}" = lib.mkIf (!super_user_start) start_service;
-    user.services."${backup_name}" = lib.mkIf (!super_user_backup) backup_service;
+    user.services."${clone_name}" = lib.mkIf (!value.super_user_clone) clone_service;
+    user.services."${restore_name}" = lib.mkIf (!value.super_user_restore) restore_service;
+    user.services."${start_name}" = lib.mkIf (!value.super_user_start) start_service;
+    user.services."${backup_name}" = lib.mkIf (!value.super_user_backup) backup_service;
 
-    user.timers."${backup_timer_name}" = lib.mkIf (!super_user_backup_timer) backup_timer_service;
+    user.timers."${backup_timer_name}" = lib.mkIf (!value.super_user_backup_timer) backup_timer_service;
 
-    services."${clone_name}" = lib.mkIf (super_user_clone) clone_service;
-    services."${restore_name}" = lib.mkIf (super_user_restore) restore_service;
-    services."${start_name}" = lib.mkIf (super_user_start) start_service;
-    services."${backup_name}" = lib.mkIf (super_user_backup) backup_service;
+    services."${clone_name}" = lib.mkIf (value.super_user_clone) clone_service;
+    services."${restore_name}" = lib.mkIf (value.super_user_restore) restore_service;
+    services."${start_name}" = lib.mkIf (value.super_user_start) start_service;
+    services."${backup_name}" = lib.mkIf (value.super_user_backup) backup_service;
 
-    timers."${backup_timer_name}" = lib.mkIf (super_user_backup_timer) backup_timer_service;
+    timers."${backup_timer_name}" = lib.mkIf (value.super_user_backup_timer) backup_timer_service;
 
   } ) config.custom.compose );
 
