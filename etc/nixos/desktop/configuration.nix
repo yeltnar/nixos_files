@@ -10,6 +10,9 @@ args@{
 }:
 let
   leUser = "drew";
+
+  # use this wrapper to get gnome key chain
+  element-desktop-wrapper = import ../../../includes/element-desktop-wrapper.nix {inherit pkgs;};
 in 
 {
   imports =
@@ -217,7 +220,8 @@ in
     sops
 
     slack
-    element-desktop
+
+    element-desktop-wrapper
 
     gimp3-with-plugins
     betaflight-configurator
