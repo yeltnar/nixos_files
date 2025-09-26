@@ -93,8 +93,8 @@ let
 
     cd "$WORKDIR";
 
-    borg info $BORG_REPO >& /dev/null
-    info_exit_code=$?;
+    info_exit_code=$(borg info $BORG_REPO >& /dev/null; echo $?)
+    echo "info_exit_code is $info_exit_code"
 
     if [ $info_exit_code -gt 0 ]; then
       echo "repo does not exsist; exiting";
