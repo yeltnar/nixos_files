@@ -148,6 +148,7 @@ let
   };
 
   generateRestoreService = name: value: shared_vars:
+  # TODO validate restore works for root and non-root
   lib.mkIf ( !(value ? enable_restore_service) || value.enable_restore_service == false ) {
     environment =
       config.nix.envVars
@@ -165,13 +166,18 @@ let
       WorkingDirectory = "/home/${user}/playin/${name}";
       Type = "oneshot";
       # User = "${user}";
+
+      # TODO this user shiz is wack
+      # if super user, use ExecStartPost hook to start the 'start' service
+      ExecStartPost = lib.mkIf (value.super_user_restore) ( pkgs.writeShellScript "poststart" "chown -R 100910:100910 config; systemctl --user -M ${user}@ ${name}_start.service" );
     };
     # unitConfig = {
     #   ConditionPathExists = "/home/${user}/playin/${unit_id}";
     # };
-    onSuccess = [
-      "${name}_start.service"
-    ];
+    onSuccess = 
+      # if not super user, use on success hook to start the 'start' service
+      lib.mkIf (!value.super_user_restore) [ "${name}_start.service" ]
+    ;
   };
 
   # generateTimers = name: value: true;
@@ -423,6 +429,7 @@ in {
     builtins.listToAttrs ( ( lib.flatten ( lib.mapAttrsToList ( generateSops ) config.custom.compose ) ) )
   );
 
+  # TODO invert logic so true is default?
   # enable lingering so service starts before user logs in
   config.users.users."${user}" = lib.foldl' lib.recursiveUpdate {} ( lib.mapAttrsToList ( name: value:
     if (  value ? linger && value.linger == true ) then
