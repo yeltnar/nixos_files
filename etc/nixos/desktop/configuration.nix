@@ -39,6 +39,8 @@ in
 
       # ../../../includes/jellyfin/jellyfin.nix
       # ../../../includes/jellyfin/backup_restore.timer.nix
+
+      ../../../includes/btrbk/btrbk.nix
     ] 
     ++
     lib.fileset.toList (

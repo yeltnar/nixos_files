@@ -19,6 +19,11 @@
       options = [ "subvol=root" ];
     };
 
+  fileSystems."/mnt/btrfs_root" =
+    { device = "/dev/disk/by-uuid/8d6b3957-edb0-4ff5-8334-4e0c14e7252f";
+      fsType = "btrfs";
+    };
+
   fileSystems."/home" =
     { device = "/dev/disk/by-uuid/8d6b3957-edb0-4ff5-8334-4e0c14e7252f";
       fsType = "btrfs";
