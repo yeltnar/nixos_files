@@ -10,9 +10,6 @@ args@{
 }:
 let
   leUser = "drew";
-
-  # use this wrapper to get gnome key chain
-  element-desktop-wrapper = import ../../../includes/element-desktop-wrapper.nix {inherit pkgs;};
 in 
 {
   imports =
@@ -41,6 +38,9 @@ in
       # ../../../includes/jellyfin/backup_restore.timer.nix
 
       ../../../includes/btrbk/btrbk.nix
+
+      # use this wrapper to get gnome key chain
+      ../../../includes/element-desktop-wrapper.nix
     ] 
     ++
     lib.fileset.toList (
@@ -223,7 +223,7 @@ in
 
     slack
 
-    element-desktop-wrapper
+    # element-desktop # this is replaced with a custom wrapper to ensure it uses a key ring
 
     gimp3-with-plugins
     betaflight-configurator
