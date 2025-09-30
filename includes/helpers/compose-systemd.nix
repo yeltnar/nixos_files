@@ -169,7 +169,7 @@ let
 
       # TODO this user shiz is wack
       # if super user, use ExecStartPost hook to start the 'start' service
-      ExecStartPost = lib.mkIf (value.super_user_restore) ( pkgs.writeShellScript "poststart" "chown -R 100910:100910 config; systemctl --user -M ${user}@ ${name}_start.service" );
+      ExecStartPost = lib.mkIf (value.super_user_restore) ( pkgs.writeShellScript "poststart" "chown -R 100910:100910 config; systemctl --user -M ${user}@ start ${name}_start.service" );
     };
     # unitConfig = {
     #   ConditionPathExists = "/home/${user}/playin/${unit_id}";
@@ -181,12 +181,6 @@ let
   };
 
   # generateTimers = name: value: true;
-  generateTimers = name: value: [
-    {
-      name="${name}_backup";
-      value=generateBackupTimerService name value;
-    }
-  ];
 
   generateSops = name: value: 
   lib.filter ( value: null != value ) 
@@ -225,6 +219,7 @@ let
     test_string = lib.mkOption { type=lib.types.string; default=""; };
     use_run_env = lib.mkOption { type=lib.types.bool; default=true; };
     backup_restore = lib.mkOption { type=lib.types.bool; default=true; };
+    BORG_REPO = lib.mkOption { type=lib.types.string; default=""; };
   };
 
 in {
@@ -256,7 +251,7 @@ in {
 
       backup_WORKDIR="/home/drew/playin/${name}";
       backup_FILES_TO_BACKUP=value.files_to_backup;
-      backup_BORG_REPO="/mnt/minio/backups/${name}_backup";
+      backup_BORG_REPO=if value ? BORG_REPO  && value.BORG_REPO != "" then value.BORG_REPO else "/mnt/minio/backups/${name}_backup";
       backup_ENCRYPTION="repokey";
 
       # for backup this is needed (provided from sops)
@@ -268,12 +263,12 @@ in {
       # s3_endpoint
 
       backup_script = ''
-        source ${shared_vars.backup_env_file}
-
         WORKDIR="${shared_vars.backup_WORKDIR}"
         export FILES_TO_BACKUP="${shared_vars.backup_FILES_TO_BACKUP}";
         export BORG_REPO="${shared_vars.backup_BORG_REPO}"
         export ENCRYPTION="${shared_vars.backup_ENCRYPTION}"
+
+        source ${shared_vars.backup_env_file}
 
         if [ -z "$WORKDIR" ]; then
           echo "WORKDIR is undefined... exiting";
@@ -332,14 +327,16 @@ in {
 
         borg prune -v --list --keep-within=1d --keep-daily=7 --keep-weekly="5" --keep-monthly="12" --keep-yearly="2"
       '';
+      # TODO need to validate the repo... this was a pain to identify
       restore_script = ''
         export RESTORE_DIR="/home/drew/playin/${name}"
-        source ${shared_vars.backup_env_file}
 
         WORKDIR="${shared_vars.backup_WORKDIR}"
         export FILES_TO_BACKUP="${shared_vars.backup_FILES_TO_BACKUP}";
         export BORG_REPO="${shared_vars.backup_BORG_REPO}"
         export ENCRYPTION="${shared_vars.backup_ENCRYPTION}"
+
+        source ${shared_vars.backup_env_file}
 
         if [ -z "$RESTORE_DIR" ]; then
           echo "RESTORE_DIR is undefined... exiting";
@@ -369,7 +366,8 @@ in {
 
         cd "$WORKDIR";
 
-        info_exit_code=$(borg info $BORG_REPO >& /dev/null; echo $?)
+        echo "trying to get info for $BORG_REPO"
+        info_exit_code=$(BORG_EXIT_CODES=modern borg info $BORG_REPO >& /dev/null; echo $?)
         echo "info_exit_code is $info_exit_code"
 
         if [ $info_exit_code -gt 0 ]; then
