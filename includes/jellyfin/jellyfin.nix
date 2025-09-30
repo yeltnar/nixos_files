@@ -1,11 +1,7 @@
 # man systemd-socket-proxyd
 {
-  # config,
-  pkgs,
-  lib,
   ...
-}: let 
-in {
+}:{
 
   imports = [ ../helpers/compose-systemd.nix ];
 
@@ -13,11 +9,8 @@ in {
     allowedTCPPorts = [
       8096
     ];
-    use_run_env = true;
-    backup_restore = true;
+    files_to_backup="config";
+    linger = true;
   };
-
-  # custom.compose.user.testme2 = {};
-  # custom.compose.system.testme2 = {};
 
 }

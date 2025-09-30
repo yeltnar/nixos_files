@@ -1,13 +1,9 @@
 # man systemd-socket-proxyd
 {
-  # config,
-  pkgs,
   ...
 }:{
-  
-  imports = [
-    ../helpers/compose-systemd.nix
-  ];
+
+  imports = [ ../helpers/compose-systemd.nix ];
 
   custom.compose.uptime-kuma = {
     allowedTCPPorts = [
@@ -15,7 +11,8 @@
     ];
     test_string = "Listening on";
     use_run_env = false;
-    backup_restore = true;
+    files_to_backup="data";
+    linger = true;
   };
 
 }

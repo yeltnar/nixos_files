@@ -4,47 +4,14 @@
   pkgs,
   ...
 }:
-# TODO can I like import each one and not have to loop over each attribute? 
 let 
   user="drew";
   get_run_env_file = name: "/home/${user}/.config/${name}/changeme.env";
   get_backup_env_file = name: "/home/${user}/.config/${name}/backup.env";
 
   # this returns a list which needs to all be merged together
-  generateServices = name: value: let
-    shared_vars = {
-      code_parent_dir="/home/${user}/playin";
-      code_dir="${shared_vars.code_parent_dir}/${name}";  
-      scripts = ( import ./backup_restore_scripts.nix ) { unit_id = name; };
-      backup_script = shared_vars.scripts.backup_script;
-      restore_script = shared_vars.scripts.restore_script;
-      git_user = "yeltnar";
-      git_server_uri = "https://github.com";
-      run_env_file = get_run_env_file name;
-      backup_env_file = get_backup_env_file name;
-    };
-  in lib.filter ( value: null !=value ) [
-    (if ( value ? start_service && value.start_service != false ) then {
-      name="${name}_start";
-      value=generateStartService name value shared_vars;
-    } else null)
-    (if ( value ? clone_service && value.clone_service != false ) then {
-      name="${name}_clone";
-      value=generateCloneService name value shared_vars;
-    } else null)
-    # TODO allow for disabling
-    (if ( value ? backup_service && value.backup_service != false ) then {
-      name="${name}_backup";
-      value=generateBackupService name value shared_vars;
-    } else null)
-    # TODO allow for disabling
-    (if ( value ? restore_service && value.restore_service != false ) then {
-      name="${name}_restore";
-      value=generateRestoreService name value shared_vars;
-    } else null)
-  ];
   generateStartService = name: value: shared_vars:
-  {
+  lib.mkIf ( !(value ? enable_start_service) || value.enable_start_service == false ) {
     path = with pkgs; [
       podman
       podman-compose
@@ -56,7 +23,7 @@ let
     requires = ["podman.service" "podman.socket"];
     after = ["nm-online.service"];
     # if the test_string var exsists, use the 'watch the logs' script
-    script = if value ? test_string then 
+    script = if ( value.test_string != "" ) then 
     ''
       PATH="$PATH:${pkgs.podman}/bin";
       ${pkgs.podman-compose}/bin/podman-compose down
@@ -106,7 +73,7 @@ let
     };
   };
   generateCloneService = name: value: shared_vars: 
-  {
+  lib.mkIf ( !(value ? enable_clone_service) || value.enable_clone_service == false ) {
     path = with pkgs; [
       git
     ];
@@ -121,9 +88,16 @@ let
     unitConfig = {
       ConditionPathExists = "!${shared_vars.code_dir}";
     };
-    script = ''
-      cd ${shared_vars.code_parent_dir}/; git clone ${shared_vars.git_server_uri}/${shared_vars.git_user}/${name};
-    '';
+
+    script = let 
+      clone_script = "mkdir -p ${shared_vars.code_parent_dir}; cd ${shared_vars.code_parent_dir}/; git clone ${shared_vars.git_server_uri}/${shared_vars.git_user}/${name}";
+    in
+      if ( value.super_user_clone == true ) then
+        "${pkgs.util-linux}/bin/runuser -u ${user} -- ${pkgs.bash}/bin/bash -c '${clone_script}'"
+      else 
+        clone_script
+    ;
+
     serviceConfig = {
       Type = "oneshot";
       SyslogIdentifier = "${name}";
@@ -134,20 +108,22 @@ let
     ];
   };
   # this needs to be systemd.user.timer.service
-  generateBackupTimerService = name: value: {
+  generateBackupTimerService = name: value:
+  lib.mkIf ( !(value ? enable_backup_timer_service) || value.enable_backup_timer_service == false ) {
     wantedBy = [
       "timers.target"
     ];
     timerConfig = {
       # run service based on how long it last ran 
-      OnUnitInactiveSec = "6h";
+      OnUnitInactiveSec = if value.backup_interval != "" then value.backup_interval else "6h";
       # start service when timer starts
       OnActiveSec = "0s";
       # Unit = "backup.${name}.service";
       Unit = "${name}_backup.service";
     };
   };
-  generateBackupService = name: value : shared_vars: {
+  generateBackupService = name: value : shared_vars:
+  lib.mkIf ( !(value ? enable_backup_service) || value.enable_backup_service == false ) {
     environment =
       config.nix.envVars
       // {
@@ -171,7 +147,9 @@ let
     };
   };
 
-  generateRestoreService = name: value: shared_vars: {
+  generateRestoreService = name: value: shared_vars:
+  # TODO validate restore works for root and non-root
+  lib.mkIf ( !(value ? enable_restore_service) || value.enable_restore_service == false ) {
     environment =
       config.nix.envVars
       // {
@@ -188,27 +166,26 @@ let
       WorkingDirectory = "/home/${user}/playin/${name}";
       Type = "oneshot";
       # User = "${user}";
+
+      # TODO this user shiz is wack
+      # if super user, use ExecStartPost hook to start the 'start' service
+      ExecStartPost = lib.mkIf (value.super_user_restore) ( pkgs.writeShellScript "poststart" "chown -R 100910:100910 config; systemctl --user -M ${user}@ start ${name}_start.service" );
     };
     # unitConfig = {
     #   ConditionPathExists = "/home/${user}/playin/${unit_id}";
     # };
-    onSuccess = [
-      "${name}_start.service"
-    ];
+    onSuccess = 
+      # if not super user, use on success hook to start the 'start' service
+      lib.mkIf (!value.super_user_restore) [ "${name}_start.service" ]
+    ;
   };
 
   # generateTimers = name: value: true;
-  generateTimers = name: value: [
-    {
-      name="${name}_backup";
-      value=generateBackupTimerService name value;
-    }
-  ];
 
   generateSops = name: value: 
   lib.filter ( value: null != value ) 
   [
-    ( if (value ? use_run_env && value.use_run_env==true) then 
+    ( if ( value.use_run_env==true ) then 
       {
         name="${name}.env";
         value= {
@@ -218,7 +195,7 @@ let
         };
       }
     else null )
-    ( if (value ? backup_restore && value.backup_restore==true) then 
+    ( if ( value.backup_restore==true ) then 
     { name="${name}_backup.env";
       value={
         owner = "${user}";
@@ -229,12 +206,22 @@ let
     else null )
   ];
 
-  
-  import_test = lib.mapAttrsToList ( name: value: {...}:{
-    
-  } ) config.compose.user
-  ;
-
+  composeSystemdOption.options = {
+    super_user_clone = lib.mkOption { type=lib.types.bool; default=false; };
+    super_user_restore = lib.mkOption { type=lib.types.bool; default=false; };
+    super_user_start = lib.mkOption { type=lib.types.bool; default=false; };
+    super_user_backup_timer = lib.mkOption { type=lib.types.bool; default=false; };
+    super_user_backup = lib.mkOption { type=lib.types.bool; default=false; };
+    allowedUDPPorts = lib.mkOption { type=lib.types.listOf lib.types.int; default=[]; };
+    allowedTCPPorts = lib.mkOption { type=lib.types.listOf lib.types.int; default=[]; };
+    files_to_backup = lib.mkOption { type=lib.types.string; default=""; };
+    linger = lib.mkOption { type=lib.types.bool; default=false; };
+    test_string = lib.mkOption { type=lib.types.string; default=""; };
+    use_run_env = lib.mkOption { type=lib.types.bool; default=true; };
+    backup_restore = lib.mkOption { type=lib.types.bool; default=true; };
+    BORG_REPO = lib.mkOption { type=lib.types.string; default=""; };
+    backup_interval = lib.mkOption { type=lib.types.string; default=""; };
+  };
 
 in {
 
@@ -244,17 +231,12 @@ in {
   # need example of service which needs to monitor output
 
   options.custom.compose = lib.mkOption {
+    type = lib.types.attrsOf (lib.types.submodule composeSystemdOption);
     default = null;
   };
 
   # TODO this should be an option that is selected... also need to change within the service spec
   imports = [ ../nm-online.service.nix ];
-
-  # TODO this needs to be an option but that seems like a bunch of 'or' statements
-  # enable lingering so service starts before user logs in
-
-  # map system key to be system services
-
 
   # config.custom.compose.user
 
@@ -265,25 +247,156 @@ in {
     shared_vars = {
       code_parent_dir="/home/${user}/playin";
       code_dir="${shared_vars.code_parent_dir}/${name}";  
-      scripts = ( import ./backup_restore_scripts.nix ) { unit_id = name; };
-      backup_script = shared_vars.scripts.backup_script;
-      restore_script = shared_vars.scripts.restore_script;
-      git_user = "yeltnar";
-      git_server_uri = "https://github.com";
       run_env_file = get_run_env_file name;
       backup_env_file = get_backup_env_file name;
+
+      backup_WORKDIR="/home/drew/playin/${name}";
+      backup_FILES_TO_BACKUP=value.files_to_backup;
+      backup_BORG_REPO=if value ? BORG_REPO  && value.BORG_REPO != "" then value.BORG_REPO else "/mnt/minio/backups/${name}_backup";
+      backup_ENCRYPTION="repokey";
+
+      # for backup this is needed (provided from sops)
+      # BORG_PASSPHRASE
+      
+      # during runtime, this is needed (provided from sops)
+      # s3_access_key_id
+      # s3_secret_access_key
+      # s3_endpoint
+
+      backup_script = ''
+        WORKDIR="${shared_vars.backup_WORKDIR}"
+        export FILES_TO_BACKUP="${shared_vars.backup_FILES_TO_BACKUP}";
+        export BORG_REPO="${shared_vars.backup_BORG_REPO}"
+        export ENCRYPTION="${shared_vars.backup_ENCRYPTION}"
+
+        source ${shared_vars.backup_env_file}
+
+        if [ -z "$WORKDIR" ]; then
+          echo "WORKDIR is undefined... exiting";
+          exit;
+        fi
+        if [ -n "$SRC_DIR" ]; then
+          echo "\$SRC_DIR is replaced with \$FILES_TO_BACKUP... exiting";
+          exit;
+        fi
+        if [ -z "$BORG_REPO" ]; then
+          echo "BORG_REPO is undefined... exiting";
+          exit;
+        fi
+        if [ -z "$BORG_PASSPHRASE" ]; then
+          echo "BORG_PASSPHRASE is undefined... exiting";
+          exit;
+        fi
+        if [ -z "$ENCRYPTION" ]; then
+          echo "ENCRYPTION is undefined... exiting";
+          exit;
+        fi
+
+        cd "$WORKDIR";
+        pwd
+
+        info_exit_code=$(borg info $BORG_REPO >& /dev/null; echo $?)
+
+        if [ $info_exit_code -gt 0 ]; then
+          echo "repo does not exsist; creating now";
+          borg init $BORG_REPO --encryption=$ENCRYPTION
+        fi
+
+        echo "FILES_TO_BACKUP is $FILES_TO_BACKUP";
+
+        if [ -z "$FILES_TO_BACKUP" ]; then
+          echo "\$FILES_TO_BACKUP is empty... backing up everything";
+        else
+          echo "backing up $FILES_TO_BACKUP";
+        fi
+
+        # if FILES_TO_BACKUP is empty, it will backup everything 
+        # we make a little function with a subshell so we can always get a good exit code
+        backup_log_file="/tmp/$$"
+        create_code=$(borg create --stats --verbose --show-rc --progress --compression lz4 ::{user}-{now} $FILES_TO_BACKUP >$backup_log_file 2>&1; echo $?;);
+        echo $create_code
+        cat $backup_log_file;
+        rm $backup_log_file;
+        # echo create_code $create_code
+        if [ $create_code -eq 1 ]; then
+          echo "Borg has a warning";
+          # systemd-notify --ready --status="warning with borg backup"
+        elif [ $create_code -gt 1 ]; then
+          echo "Borg backup had errors."
+          exit $create_code;
+        fi
+
+        borg prune -v --list --keep-within=1d --keep-daily=7 --keep-weekly="5" --keep-monthly="12" --keep-yearly="2"
+      '';
+      # TODO need to validate the repo... this was a pain to identify
+      restore_script = ''
+        export RESTORE_DIR="/home/drew/playin/${name}"
+
+        WORKDIR="${shared_vars.backup_WORKDIR}"
+        export FILES_TO_BACKUP="${shared_vars.backup_FILES_TO_BACKUP}";
+        export BORG_REPO="${shared_vars.backup_BORG_REPO}"
+        export ENCRYPTION="${shared_vars.backup_ENCRYPTION}"
+
+        source ${shared_vars.backup_env_file}
+
+        if [ -z "$RESTORE_DIR" ]; then
+          echo "RESTORE_DIR is undefined... exiting";
+          exit;
+        fi
+
+        if [ -z "$WORKDIR" ]; then
+          echo "WORKDIR is undefined... exiting";
+          exit;
+        fi
+        if [ -n "$SRC_DIR" ]; then
+          echo "\$SRC_DIR is replaced with \$FILES_TO_BACKUP... exiting";
+          exit;
+        fi
+        if [ -z "$BORG_REPO" ]; then
+          echo "BORG_REPO is undefined... exiting";
+          exit;
+        fi
+        if [ -z "$BORG_PASSPHRASE" ]; then
+          echo "BORG_PASSPHRASE is undefined... exiting";
+          exit;
+        fi
+        if [ -z "$ENCRYPTION" ]; then
+          echo "ENCRYPTION is undefined... exiting";
+          exit;
+        fi
+
+        cd "$WORKDIR";
+
+        echo "trying to get info for $BORG_REPO"
+        info_exit_code=$(BORG_EXIT_CODES=modern borg info $BORG_REPO >& /dev/null; echo $?)
+        echo "info_exit_code is $info_exit_code"
+
+        if [ $info_exit_code -gt 0 ]; then
+          echo "repo does not exsist; exiting";
+          exit 1;
+        fi
+
+        archive_name=$(borg list --sort-by timestamp --last 1 --format "{archive}")
+        echo $archive_name
+
+        # borg extract user@host:path/to/repo_directory::Monday path/to/target_directory --exclude '*.ext'
+        echo "restoring"
+        borg list "$BORG_REPO::$archive_name"
+
+        cd $RESTORE_DIR
+
+        borg extract "$BORG_REPO::$archive_name"
+      '';
+      git_user = "yeltnar";
+      git_server_uri = "https://github.com";
     };
 
-    super_user_clone = false;
-    super_user_restore = false;
-    super_user_start = false;
-    super_user_backup_timer = false;
-    super_user_backup = false;
+    # TODO allow for these to be set from module
 
     clone_name = "${name}_clone";
     restore_name = "${name}_restore";
     start_name = "${name}_start";
-    backup_timer_name = "${name}_backup_timer";
+    backup_timer_name = "${name}_backup";
     backup_name = "${name}_backup";
 
     clone_service = generateCloneService name value shared_vars;
@@ -294,19 +407,19 @@ in {
 
   in {
 
-    user.services."${clone_name}" = lib.mkIf (!super_user_clone) clone_service;
-    user.services."${restore_name}" = lib.mkIf (!super_user_restore) restore_service;
-    user.services."${start_name}" = lib.mkIf (!super_user_start) start_service;
-    user.services."${backup_name}" = lib.mkIf (!super_user_backup) backup_service;
+    user.services."${clone_name}" = lib.mkIf (!value.super_user_clone) clone_service;
+    user.services."${restore_name}" = lib.mkIf (!value.super_user_restore) restore_service;
+    user.services."${start_name}" = lib.mkIf (!value.super_user_start) start_service;
+    user.services."${backup_name}" = lib.mkIf (!value.super_user_backup) backup_service;
 
-    user.timers."${backup_timer_name}" = lib.mkIf (!super_user_backup_timer) backup_timer_service;
+    user.timers."${backup_timer_name}" = lib.mkIf (!value.super_user_backup) backup_timer_service;
 
-    services."${clone_name}" = lib.mkIf (super_user_clone) clone_service;
-    services."${restore_name}" = lib.mkIf (super_user_restore) restore_service;
-    services."${start_name}" = lib.mkIf (super_user_start) start_service;
-    services."${backup_name}" = lib.mkIf (super_user_backup) backup_service;
+    services."${clone_name}" = lib.mkIf (value.super_user_clone) clone_service;
+    services."${restore_name}" = lib.mkIf (value.super_user_restore) restore_service;
+    services."${start_name}" = lib.mkIf (value.super_user_start) start_service;
+    services."${backup_name}" = lib.mkIf (value.super_user_backup) backup_service;
 
-    timers."${backup_timer_name}" = lib.mkIf (super_user_backup_timer) backup_timer_service;
+    timers."${backup_timer_name}" = lib.mkIf (value.super_user_backup) backup_timer_service;
 
   } ) config.custom.compose );
 
@@ -315,11 +428,18 @@ in {
     builtins.listToAttrs ( ( lib.flatten ( lib.mapAttrsToList ( generateSops ) config.custom.compose ) ) )
   );
 
-  config.users.users.drew.linger = true;
-
+  # TODO invert logic so true is default?
+  # enable lingering so service starts before user logs in
+  config.users.users."${user}" = lib.foldl' lib.recursiveUpdate {} ( lib.mapAttrsToList ( name: value:
+    if (  value ? linger && value.linger == true ) then
+      { linger = true; }
+    else {}
+  ) config.custom.compose );
 
   # allowed ports (tcp and upd)
   # TODO I know I want to open on a single interface (ie nebula) sometimes but thats a whole other thing
+  # networking.firewall.interfaces.<name>.allowedTCPPorts
+
   config.networking.firewall.allowedTCPPorts = 
   lib.optionals ( config.custom.compose != null && config.custom.compose != {} ) 
   (
@@ -346,7 +466,7 @@ in {
     )
   );
 
-  # TODO  need to be able to turn on/off backup and restore
+  # TODO script to set up sops?
 
 }
 
