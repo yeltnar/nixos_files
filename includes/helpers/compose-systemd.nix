@@ -214,13 +214,13 @@ let
     super_user_backup = lib.mkOption { type=lib.types.bool; default=false; };
     allowedUDPPorts = lib.mkOption { type=lib.types.listOf lib.types.int; default=[]; };
     allowedTCPPorts = lib.mkOption { type=lib.types.listOf lib.types.int; default=[]; };
-    files_to_backup = lib.mkOption { type=lib.types.string; default=""; };
+    files_to_backup = lib.mkOption { type=lib.types.str; default=""; };
     linger = lib.mkOption { type=lib.types.bool; default=false; };
-    test_string = lib.mkOption { type=lib.types.string; default=""; };
+    test_string = lib.mkOption { type=lib.types.str; default=""; };
     use_run_env = lib.mkOption { type=lib.types.bool; default=true; };
     backup_restore = lib.mkOption { type=lib.types.bool; default=true; };
-    BORG_REPO = lib.mkOption { type=lib.types.string; default=""; };
-    backup_interval = lib.mkOption { type=lib.types.string; default=""; };
+    BORG_REPO = lib.mkOption { type=lib.types.str; default=""; };
+    backup_interval = lib.mkOption { type=lib.types.str; default=""; };
   };
 
 in {

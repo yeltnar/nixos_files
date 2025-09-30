@@ -14,15 +14,14 @@ in {
       ( import ../../../includes/sops/sops_make_age_key.nix (args // { leUser = leUser; }))
       ../../../includes/custom_bashrc.nix
       ../../../includes/nixos_files.nix
-      ../../../includes/ntfy-server/ntfy-server.nix
 
       ../../../includes/rclone_mounts/mini-minio.nix
 
       ../../../includes/caddy-server/do-nixos-caddy-server.nix
       ../../../includes/caddy-server/backup_restore.timer.nix
 
-      ../../../includes/ntfy-server/ntfy-server.nix
-      ../../../includes/ntfy-server/backup_restore.timer.nix
+      ../../../includes/ntfy_server/ntfy-server.nix
+      # ../../../includes/ntfy_server/backup_restore.timer.nix
 
       ../../../includes/wireguard_server/wireguard_server.nix
       ../../../includes/wireguard_server/backup_restore.timer.nix
