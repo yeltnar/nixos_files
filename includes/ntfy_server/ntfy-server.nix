@@ -9,6 +9,8 @@
   code_dir="${code_parent_dir}/${unit_id}";  
 in {
 
+  imports = [ ../../includes/helpers/compose-systemd.nix ];
+
   # expose to nebula devices only
   networking.firewall.interfaces."nebula1".allowedTCPPorts = [
     8981 
@@ -21,6 +23,7 @@ in {
     files_to_backup="ntfy_cache ntfy_config ntfy_log ntfy_var";
     linger = true;
     use_run_env = false;
+    test_string = "Listening on";
   };
 
 }
