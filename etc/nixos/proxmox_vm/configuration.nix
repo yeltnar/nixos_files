@@ -64,12 +64,13 @@ in {
     ];
     files_to_backup="config .env";
     linger = true;
-    use_run_env = false;
+    use_run_env = false; # this is in the borg repo
     super_user_clone = true; 
     super_user_restore = true; 
     super_user_backup = true; 
     # the non numbered one broke 
     BORG_REPO = "/mnt/minio/backups/babybuddy_backup2";
+    backup_interval = "1h";
   };
 
   services.desktop_environment.selection = "none";

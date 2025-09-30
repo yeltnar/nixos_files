@@ -115,7 +115,7 @@ let
     ];
     timerConfig = {
       # run service based on how long it last ran 
-      OnUnitInactiveSec = "6h";
+      OnUnitInactiveSec = if value.backup_interval != "" then value.backup_interval else "6h";
       # start service when timer starts
       OnActiveSec = "0s";
       # Unit = "backup.${name}.service";
@@ -220,6 +220,7 @@ let
     use_run_env = lib.mkOption { type=lib.types.bool; default=true; };
     backup_restore = lib.mkOption { type=lib.types.bool; default=true; };
     BORG_REPO = lib.mkOption { type=lib.types.string; default=""; };
+    backup_interval = lib.mkOption { type=lib.types.string; default=""; };
   };
 
 in {
@@ -411,14 +412,14 @@ in {
     user.services."${start_name}" = lib.mkIf (!value.super_user_start) start_service;
     user.services."${backup_name}" = lib.mkIf (!value.super_user_backup) backup_service;
 
-    user.timers."${backup_timer_name}" = lib.mkIf (!value.super_user_backup_timer) backup_timer_service;
+    user.timers."${backup_timer_name}" = lib.mkIf (!value.super_user_backup) backup_timer_service;
 
     services."${clone_name}" = lib.mkIf (value.super_user_clone) clone_service;
     services."${restore_name}" = lib.mkIf (value.super_user_restore) restore_service;
     services."${start_name}" = lib.mkIf (value.super_user_start) start_service;
     services."${backup_name}" = lib.mkIf (value.super_user_backup) backup_service;
 
-    timers."${backup_timer_name}" = lib.mkIf (value.super_user_backup_timer) backup_timer_service;
+    timers."${backup_timer_name}" = lib.mkIf (value.super_user_backup) backup_timer_service;
 
   } ) config.custom.compose );
 
