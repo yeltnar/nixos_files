@@ -9,8 +9,8 @@ let
   let 
     subvolume=name;
     snapshot_dir = ".snapshots";
-    snapshot_preserve = "2y 12m 52w 30d 24h";
-    snapshot_preserve_min = "h";
+    snapshot_preserve = "2y 12m 52w 30d 48h";
+    snapshot_preserve_min = "6h";
     btrfs_top="/mnt/btrfs_root/";
     config = ''
       # This is a sample btrbk.conf file.
