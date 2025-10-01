@@ -30,21 +30,19 @@ let
       # ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_${name}_podman.pid --gpus=all" up --no-recreate -d
       ${pkgs.podman-compose}/bin/podman-compose up  -d
 
-      # str="Listening on";
       str="${value.test_string}";
 
-      testit(){
-        podman-compose logs | grep "$str" >& /dev/null
-        echo $?
-      }
-
-      while [ 1 -eq `testit` ] ;
-      do 
-        echo loop again
-        sleep 1
+      podman-compose logs -f 2>&1 | while IFS= read -r line; do
+        # Process the line
+        if [[ "$line" == *"$str"* ]]; then
+          echo "Found a match: $line"
+          # Take action, e.g., run another command
+          systemd-notify --ready --status="container up"
+          break
+        else
+          echo "x-$line"
+        fi
       done
-
-      systemd-notify --ready --status="container up"
 
     '' else 
     ''
@@ -61,7 +59,7 @@ let
       RequiresMountsFor = "/run/user/1000/containers";
     };
     serviceConfig = {
-      Type = "notify";
+      Type = "notify"; # TODO does this needs to be swapped when using systemd-notify?
       WorkingDirectory = "${shared_vars.code_dir}";
       Restart = "always";
       NotifyAccess = "all";
@@ -103,11 +101,9 @@ let
       SyslogIdentifier = "${name}";
       WorkingDirectory = "${shared_vars.code_parent_dir}";
     };
-    onSuccess = [
-      "${name}_restore.service"
-    ];
+    onSuccess = if (value.backup_restore == true) then ["${name}_restore.service"] else ["${name}_start.service"] ;
   };
-  # this needs to be systemd.user.timer.service
+  # TODO this needs to not happen if we have backup_restore off
   generateBackupTimerService = name: value:
   lib.mkIf ( !(value ? enable_backup_timer_service) || value.enable_backup_timer_service == false ) {
     wantedBy = [
@@ -147,6 +143,7 @@ let
     };
   };
 
+  # TODO this needs to not happen if we have backup_restore off
   generateRestoreService = name: value: shared_vars:
   # TODO validate restore works for root and non-root
   lib.mkIf ( !(value ? enable_restore_service) || value.enable_restore_service == false ) {
@@ -296,6 +293,8 @@ in {
         pwd
 
         info_exit_code=$(borg info $BORG_REPO >& /dev/null; echo $?)
+
+        echo "info_exit_code is $info_exit_code"
 
         if [ $info_exit_code -gt 0 ]; then
           echo "repo does not exsist; creating now";

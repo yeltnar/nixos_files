@@ -11,11 +11,6 @@ in {
 
   imports = [ ../../includes/helpers/compose-systemd.nix ];
 
-  # expose to nebula devices only
-  networking.firewall.interfaces."nebula1".allowedTCPPorts = [
-    8981 
-  ];
-
   custom.compose.ntfy_server = {
     allowedTCPPorts = [
       8981 # TODO move to nebulal only?
