@@ -56,6 +56,8 @@ in {
     ../../../includes/rclone_mounts/mini-minio.nix
 
     ../../../includes/helpers/compose-systemd.nix
+
+    ../../../includes/ship_check/ship_check.nix 
   ];
 
   custom.compose.babybuddy = {
