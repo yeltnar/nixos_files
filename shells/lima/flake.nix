@@ -2,7 +2,7 @@
   description = "lima vm";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=25.05";
   };
 
   outputs = { self, nixpkgs } @ args: { 

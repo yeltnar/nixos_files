@@ -1,5 +1,5 @@
 {
-  description = "google-chrome flake dev shell";
+  description = "hoppscotch app for mac";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
