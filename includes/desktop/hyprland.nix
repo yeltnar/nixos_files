@@ -52,6 +52,23 @@ in
       hyprlandPlugins.hyprexpo
       waybar
       wofi
+      fuzzel
+      (pkgs.writeShellScriptBin "dfuzzel" ''
+        ${fuzzel}/bin/fuzzel \
+          --font 'Hack Nerd Font:size=20' \
+          --width 30 \
+          --lines 10 \
+          --border-width 2 \
+          --border-radius 8 \
+          --prompt "Launch: " \
+          --background 2e3440e6 \
+          --text-color d8dee9ff \
+          --match-color 88c0d0ff \
+          --selection-color 4c566aff \
+          --selection-text-color e5e9f0ff \
+          --selection-match-color 8fbcbbff \
+          --border-color 88c0d0ff "$@"
+      '')
       bemenu
       swaynotificationcenter
       hyprpaper

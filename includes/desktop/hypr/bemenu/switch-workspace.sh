@@ -20,9 +20,17 @@ else
   action="workspace"
 fi
 
-workspace_list=$(hyprctl workspaces | awk '/^[a-z]/{print $3}' | sort -g)
-workspace_list=""
-workspace_number=$( echo "$workspace_list" | bemenu -n -p "$prompt"  -W .5 --center --fn 32 --tf '#2DC9E6')
+smart_workspaces=$(
+  smart_workspaces_arr=("fisms" "element" "slack" "doom" "ff")
+  IFS=$'\n'
+  echo "${smart_workspaces_arr[*]}"
+  unset IFS
+)
+
+workspace_list=$(hyprctl workspaces | gawk 'match($0,/^[a-z].*\((.*)\)/,a){print a[1]}')
+workspace_list="$workspace_list\n$smart_workspaces"
+workspace_list=$(echo -e "$workspace_list" | sort -g | uniq)
+workspace_number=$( echo -e "$workspace_list" | dfuzzel --dmenu --prompt "$prompt: " )
 
 if [[ ! -n "$workspace_number" ]]; then
   # Check if the user entered a number and didn't cancel (wofi returns an empty string on cancel)
