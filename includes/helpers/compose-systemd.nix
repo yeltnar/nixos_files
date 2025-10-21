@@ -9,6 +9,8 @@ let
   get_run_env_file = name: "/home/${user}/.config/${name}/changeme.env";
   get_backup_env_file = name: "/home/${user}/.config/${name}/backup.env";
 
+  default_backups_to_keep="--keep-within=1d --keep-daily=7 --keep-weekly=\"5\" --keep-monthly=\"12\" --keep-yearly=\"2\"";
+
   # this returns a list which needs to all be merged together
   generateStartService = name: value: shared_vars:
   lib.mkIf ( !(value ? enable_start_service) || value.enable_start_service == false ) {
@@ -218,6 +220,7 @@ let
     backup_restore = lib.mkOption { type=lib.types.bool; default=true; };
     BORG_REPO = lib.mkOption { type=lib.types.str; default=""; };
     backup_interval = lib.mkOption { type=lib.types.str; default=""; };
+    backups_to_keep = lib.mkOption { type=lib.types.str; default=""; };
   };
 
 in {
@@ -260,7 +263,9 @@ in {
       # s3_secret_access_key
       # s3_endpoint
 
-      backup_script = ''
+      backup_script = let 
+        backups_to_keep = if value.backups_to_keep!="" then value.backups_to_keep else default_backups_to_keep;
+      in ''
         WORKDIR="${shared_vars.backup_WORKDIR}"
         export FILES_TO_BACKUP="${shared_vars.backup_FILES_TO_BACKUP}";
         export BORG_REPO="${shared_vars.backup_BORG_REPO}"
@@ -325,7 +330,7 @@ in {
           exit $create_code;
         fi
 
-        borg prune -v --list --keep-within=1d --keep-daily=7 --keep-weekly="5" --keep-monthly="12" --keep-yearly="2"
+        borg prune -v --list ${backups_to_keep}
       '';
       # TODO need to validate the repo... this was a pain to identify
       restore_script = ''

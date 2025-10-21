@@ -13,6 +13,7 @@
     use_run_env = false;
     files_to_backup="data";
     linger = true;
+    backups_to_keep = "--keep-daily=2";
   };
 
 }
