@@ -213,6 +213,9 @@ in
   #  wget
     libnbd 
     gparted
+
+    (pkgs.writeShellScriptBin "gparted-wrapped" ''sudo -EH gparted "$@"'')
+
     btrfs-progs
     mullvad-vpn
     borgbackup
