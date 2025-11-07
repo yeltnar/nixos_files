@@ -159,6 +159,7 @@ in {
     podman-compose
     # docker-compose
     rclone
+    bat
 
     # see about moving to nvim section 
     lua-language-server
