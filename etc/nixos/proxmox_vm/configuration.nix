@@ -75,6 +75,17 @@ in {
     backup_interval = "1h";
   };
 
+  custom.compose.container_ssh = {
+    allowedTCPPorts = [
+      9022 # TODO make the only accessable from the nebula interface 
+    ];
+    # files_to_backup="config .env";
+    files_to_backup="ssh git server";
+    linger = true;
+    use_run_env = false;
+    backup_restore = false;
+  };
+
   services.desktop_environment.selection = "none";
 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
