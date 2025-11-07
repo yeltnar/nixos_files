@@ -20,20 +20,27 @@
       # $ nix-env -qaP | grep wget
 
       system.primaryUser = "drew"; 
-      homebrew.enable = true; 
-      homebrew.brews = [
-        "podman"
-        "qemu"
-        "openjdk"
-      ];
-      homebrew.casks = [
-        "chromium"
-        "ghostty"
-        "macfuse"
-        "vscodium"
-        "podman-desktop"
-        "nikitabobko/tap/aerospace"
-      ];
+      homebrew = {
+        enable = true; 
+        onActivation = {
+          autoUpdate = true; 
+           # = true; 
+        };
+        brews = [
+          "podman"
+          "qemu"
+          "openjdk"
+        ];
+        casks = [
+          "chromium"
+          "ghostty"
+          "macfuse"
+          "vscodium"
+          "podman-desktop"
+          "nikitabobko/tap/aerospace"
+          "kdenlive"
+        ];
+      };
 
       nixpkgs.config.allowUnfree = true;
 
@@ -59,6 +66,7 @@
           bash # mac bash is dead
           borgbackup
           utm # VM manager. Start with `utm`
+          bat
 
           ffmpeg
           fzf
