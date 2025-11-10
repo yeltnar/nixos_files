@@ -9,6 +9,7 @@ in {
   imports =
     [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ../../../includes/nixos_files.nix
     ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -30,8 +31,8 @@ in {
   users.groups."${leUser}" = {};
 
   nix.settings.experimental-features = [
-    # "nix-command"
-    # "flakes"
+    "nix-command"
+    "flakes"
   ];
 
   # allow remote building
@@ -67,10 +68,10 @@ in {
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
 
-  # networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "lil_lenovo"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "Americas/Chicago";
@@ -108,11 +109,56 @@ in {
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
     environment.systemPackages = with pkgs; [
-    neovim
-      wget
+      home-manager
+
+      # neovim
+      clang # needed to compile c # used in nvim 
+      ripgrep # nvim search 
+      lua-language-server
+      # nixd
+      tmux
+      tree
+      fzf
+
+      jq
+      yq
+      openssl
       curl
       git
+      dig
+      lazygit
+      nebula
+      podman-compose
+      borgbackup
+      htop
+
+      sops
+      age
+      rclone
     ];
+
+  programs.neovim = {
+    enable = true; 
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+  };
+
+  virtualisation = {
+    # docker = {
+    #   enable = false;
+    # };
+    podman = {
+      enable = true;
+
+      # Create a `docker` alias for podman, to use it as a drop-in replacement
+      # dockerCompat = true;
+
+      # Required for containers under podman-compose to be able to talk to each other.
+      defaultNetwork.settings.dns_enabled = true;
+    };
+  };
+
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
