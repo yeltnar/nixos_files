@@ -43,6 +43,7 @@
       home-manager
     ];
     script =''
+      mkdir -p /home/drew/.config
       ln -s /home/drew/playin/nixos_files/home-manager /home/drew/.config/home-manager 
       whoami
       ls ~/.config

@@ -126,7 +126,6 @@ in {
     git
     dig
     lazygit
-    tmux
     nebula
     podman-compose
     borgbackup
@@ -159,7 +158,6 @@ in {
   };
 
   systemd.services.podman-restart.enable = true;
-
 
   environment.etc = {
     "ssh/user_ca.pub".text = ''
