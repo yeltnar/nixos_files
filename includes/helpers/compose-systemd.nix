@@ -244,6 +244,53 @@ in {
   
   config.systemd = lib.foldl' lib.recursiveUpdate {} ( lib.mapAttrsToList ( name: value: let 
 
+      send_push_code=pkgs.writeShellScript "${name}_send_json_push" ''
+
+        export bashrc_folder="$HOME/playin/custom_bashrc"
+        PATH="$PATH:$bashrc_folder/bin"
+        PATH="$PATH:${pkgs.jq}/bin:${pkgs.curl}/bin"
+
+        _send_push(){
+          
+          export topic="`cat $bashrc_folder/gitignore/borg_ntfy_topic`"
+          export message_title="$1" 
+          export message_content="$2"
+
+          echo topic="`cat $bashrc_folder/gitignore/borg_ntfy_topic`"
+          echo message_title="$1" 
+          echo message_content="$2"
+
+          _generic_ntfy_andbrant
+          #_generic_ntfy_public
+        }
+
+        _send_json_push(){
+
+          if [ -z "$BORG_NAME" ]; then
+            BORG_NAME="SRC_DIR=$SRC_DIR";
+          fi
+
+          end_time=`date`
+
+          json=`echo {} | jq --arg BORG_NAME "$BORG_NAME" '.BORG_NAME = $BORG_NAME'`
+          json=`echo $json | jq --arg start_time "$start_time" '.start_time= $start_time'`
+          json=`echo $json | jq --arg end_time "$end_time" '.end_time= $end_time'`
+          json=`echo $json | jq --arg msg "$2" '.msg = $msg'`
+          json=`echo $json | jq --argjson good "$3" '.good = $good'`
+          
+          _send_push "$1" "$json"
+        }
+
+        # subject, msg, bool
+        export BORG_NAME="${name}_systemd";
+        echo _send_json_push "backup_prune" "$push_msg" "$good"
+        # set to var so it does not try to run the output; call true at the end so always gives a good exit code
+        send_push_output=$(_send_json_push "backup_prune" "$push_msg" "$good" 2>&1; true)
+        echo "$send_push_output"
+
+      '';
+
+
     shared_vars = {
       code_parent_dir="/home/${user}/playin";
       code_dir="${shared_vars.code_parent_dir}/${name}";  
@@ -314,8 +361,13 @@ in {
           echo "backing up $FILES_TO_BACKUP";
         fi
 
+        # CONSIDER adding an if branch to make this bad by default
+        push_msg="good"
+        good="true"
+
         # if FILES_TO_BACKUP is empty, it will backup everything 
         # we make a little function with a subshell so we can always get a good exit code
+        export start_time=`date`
         backup_log_file="/tmp/$$"
         create_code=$(borg create --stats --verbose --show-rc --progress --compression lz4 ::{user}-{now} $FILES_TO_BACKUP >$backup_log_file 2>&1; echo $?;);
         echo $create_code
@@ -325,10 +377,23 @@ in {
         if [ $create_code -eq 1 ]; then
           echo "Borg has a warning";
           # systemd-notify --ready --status="warning with borg backup"
+          push_msg="warning"
+          good="true"
         elif [ $create_code -gt 1 ]; then
           echo "Borg backup had errors."
           exit $create_code;
+          push_msg="not so good"
+          good="false"
         fi
+
+        user_command="export start_time=\"$start_time\"; export push_msg=\"$push_msg\"; export good=\"$good\"; ${send_push_code}"
+        
+        ${
+          if value.super_user_restore then
+            ''/run/wrappers/bin/su - drew -s ${pkgs.bash}/bin/bash -c "$user_command";''
+          else
+            ''${pkgs.bash}/bin/bash -c "$user_command";''
+        }
 
         borg prune -v --list ${backups_to_keep}
       '';
