@@ -32,7 +32,7 @@
     echo "ship_date: $ship_date; new_ship_date: $new_ship_date;"
 
     if [ "$ship_date" != "$new_ship_date" ]; then
-      send_push "ship_date" "$new_ship_date; check back 11/10/25"
+      send_push "ship_date" "$new_ship_date; check back 11/10/25... 11/15/25"
       echo "$new_ship_date" > /tmp/ship_date.txt
     fi
   '';
