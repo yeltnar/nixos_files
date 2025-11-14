@@ -40,7 +40,7 @@
       # export PATH=$PATH;
       mkdir -p /home/drew/cron
       export bashrc_folder=/home/drew/playin/custom_bashrc;
-      /home/drew/playin/custom_bashrc/bin/mqtt_report_ip >/home/drew/cron/mqtt_report_ip 2>/home/drew/cron/mqtt_report_stderr
+      $bashrc_folder/bin/mqtt_report_ip
     '';
     serviceConfig = {
       Type = "oneshot";
