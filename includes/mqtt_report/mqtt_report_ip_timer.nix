@@ -7,7 +7,7 @@
     wantedBy = ["timers.target"];
     requires = ["network-online.target"];
     timerConfig = {
-      OnUnitActiveSec = "2m";
+      OnUnitActiveSec = "1m";
       # start service when timer starts
       OnActiveSec = "0s";
       Unit = "mqtt_report_ip.service";
