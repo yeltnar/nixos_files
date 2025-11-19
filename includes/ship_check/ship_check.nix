@@ -24,7 +24,7 @@
     fi
 
     new_ship_date=$(
-      curl 'https://www.my-order-status.com/orderstatus/ShowOrder.do?o=XYV11NZZVY_04775064595&r=e' 2>/dev/null |
+      curl 'https://www.my-order-status.com/orderstatus/ShowOrder.do?o=Z3V1YNZWWY_47228433206&r=e' 2>/dev/null |
       awk -F'>' '/Estimated Ship/{print $5}' |
       awk -F'<' '{print $1}'
     )
@@ -32,7 +32,8 @@
     echo "ship_date: $ship_date; new_ship_date: $new_ship_date;"
 
     if [ "$ship_date" != "$new_ship_date" ]; then
-      send_push "ship_date" "$new_ship_date; check back 11/10/25... 11/15/25"
+      # send_push "ship_date" "$new_ship_date; check back 11/10/25... 11/15/25"
+      send_push "ship_date" "$new_ship_date"
       echo "$new_ship_date" > /tmp/ship_date.txt
     fi
   '';
