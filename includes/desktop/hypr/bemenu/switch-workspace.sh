@@ -14,7 +14,7 @@ workspace_count=$((workspace_count+1))
 prompt=""
 if [[ "move" == "$@" ]]; then
   prompt="move"
-  action="movetoworkspace"
+  action="movetoworkspacesilent"
 else
   prompt="switch"
   action="workspace"
@@ -40,5 +40,9 @@ elif [[ ! "$workspace_number" =~ ^[0-9]+$ ]]; then
   workspace_number="name:$workspace_number"
 fi
 
-hyprctl dispatch "$action" "$workspace_number"
+if [[ "movetoworkspacesilent" = "$action" ]]; then
+  hyprctl dispatch "$action" "$workspace_number"
+fi
+
+hyprctl dispatch workspace "$workspace_number"
 
