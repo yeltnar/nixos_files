@@ -141,9 +141,6 @@ in
 
   services.xserver.displayManager.gdm.autoSuspend = false;
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
   # moved to includes/desktop/desktop.nix
   # Enable sound with pipewire.
   # hardware.pulseaudio.enable = false;

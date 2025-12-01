@@ -24,7 +24,16 @@ in {
     };
 
     # Enable CUPS to print documents.
+    # to modify setting and add printers, go to http://localhost:631
     services.printing.enable = true;
+    # added to help with printer discovery 
+    services.avahi = {
+      enable = true;
+      # Use mdns4 for better compatibility and to prevent IPv6 resolution timeouts
+      nssmdns4 = true;
+      # Open the necessary UDP port (5353) in the firewall
+      openFirewall = true;
+    };
 
     # Enable sound with pipewire.
     # sound.enable = true # removed at request of nixos-rebuild;
