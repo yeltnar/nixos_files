@@ -1,1 +1,3 @@
-nixos-rebuild --flake .#nixos-testing --use-remote-sudo --target-host nixos build
+command="build"
+NIX_SSHOPTS='-t'
+nixos-rebuild "$command" --flake .#nixos-testing --target-host nixos --use-remote-sudo

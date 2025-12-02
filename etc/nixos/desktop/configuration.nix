@@ -139,7 +139,7 @@ in
 
 
 
-  services.xserver.displayManager.gdm.autoSuspend = false;
+  services.displayManager.gdm.autoSuspend = false;
 
   # moved to includes/desktop/desktop.nix
   # Enable sound with pipewire.

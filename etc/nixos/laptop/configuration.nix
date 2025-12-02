@@ -85,7 +85,7 @@ in
   # Enable the GNOME Desktop Environment.
   # disable xterm
   # prevent suspend before the user logs in 
-  services.xserver.displayManager.gdm.autoSuspend = false;
+  services.displayManager.gdm.autoSuspend = false;
 
   ### some power mgmt stuff ### 
   # this seems to work 

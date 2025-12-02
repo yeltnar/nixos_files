@@ -4,7 +4,7 @@
   ...
 }: {
   environment.systemPackages = with pkgs; [
-    protonup
+    protonup-ng
     mangohud
     # steam is set below
   ];

@@ -2,7 +2,7 @@
   description = "EasyEffects audio editor";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=25.05";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=25.11";
   };
 
   outputs = { self, nixpkgs } @ args: { 
