@@ -1,3 +1,5 @@
 command="boot"
-NIX_SSHOPTS='-t'
-nixos-rebuild "$command" --flake .#nixos-testing --target-host nixos --use-remote-sudo
+export NIX_SSHOPTS='-t'
+flake="nixos-testing"
+host="nixos"
+nixos-rebuild "$command" --flake .#"$flake" --target-host "$host" --use-remote-sudo
