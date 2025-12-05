@@ -41,6 +41,7 @@ in
 
       # use this wrapper to get gnome key chain
       ../../../includes/element-desktop-wrapper.nix
+      ../../../includes/notify_boot/notify_boot.nix
     ] 
     ++
     lib.fileset.toList (
