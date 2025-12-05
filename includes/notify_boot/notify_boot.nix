@@ -19,6 +19,9 @@ in{
       RemainAfterExit = true; 
       ExecStart = "${script}"; 
     };
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = [ 
+      "default.target" 
+      "multi-user.target" 
+    ];
   };
 }
