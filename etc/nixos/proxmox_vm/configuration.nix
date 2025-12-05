@@ -58,6 +58,8 @@ in {
     ../../../includes/helpers/compose-systemd.nix
 
     ../../../includes/ship_check/ship_check.nix 
+
+    ../../../includes/notify_boot/notify_boot.nix
   ];
 
   custom.compose.babybuddy = {
