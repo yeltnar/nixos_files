@@ -17,7 +17,7 @@
       if use_gui then 
         "${pkgs.path}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
       else 
-        "${pkgs.path}/nixos/modules/installer/cd-dvd/installation-cd-graphical-gnome.nix"
+        "${pkgs.path}/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares-gnome.nix"
       ;
   in
   {
@@ -26,6 +26,7 @@
       modules = [
 
         module
+        # "${nixpkgs}/nixos/modules/installer/cd-dvd/channel.nix"
 
         # 2. Add the Bcachefs configuration overrides
         ({ config, lib, pkgs, ... }: {
