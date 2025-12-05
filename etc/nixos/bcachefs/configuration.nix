@@ -19,6 +19,7 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       (import ../../../generic_configuration.nix ( args // {leUser = leUser;}))
+      ../../../includes/nvim/nvim.nix
       ../../../includes/notify_boot/notify_boot.nix
     ];
 

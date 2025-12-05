@@ -24,10 +24,7 @@ in {
     ./includes/make_id_rsa.nix
     # ./includes/fetch_test.nix
 
-    ### containers ###
-    # ./includes/vaultwarden.nix
-    # ./includes/caddy.nix
-    # ./includes/wedding_site.nix
+    ./includes/nvim/nvim.nix
   ];
 
   nix.settings.experimental-features = [
@@ -196,15 +193,6 @@ in {
   #   enable = true;
   #   enableSSHSupport = true;
   # };
-
-  programs.neovim = {
-    enable = true;
-    # package = unstable.neovim-unwrapped;
-    package = pkgs.neovim-unwrapped;
-    defaultEditor = true;
-    vimAlias = true; 
-    viAlias = true; 
-  };
 
   # List services that you want to enable:
 
