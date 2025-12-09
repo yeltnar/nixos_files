@@ -3,10 +3,14 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.11";
+    sops-nix = { 
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # outputs = { self, nixpkgs, nixpkgs-unstable, sops-nix, ... } @ inputs: 
-  outputs = { self, nixpkgs, ... } @ inputs: 
+  outputs = { self, nixpkgs, sops-nix, ... } @ inputs: 
   let
     system = "x86_64-linux";
     config = self.config;
@@ -27,6 +31,7 @@
 
         modules = [
           ./configuration.nix
+          sops-nix.nixosModules.sops
         ];
       };
     };

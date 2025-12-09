@@ -23,6 +23,7 @@ in
       ../../../includes/nvim/nvim.nix
       ../../../includes/notify_boot/notify_boot.nix
       ../../../includes/custom_bashrc.nix
+      ../../../includes/wireguard_server/wireguard_server.nix
     ];
 
   nix.settings.trusted-users = [leUser];

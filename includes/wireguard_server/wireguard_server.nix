@@ -8,7 +8,7 @@
   imports = [ ../helpers/compose-systemd.nix ];
 
   custom.compose.wireguard_server = {
-    allowedTCPPorts = [
+    allowedUDPPorts = [
       51820
     ];
     files_to_backup="data allocation.txt";

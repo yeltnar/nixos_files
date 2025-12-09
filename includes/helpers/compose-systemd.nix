@@ -492,6 +492,7 @@ in {
 
   } ) config.custom.compose );
 
+  # TODO find a way to have sops not need, for when it is not brought in by the flake?
   config.sops.secrets = lib.mkIf ( config.custom.compose != null && config.custom.compose != {} ) 
   (
     builtins.listToAttrs ( ( lib.flatten ( lib.mapAttrsToList ( generateSops ) config.custom.compose ) ) )
