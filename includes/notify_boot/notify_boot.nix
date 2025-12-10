@@ -6,7 +6,7 @@
   script = pkgs.writeShellScript "notify_boot" ''
     export bashrc_folder="/home/drew/playin/custom_bashrc"
     export PATH="$bashrc_folder/bin:$PATH:${pkgs.curl}/bin:${pkgs.coreutils-full}/bin"
-    /home/drew/playin/custom_bashrc/bin/send_push "${config.networking.hostName}" "booted"
+    /home/drew/playin/custom_bashrc/bin/send_push "${config.networking.hostName}" "booted $(date)"
   '';
 in{
   imports = [ ../nm-online.service.nix ];
