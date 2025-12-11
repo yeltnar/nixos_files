@@ -7,6 +7,9 @@ new_img=./gen_image.qcow2
 #   chmod 666 $new_img
 # fi
 
+# Takes a uniq mac address
+# br-lan needs to be the bridge device on the router (br0 at the end is to link the two lines)
+
 qemu-system-x86_64 \
 -enable-kvm \
 -serial mon:stdio \
@@ -15,6 +18,5 @@ qemu-system-x86_64 \
 -device virtio-net-pci,mac=E2:F2:6A:01:9D:C9,netdev=br0 \
 -netdev bridge,br=br-lan,id=br0 \
 -drive file=$new_img,media=disk,if=virtio
-
 
 # -netdev user,id=net0,hostfwd=tcp:192.168.2.1:8022-:22,hostfwd=udp::51820-:51820 \
