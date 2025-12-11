@@ -21,6 +21,7 @@ in
       ./hardware-configuration.nix
       (import ../../../generic_configuration.nix ( args // {leUser = leUser;}))
       ../../../includes/nvim/nvim.nix
+      ../../../includes/nixos_files.nix
       ../../../includes/notify_boot/notify_boot.nix
       ../../../includes/custom_bashrc.nix
       ../../../includes/wireguard_server/wireguard_server.nix
