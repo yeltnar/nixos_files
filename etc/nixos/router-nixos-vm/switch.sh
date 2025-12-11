@@ -1,5 +1,4 @@
 command="switch"
-export NIX_SSHOPTS='-t'
-flake="router-nixos-vm"
-host="router-nixos-vm"
-nixos-rebuild "$command" --flake .#"$flake" --target-host "$host" --sudo
+export flake="router-nixos-vm"
+export host="router-nixos-vm"
+./.nixos-rebuild_wrapper.sh "$command"
