@@ -36,6 +36,8 @@ in
     # ../../../includes/makemkv/makemkv.entry.nix
 
     ../../../includes/fix-trackpad.nix 
+
+    ../../../includes/element-desktop-wrapper.nix
   ];
 
   services.desktop_environment.selection = "hyprland";
@@ -107,8 +109,6 @@ in
     keybase
     keybase-gui
     slack
-
-    element-desktop-wrapper
 
     mullvad-vpn
     gimp3-with-plugins
