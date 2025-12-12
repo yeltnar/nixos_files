@@ -138,7 +138,6 @@ in {
     squashfsTools
     htop
     btop
-    gnupg
     cryptsetup
     tree
     clang # needed to compile c # used by nvim 
@@ -179,10 +178,12 @@ in {
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+
+  # need to set up like this so the pinentry works correctly
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
 
   # List services that you want to enable:
 
