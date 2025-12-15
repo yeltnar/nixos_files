@@ -1,3 +1,4 @@
+cd /root/playin/qemu/
 # new_img=/tmp/gen_image.qcow2
 new_img=./gen_image.qcow2
 
