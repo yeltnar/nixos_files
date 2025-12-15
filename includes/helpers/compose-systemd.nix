@@ -221,6 +221,7 @@ let
     BORG_REPO = lib.mkOption { type=lib.types.str; default=""; };
     backup_interval = lib.mkOption { type=lib.types.str; default=""; };
     backups_to_keep = lib.mkOption { type=lib.types.str; default=""; };
+    enable_clone_service = lib.mkOption { type=lib.types.bool; default=true; };
   };
 
 in {

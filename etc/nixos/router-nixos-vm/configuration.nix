@@ -25,6 +25,7 @@ in
       ../../../includes/notify_boot/notify_boot.nix
       ../../../includes/custom_bashrc.nix
       ../../../includes/wireguard_server/wireguard_server.nix
+      ../../../includes/technitium/technitium.nix
     ];
 
   nix.settings.trusted-users = [leUser];
@@ -45,6 +46,15 @@ in
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
+
+  # want to use technitium
+  services.dnsmasq.enable = false;
+
+  sops.defaultSopsFile = ./secrets/secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+  # this has to be available when booting, so watch for mount sequence
+  # sops.age.keyFile = "/etc/sops/age/keys.txt";
+  sops.age.keyFile = "/etc/sops/age/keys.txt";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
