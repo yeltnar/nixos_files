@@ -1,0 +1,160 @@
+{
+  "hosts": [
+    {
+      "name": "router-nixos-vm",
+      "key": "age1g83ku73r579tux72pepqt63u4hhm3x2qnxvga9r8vjlgz9dewemswqmks6",
+      "extra_keys":[
+        "backup-key",
+        "drew-lin-laptop",
+        "drew-lin-desktop"
+      ]
+    },
+    {
+      "name": "nix-darwin",
+      "key": "age10z776utsv2h97fwq93q2cqxqdvjmt7f4ffcrq582yj2qtnft796q879gn6",
+      "extra_keys":[
+        "backup-key"
+      ]
+    },
+    {
+      "name": "proxmox_vm",
+      "key": "age1l4vr6dfrrckenwsyqt4rg999fmztnh7528mxjcw9wtw50p8dcavq34lz4f",
+      "extra_keys":[
+        "backup-key",
+        "drew-lin-laptop",
+        "drew-lin-desktop"
+      ]
+    },
+    {
+      "name": "drew-lin-desktop",
+      "key": "age1hu4du8pygnmadptmvurw6s06rpmrj9tfe7k89yejajxynp743ufqrfz5ue",
+      "extra_keys":[
+        "backup-key"
+      ]
+    },
+    {
+      "name": "drew-lin-laptop",
+      "key": "age1lvg4ywtqshnztlhvqxgy83434l4kjffrwmeg5dz5qh5v32lfg9eqzl406g",
+      "extra_keys":[
+        "backup-key"
+      ]
+    },
+    {
+      "name": "do-nixos",
+      "key": "age1jdwddh9v3phpast5gwtruyq2s77r3gvtvvrhczs5wnp3ryv08ekqv2yeua",
+      "extra_keys":[
+        "backup-key",
+        "drew-lin-laptop",
+        "drew-lin-desktop"
+      ]
+    },
+    {
+      "name": "nixos2",
+      "key": "age12f65ngun52j3ttyxtp8ychm9rf6zgxd63h973el448y76j3uyyvs47evvr",
+      "extra_keys":[
+        "backup-key",
+        "drew-lin-laptop",
+        "drew-lin-desktop"
+      ]
+    },
+    {
+      "name": "nixos3",
+      "key": "age1qlxfhqz06ya6s6zklj7cpw6g8x0x6m3wgztvstg8kc0aggzuqcqsemkvf5",
+      "extra_keys":[
+        "backup-key",
+        "drew-lin-laptop",
+        "drew-lin-desktop"
+      ]
+    }
+  ],
+  "includes":[
+    {
+      "path_regex": "includes/uptime-kuma/*",
+      "key_groups":{
+        "age":[
+          "proxmox_vm",
+          "backup-key",
+          "drew-lin-laptop",
+          "drew-lin-desktop"
+        ]
+      }
+    },
+    {
+      "path_regex": "includes/jellyfin/*",
+      "key_groups":{
+        "age":[
+          "proxmox_vm",
+          "backup-key",
+          "drew-lin-laptop",
+          "drew-lin-desktop"
+        ]
+      }
+    },
+    {
+      "path_regex": "includes/babybuddy/*",
+      "key_groups":{
+        "age":[
+          "proxmox_vm",
+          "backup-key",
+          "drew-lin-laptop",
+          "drew-lin-desktop"
+        ]
+      }
+    },
+    {
+      "path_regex": "includes/caddy-server/*",
+      "key_groups":{
+        "age":[
+          "do-nixos",
+          "backup-key",
+          "drew-lin-laptop",
+          "drew-lin-desktop"
+        ]
+      }
+    },
+    {
+      "path_regex": "includes/ntfy-server/*",
+      "key_groups":{
+        "age":[
+          "do-nixos",
+          "backup-key",
+          "drew-lin-laptop",
+          "drew-lin-desktop"
+        ]
+      }
+    },
+    {
+      "path_regex": "includes/wireguard_server/*",
+      "key_groups":{
+        "age":[
+          "do-nixos",
+          "backup-key",
+          "drew-lin-laptop",
+          "drew-lin-desktop"
+        ]
+      }
+    },
+    {
+      "path_regex": "includes/container_ssh/*",
+      "key_groups":{
+        "age":[
+          "do-nixos",
+          "backup-key",
+          "drew-lin-laptop",
+          "drew-lin-desktop"
+        ]
+      }
+    },
+    {
+      "path_regex": "includes/ntfy_report/*",
+      "key_groups":{
+        "age":[
+          "do-nixos",
+          "backup-key",
+          "drew-lin-laptop",
+          "drew-lin-desktop"
+        ]
+      }
+    }
+  ]
+}

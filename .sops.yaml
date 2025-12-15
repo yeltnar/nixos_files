@@ -1,5 +1,6 @@
 keys:
   - &backup-key age19t8h67m3fe60yc65fg6fgtp4xp9xexk24qh0qxn75a3kxeua9q6sjlhg8u
+  - &router-nixos-vm age1g83ku73r579tux72pepqt63u4hhm3x2qnxvga9r8vjlgz9dewemswqmks6
   - &nix-darwin age10z776utsv2h97fwq93q2cqxqdvjmt7f4ffcrq582yj2qtnft796q879gn6
   - &proxmox_vm age1l4vr6dfrrckenwsyqt4rg999fmztnh7528mxjcw9wtw50p8dcavq34lz4f
   - &drew-lin-desktop age1hu4du8pygnmadptmvurw6s06rpmrj9tfe7k89yejajxynp743ufqrfz5ue
@@ -8,104 +9,109 @@ keys:
   - &nixos2 age12f65ngun52j3ttyxtp8ychm9rf6zgxd63h973el448y76j3uyyvs47evvr
   - &nixos3 age1qlxfhqz06ya6s6zklj7cpw6g8x0x6m3wgztvstg8kc0aggzuqcqsemkvf5
 creation_rules:
+  - path_regex: etc/router-nixos-vm/*
+    key_groups:
+      - age:
+          - *router-nixos-vm
+          - *backup-key
+          - *drew-lin-laptop
+          - *drew-lin-desktop
   - path_regex: etc/nix-darwin/*
     key_groups:
-    - age:
-      - *nix-darwin
-      - *backup-key
-  - path_regex: etc/nixos/proxmox_vm/*
+      - age:
+          - *nix-darwin
+          - *backup-key
+  - path_regex: etc/proxmox_vm/*
     key_groups:
-    - age:
-      - *backup-key
-      - *proxmox_vm
-      - *drew-lin-laptop
-      - *drew-lin-desktop
-  - path_regex: etc/nixos/desktop/*
+      - age:
+          - *proxmox_vm
+          - *backup-key
+          - *drew-lin-laptop
+          - *drew-lin-desktop
+  - path_regex: etc/drew-lin-desktop/*
     key_groups:
-    - age:
-      - *backup-key
-      - *drew-lin-desktop
-  - path_regex: etc/nixos/laptop/*
+      - age:
+          - *drew-lin-desktop
+          - *backup-key
+  - path_regex: etc/drew-lin-laptop/*
     key_groups:
-    - age:
-      - *backup-key
-      - *drew-lin-laptop
-  - path_regex: etc/nixos/digital-ocean/*
+      - age:
+          - *drew-lin-laptop
+          - *backup-key
+  - path_regex: etc/do-nixos/*
     key_groups:
-    - age:
-      - *backup-key
-      - *drew-lin-desktop
-      - *drew-lin-laptop
-      - *do-nixos
-  - path_regex: etc/nixos/nixos2/*
+      - age:
+          - *do-nixos
+          - *backup-key
+          - *drew-lin-laptop
+          - *drew-lin-desktop
+  - path_regex: etc/nixos2/*
     key_groups:
-    - age:
-      - *backup-key
-      - *drew-lin-desktop
-      - *drew-lin-laptop
-      - *nixos2
-  - path_regex: etc/nixos/nixos3/*
+      - age:
+          - *nixos2
+          - *backup-key
+          - *drew-lin-laptop
+          - *drew-lin-desktop
+  - path_regex: etc/nixos3/*
     key_groups:
-    - age:
-      - *backup-key
-      - *drew-lin-desktop
-      - *drew-lin-laptop
-      - *nixos3
-  # app data
+      - age:
+          - *nixos3
+          - *backup-key
+          - *drew-lin-laptop
+          - *drew-lin-desktop
   - path_regex: includes/uptime-kuma/*
     key_groups:
-    - age:
-      - *backup-key
-      - *drew-lin-laptop
-      - *drew-lin-desktop
-      - *proxmox_vm
+      - age:
+          - *proxmox_vm
+          - *backup-key
+          - *drew-lin-laptop
+          - *drew-lin-desktop
   - path_regex: includes/jellyfin/*
     key_groups:
-    - age:
-      - *backup-key
-      - *drew-lin-laptop
-      - *drew-lin-desktop
-      - *proxmox_vm
+      - age:
+          - *proxmox_vm
+          - *backup-key
+          - *drew-lin-laptop
+          - *drew-lin-desktop
   - path_regex: includes/babybuddy/*
     key_groups:
-    - age:
-      - *backup-key
-      - *drew-lin-laptop
-      - *drew-lin-desktop
-      - *proxmox_vm
+      - age:
+          - *proxmox_vm
+          - *backup-key
+          - *drew-lin-laptop
+          - *drew-lin-desktop
   - path_regex: includes/caddy-server/*
     key_groups:
-    - age:
-      - *backup-key
-      - *drew-lin-laptop
-      - *drew-lin-desktop
-      - *do-nixos
+      - age:
+          - *do-nixos
+          - *backup-key
+          - *drew-lin-laptop
+          - *drew-lin-desktop
   - path_regex: includes/ntfy-server/*
     key_groups:
-    - age:
-      - *backup-key
-      - *drew-lin-laptop
-      - *drew-lin-desktop
-      - *do-nixos
+      - age:
+          - *do-nixos
+          - *backup-key
+          - *drew-lin-laptop
+          - *drew-lin-desktop
   - path_regex: includes/wireguard_server/*
     key_groups:
-    - age:
-      - *backup-key
-      - *drew-lin-laptop
-      - *drew-lin-desktop
-      - *do-nixos
+      - age:
+          - *do-nixos
+          - *backup-key
+          - *drew-lin-laptop
+          - *drew-lin-desktop
   - path_regex: includes/container_ssh/*
     key_groups:
-    - age:
-      - *backup-key
-      - *drew-lin-laptop
-      - *drew-lin-desktop
-      - *do-nixos
+      - age:
+          - *do-nixos
+          - *backup-key
+          - *drew-lin-laptop
+          - *drew-lin-desktop
   - path_regex: includes/ntfy_report/*
     key_groups:
-    - age:
-      - *backup-key
-      - *drew-lin-laptop
-      - *drew-lin-desktop
-      # - *proxmox_vm
-      - *do-nixos
+      - age:
+          - *do-nixos
+          - *backup-key
+          - *drew-lin-laptop
+          - *drew-lin-desktop

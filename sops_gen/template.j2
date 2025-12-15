@@ -1,0 +1,14 @@
+keys:
+  - &backup-key age19t8h67m3fe60yc65fg6fgtp4xp9xexk24qh0qxn75a3kxeua9q6sjlhg8u{% for host in hosts %}
+  - &{{host.name}} {{host.key}} {% endfor %}
+creation_rules: {% for host in hosts %}
+    - path_regex: etc/{{host.name}}/*
+      key_groups:
+        - age:
+          - *{{host.name}}{% for extra in host.extra_keys %}
+          - *{{extra}}{% endfor %}{% endfor %}
+    {% for include in includes %}
+    - path_regex: {{include.path_regex}}
+      key_groups: 
+      - age: {% for key in include.key_groups.age %}
+        - *{{key}} {% endfor %} {% endfor %}
