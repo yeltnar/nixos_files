@@ -14,6 +14,7 @@ in{
   systemd.services."notify_boot" = {
     description = "Notify when system boots";
     after = ["network-online.target"];
+    requires = ["network-online.target"];
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true; 
