@@ -9,11 +9,11 @@
     /home/drew/playin/custom_bashrc/bin/send_push "${config.networking.hostName}" "booted $(date)"
   '';
 in{
-  imports = [ ../nm-online.service.nix ];
+  # imports = [ ../nm-online.service.nix ];
 
-  systemd.user.services."notify_boot" = {
+  systemd.services."notify_boot" = {
     description = "Notify when system boots";
-    after = ["nm-online.service"];
+    after = ["network-online.target"];
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true; 
