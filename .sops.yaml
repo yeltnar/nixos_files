@@ -9,50 +9,50 @@ keys:
   - &nixos2 age12f65ngun52j3ttyxtp8ychm9rf6zgxd63h973el448y76j3uyyvs47evvr
   - &nixos3 age1qlxfhqz06ya6s6zklj7cpw6g8x0x6m3wgztvstg8kc0aggzuqcqsemkvf5
 creation_rules:
-  - path_regex: etc/router-nixos-vm/*
+  - path_regex: etc/nixos/router-nixos-vm/*
     key_groups:
       - age:
           - *router-nixos-vm
           - *backup-key
           - *drew-lin-laptop
           - *drew-lin-desktop
-  - path_regex: etc/nix-darwin/*
+  - path_regex: etc/nixos/nix-darwin/*
     key_groups:
       - age:
           - *nix-darwin
           - *backup-key
-  - path_regex: etc/proxmox_vm/*
+  - path_regex: etc/nixos/proxmox_vm/*
     key_groups:
       - age:
           - *proxmox_vm
           - *backup-key
           - *drew-lin-laptop
           - *drew-lin-desktop
-  - path_regex: etc/drew-lin-desktop/*
+  - path_regex: etc/nixos/drew-lin-desktop/*
     key_groups:
       - age:
           - *drew-lin-desktop
           - *backup-key
-  - path_regex: etc/drew-lin-laptop/*
+  - path_regex: etc/nixos/drew-lin-laptop/*
     key_groups:
       - age:
           - *drew-lin-laptop
           - *backup-key
-  - path_regex: etc/do-nixos/*
+  - path_regex: etc/nixos/do-nixos/*
     key_groups:
       - age:
           - *do-nixos
           - *backup-key
           - *drew-lin-laptop
           - *drew-lin-desktop
-  - path_regex: etc/nixos2/*
+  - path_regex: etc/nixos/nixos2/*
     key_groups:
       - age:
           - *nixos2
           - *backup-key
           - *drew-lin-laptop
           - *drew-lin-desktop
-  - path_regex: etc/nixos3/*
+  - path_regex: etc/nixos/nixos3/*
     key_groups:
       - age:
           - *nixos3
@@ -98,6 +98,14 @@ creation_rules:
     key_groups:
       - age:
           - *do-nixos
+          - *backup-key
+          - *drew-lin-laptop
+          - *drew-lin-desktop
+  - path_regex: includes/router_wireguard_server/*
+    key_groups:
+      - age:
+          - *proxmox_vm
+          - *router-nixos-vm
           - *backup-key
           - *drew-lin-laptop
           - *drew-lin-desktop

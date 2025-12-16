@@ -2,7 +2,7 @@ keys:
   - &backup-key age19t8h67m3fe60yc65fg6fgtp4xp9xexk24qh0qxn75a3kxeua9q6sjlhg8u{% for host in hosts %}
   - &{{host.name}} {{host.key}} {% endfor %}
 creation_rules: {% for host in hosts %}
-    - path_regex: etc/{{host.name}}/*
+    - path_regex: etc/nixos/{{host.name}}/*
       key_groups:
         - age:
           - *{{host.name}}{% for extra in host.extra_keys %}

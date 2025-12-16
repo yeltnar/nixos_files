@@ -90,7 +90,7 @@ let
     };
 
     script = let 
-      clone_script = "mkdir -p ${shared_vars.code_parent_dir}; cd ${shared_vars.code_parent_dir}/; git clone ${shared_vars.git_server_uri}/${shared_vars.git_user}/${name}";
+      clone_script = "mkdir -p ${shared_vars.code_parent_dir}; cd ${shared_vars.code_parent_dir}/; git clone ${shared_vars.git_server_uri}/${shared_vars.git_user}/${name} ${shared_vars.code_dir}";
     in
       if ( value.super_user_clone == true ) then
         "${pkgs.util-linux}/bin/runuser -u ${user} -- ${pkgs.bash}/bin/bash -c '${clone_script}'"
@@ -136,10 +136,10 @@ let
 
     script = shared_vars.backup_script;
     unitConfig = {
-      ConditionPathExists = "/home/${user}/playin/${name}";
+      ConditionPathExists = "${shared_vars.code_dir}";
     };
     serviceConfig = {
-      WorkingDirectory = "/home/${user}/playin/${name}";
+      WorkingDirectory = "${shared_vars.code_dir}";
       Type = "oneshot";
       # User = "${user}";
     };
@@ -222,6 +222,7 @@ let
     backup_interval = lib.mkOption { type=lib.types.str; default=""; };
     backups_to_keep = lib.mkOption { type=lib.types.str; default=""; };
     enable_clone_service = lib.mkOption { type=lib.types.bool; default=true; };
+    repo_dir = lib.mkOption { type=lib.types.str; default=""; };
   };
 
 in {
@@ -294,11 +295,11 @@ in {
 
     shared_vars = {
       code_parent_dir="/home/${user}/playin";
-      code_dir="${shared_vars.code_parent_dir}/${name}";  
+      code_dir="${shared_vars.code_parent_dir}/${ if (value.repo_dir == "") then (name) else (value.repo_dir) }";  
       run_env_file = get_run_env_file name;
       backup_env_file = get_backup_env_file name;
 
-      backup_WORKDIR="/home/drew/playin/${name}";
+      backup_WORKDIR=shared_vars.code_dir;
       backup_FILES_TO_BACKUP=value.files_to_backup;
       backup_BORG_REPO=if value ? BORG_REPO  && value.BORG_REPO != "" then value.BORG_REPO else "/mnt/minio/backups/${name}_backup";
       backup_ENCRYPTION="repokey";

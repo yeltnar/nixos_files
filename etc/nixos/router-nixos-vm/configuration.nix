@@ -24,8 +24,11 @@ in
       ../../../includes/nixos_files.nix
       ../../../includes/notify_boot/notify_boot.nix
       ../../../includes/custom_bashrc.nix
-      ../../../includes/wireguard_server/wireguard_server.nix
+      ../../../includes/router_wireguard_server/wireguard_server_router.nix
       ../../../includes/technitium/technitium.nix
+      ../../../includes/rclone_mounts/mini-minio.nix
+      
+      ( import ../../../includes/nebula/nebula.nix ( args // { user = leUser; SECONDARY_HOST="hot.andbrant.com"; SECONDARY_CURL_OPTIONS=""; } ) )
     ];
 
   nix.settings.trusted-users = [leUser];
@@ -55,6 +58,7 @@ in
   # this has to be available when booting, so watch for mount sequence
   # sops.age.keyFile = "/etc/sops/age/keys.txt";
   sops.age.keyFile = "/etc/sops/age/keys.txt";
+  sops.secrets."mnt-minio.env" = {};
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
