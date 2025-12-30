@@ -33,7 +33,7 @@
     ${pkgs.coreutils-full}/bin/sleep "$sleep_time"
     echo slept for "$sleep_time"
     echo restart starting
-    ${pkgs.systemd}/bin/systemctl restart wireguard_server_start.service
+    ${pkgs.systemd}/bin/systemctl restart router_wireguard_server_start.service
     echo restart done
     '';
     wantedBy = [
