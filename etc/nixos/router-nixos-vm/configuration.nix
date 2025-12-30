@@ -27,6 +27,8 @@ in
       ../../../includes/router_wireguard_server/wireguard_server_router.nix
       ../../../includes/technitium/technitium.nix
       ../../../includes/rclone_mounts/mini-minio.nix
+
+      ../../../includes/ntfy_report/ntfy_report_ip_timer.nix
       
       ( import ../../../includes/nebula/nebula.nix ( args // { user = leUser; SECONDARY_HOST="hot.andbrant.com"; SECONDARY_CURL_OPTIONS=""; } ) )
     ];
