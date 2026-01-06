@@ -178,6 +178,7 @@ in
       discord
     #  thunderbird
       kdePackages.kdenlive
+      spotify
     ];
   };
 
@@ -242,6 +243,7 @@ in
     snapper
     # lima
     ulauncher 
+    finamp
   ];
 
 
