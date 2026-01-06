@@ -54,6 +54,12 @@
       options = [ "subvol=Steam" ];
     };
 
+  fileSystems."/home/drew/.local/share/containers" =
+    { device = "/dev/disk/by-uuid/8d6b3957-edb0-4ff5-8334-4e0c14e7252f";
+      fsType = "btrfs";
+      options = [ "subvol=home_containers" ];
+    };
+
   fileSystems."/home/drew/.cache" =
     { device = "/dev/disk/by-uuid/8d6b3957-edb0-4ff5-8334-4e0c14e7252f";
       fsType = "btrfs";
