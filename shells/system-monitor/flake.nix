@@ -23,6 +23,7 @@
               packages = with pkgs; [ gnome-system-monitor ];
               shellHook= ''
                 gnome-system-monitor
+                exit
               '';
             };
           }
