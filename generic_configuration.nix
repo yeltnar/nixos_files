@@ -130,6 +130,7 @@ in {
     tmux
     git
     unzip
+    zip
     alejandra
     fzf
     jq
