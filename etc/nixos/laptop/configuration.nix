@@ -104,6 +104,7 @@ in
 
     qemu
 
+    (pkgs.writeShellScriptBin "gparted-wrapped" ''sudo -EH gparted "$@"'')
     gparted
 
     keybase
