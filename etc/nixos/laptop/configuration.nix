@@ -173,4 +173,10 @@ in
   };
 
   swapDevices = [ { device = "/swap/swapfile"; } ];
+
+  powerManagement.resumeCommands = ''
+    # Commands to run after the system wakes up
+    ${pkgs.kmod}/bin/modprobe -r psmouse && ${pkgs.kmod}/bin/modprobe psmouse
+  '';
+
 }
