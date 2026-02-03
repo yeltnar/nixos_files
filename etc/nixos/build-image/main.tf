@@ -32,6 +32,7 @@ resource "proxmox_virtual_environment_file" "nixos_qcow2" {
   node_name    = "pve"
 
   source_file {
+    # TODO make this pull not push
     path = "http://drew-lin-desktop.lan:9999/nixos-image-qcow2-25.11.20251206.d9bc5c7-x86_64-linux.qcow2"
   }
 }
