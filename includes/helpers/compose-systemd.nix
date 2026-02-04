@@ -73,7 +73,7 @@ let
     };
   };
   generateCloneService = name: value: shared_vars: 
-  lib.mkIf ( !(value ? enable_clone_service) || value.enable_clone_service == false ) {
+  lib.mkIf ( !(value ? enable_clone_service) || value.enable_clone_service == true ) {
     path = with pkgs; [
       git
     ];
