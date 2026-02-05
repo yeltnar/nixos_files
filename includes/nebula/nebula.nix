@@ -4,6 +4,7 @@ args@{
   user,
   group ? "100",
   SECONDARY_HOST ? "hot.h.lan",
+  DEVICE_NAME ? "${config.networking.hostName}",
   ...
 }: {
   imports = [
@@ -12,6 +13,7 @@ args@{
       user = user; 
       group = group; 
       SECONDARY_HOST = SECONDARY_HOST;
+      DEVICE_NAME = DEVICE_NAME;
     }))
   ];
 

@@ -38,6 +38,12 @@
   };
   vardir = "/var/yeltnar-nebula";
 in {
+
+  imports = [
+    # these scripts depend on some custom scripts, so need this setup
+    ../../../includes/custom_bashrc.nix
+  ];
+
   systemd.services.setup_nebula_env = {
     after = ["sysinit-reactivation.target"];
     wantedBy = ["basic.target"];
