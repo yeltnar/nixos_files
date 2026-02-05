@@ -20,10 +20,23 @@
             # config = self.config;
           in {
             default = pkgs.mkShell {
-              packages = with pkgs; [ picard chromaprint ];
+              # packages = with pkgs; [ picard chromaprint ];
+              packages = with pkgs; [ beets ];
+              # shellHook= ''
+              #   picard
+              # '';
               shellHook= ''
-                picard
-                chromaprint
+                # this will fix the metadata, and move to artist folder for the same path
+                # -d is directory... this is a global flag
+                # -m is move
+                # -w
+                # -a
+                if [[ -z "$music_dir" ]]; then
+                  echo "music_dir is undefined; exiting"
+                  exit
+                fi
+                beet -d "$music_dir" import -m -w -a "$music_dir"
+                exit
               '';
             };
           }
