@@ -11,6 +11,11 @@
 in{
   # imports = [ ../nm-online.service.nix ];
 
+  imports = [
+    # these scripts depend on some custom scripts, so need this setup
+    ../../../includes/custom_bashrc.nix
+  ];
+
   systemd.services."notify_boot" = {
     description = "Notify when system boots";
     after = ["network-online.target"];
