@@ -13,7 +13,7 @@ in{
 
   imports = [
     # these scripts depend on some custom scripts, so need this setup
-    ../../../includes/custom_bashrc.nix
+    ../../includes/custom_bashrc.nix
   ];
 
   systemd.services."notify_boot" = {
@@ -24,6 +24,14 @@ in{
       Type = "oneshot";
       RemainAfterExit = true; 
       ExecStart = "${script}"; 
+      ExecStartPre = pkgs.writeScript "check-dir-exists" ''
+        #!${pkgs.bash}/bin/bash
+        dir="/home/drew/playin/custom_bashrc/"
+        while [ ! -d "$dir" ]; do
+          echo "Waiting for $dir"
+          sleep 10
+        done
+      '';
     };
     wantedBy = [ 
       "default.target" 
