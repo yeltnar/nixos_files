@@ -33,6 +33,7 @@ in {
     ( import ../../../includes/nebula/nebula.nix (args // {
       user = leUser; 
       group = "100"; 
+      DEVICE_NAME = "nixos_vm"; # the name to use when updating nixos... this defaults to hostname
     }))
 
     ../../../includes/rclone_mounts/rclone_mini.proxmoxvm.nix
