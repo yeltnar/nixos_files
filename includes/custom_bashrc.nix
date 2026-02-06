@@ -22,7 +22,24 @@
     script =''
       mkdir -p /home/drew/playin
       cd /home/drew/playin
+
       ${pkgs.git}/bin/git clone https://github.com/yeltnar/custom_bashrc
+
+      PATH="$PATH:${pkgs.git}/bin:${pkgs.curl}/bin"
+      /home/drew/playin/custom_bashrc/setup.sh
+
+      # Define the target file
+      TARGET="$HOME/.bash_profile"
+      
+      # Check if the file exists
+      if [ ! -f "$TARGET" ]; then
+          echo "# include .profile if it exists" > "$TARGET"
+          echo "[[ -f ~/.profile ]] && . ~/.profile" >> "$TARGET"
+          echo "" >> "$TARGET"
+          echo "# include .bashrc if it exists" >> "$TARGET"
+          echo "[[ -f ~/.bashrc ]] && . ~/.bashrc" >> "$TARGET"
+      fi
+
     '';
   };
 

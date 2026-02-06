@@ -1,0 +1,1 @@
+../../../shell_helpers/build-image.sh
