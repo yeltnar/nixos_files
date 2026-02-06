@@ -17,11 +17,14 @@ in
 
   imports =
     [ # Include the results of the hardware scan.
-      # ./hardware-configuration.nix
       ./hardware-configuration.nix
       (import ../../../generic_configuration.nix ( args // {leUser = leUser;}))
       ../../../includes/nvim/nvim.nix
       ../../../includes/notify_boot/notify_boot.nix
+
+      # TODO remove
+      # ../../../includes/custom_bashrc.nix
+      # ../../../includes/nixos_files.nix
     ];
 
   users.users."${leUser}".initialHashedPassword = "$y$j9T$Hoqb64htLdKUgZuVI1QK31$6O2aevVdmXqDMrU6Tm2vbAF1/vTZUlwEEFjkEB8ftIA";
@@ -88,6 +91,9 @@ in
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
+
+  # some proxmox stuff... TODO move this to another file? 
+  services.qemuGuest.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

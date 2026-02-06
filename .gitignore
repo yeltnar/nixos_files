@@ -1,1 +1,3 @@
 nixos-switch.log
+etc/nixos/proxmox_vm/gen_image.qcow2
+etc/nixos/build-image/gen_image.qcow2

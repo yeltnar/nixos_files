@@ -28,6 +28,10 @@ variable "image_name" {
   type = string
 }
 
+variable "image_proxmox_name" {
+  type = string
+}
+
 # resource "proxmox_virtual_environment_file" "ubuntu_container_template" {
 resource "proxmox_virtual_environment_file" "nixos_qcow2" {
   content_type = "import"
@@ -37,13 +41,12 @@ resource "proxmox_virtual_environment_file" "nixos_qcow2" {
   source_file {
     # TODO make this pull not push
     path = "${var.image_name}"
+    file_name = "${var.image_proxmox_name}.qcow2"
   }
 }
 
-# TODO need to 'import' file into lvm. dont want to directly boot from the qcow2 image
-
 resource "proxmox_virtual_environment_vm" "my_vm" {
-  name      = "opentofu-vm"
+  name      = "opentofu-vm-${var.image_proxmox_name}"
   node_name = "pve"
   # vm_id     = 102
 

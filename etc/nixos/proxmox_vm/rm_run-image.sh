@@ -1,0 +1,1 @@
+../../../shell_helpers/rm_run-image.sh

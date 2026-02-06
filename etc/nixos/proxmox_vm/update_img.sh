@@ -1,0 +1,1 @@
+../../../shell_helpers/update_img.sh
