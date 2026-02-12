@@ -82,6 +82,7 @@ in {
       9022 # TODO make the only accessable from the nebula interface 
     ];
     # files_to_backup="config .env";
+    test_string="ssh server started";
     files_to_backup="ssh git server";
     linger = true;
     use_run_env = false;
