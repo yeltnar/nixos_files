@@ -1,28 +1,9 @@
 new_img=./gen_image.qcow2
-
-if [ -e ./result ]; then
-  rm -rf $new_img
-  cp ./result/nixos-image-qcow2* $new_img
-  chmod 666 $new_img
-fi
-
 mnt_dir="/tmp/gen_image_mnt"
 
-cleanup(){
-  sudo umount "$mnt_dir"
-  sudo qemu-nbd --disconnect /dev/nbd0
-  rmdir "$mnt_dir"
-}
-
-cleanup
-echo after clean
-echo
-
-trap cleanup EXIT
-
-# cp ./date.txt "$mnt_dir/home/drew/"
-
 mountit(){
+  trap cleanup EXIT
+
   sudo modprobe nbd max_part=8
   echo sleep 1 for modprobe
   sleep 1
@@ -59,8 +40,32 @@ resize(){
   qemu-img resize "$new_img" 20G
 }
 
-resize
-mountit
-copy_keys
+setup(){
+  if [ -e ./result ]; then
+    rm -rf $new_img
+    cp ./result/nixos-image-qcow2* $new_img
+    chmod 666 $new_img
+  fi
+}
+
+cleanup(){
+  sudo umount "$mnt_dir"
+  sudo qemu-nbd --disconnect /dev/nbd0
+  rmdir "$mnt_dir"
+}
+
+pre_cleanup(){
+  # reset state before start
+  cleanup
+  echo after clean
+  echo
+
+}
+
+# pre_cleanup
+setup
+# resize
+# mountit
+# copy_keys
 
 
