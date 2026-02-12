@@ -138,3 +138,10 @@ creation_rules:
           - *backup-key
           - *drew-lin-laptop
           - *drew-lin-desktop
+  - path_regex: includes/triliumnotes/*
+    key_groups:
+      - age:
+          - *proxmox_vm
+          - *backup-key
+          - *drew-lin-laptop
+          - *drew-lin-desktop

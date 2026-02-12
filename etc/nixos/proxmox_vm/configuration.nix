@@ -40,10 +40,9 @@ in {
 
     ../../../includes/ntfy_report/ntfy_report_ip_timer.nix
     ../../../includes/mqtt_report/mqtt_report_ip_timer.nix
-
     ../../../includes/jellyfin/jellyfin.nix
-
     ../../../includes/uptime-kuma/uptime-kuma.nix
+      ../../../includes/triliumnotes/triliumnotes.nix
 
     # ../../../includes/babybuddy/babybuddy.nix
     # ../../../includes/babybuddy/backup_restore.timer.nix
