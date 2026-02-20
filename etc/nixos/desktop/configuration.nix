@@ -42,6 +42,8 @@ in
       # use this wrapper to get gnome key chain
       ../../../includes/element-desktop-wrapper.nix
       ../../../includes/notify_boot/notify_boot.nix
+
+      ../../../includes/webapp/teams.nix
     ] 
     ++
     lib.fileset.toList (
@@ -179,6 +181,7 @@ in
     #  thunderbird
       kdePackages.kdenlive
       spotify
+      vscodium-fhs
     ];
   };
 
