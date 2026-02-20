@@ -45,7 +45,7 @@
   fileSystems."/swap" =
     { device = "/dev/disk/by-uuid/8d6b3957-edb0-4ff5-8334-4e0c14e7252f";
       fsType = "btrfs";
-      options = [ "subvol=swap" ];
+      options = [ "subvol=swap" "noatime" ];
     };
 
   fileSystems."/home/drew/.local/share/Steam" =
@@ -66,7 +66,33 @@
       options = [ "subvol=home.cache" ];
     };
 
-  swapDevices = [ { device = "/swap/swapfile"; } ];
+  ## steps to create swap device
+  # sudo truncate -s 0 /swap/swapfile
+  # sudo chattr +C /swap/swapfile # Disable Copy-on-Write
+  # sudo btrfs property set /swap/swapfile compression none
+  # sudo dd if=/dev/zero of=/swap/swapfile bs=1M count=16384 # Example: 16GB
+  # sudo chmod 600 /swap/swapfile
+  # sudo mkswap /swap/swapfile
+  # sudo swapon /swap/swapfile
+
+  ## calculate the resume offset 
+  ## This will be the value for resume_offset
+  # sudo btrfs inspect-internal map-swapfile -r /swap/swapfile
+
+  ## validating
+  # lsattr /swap/swapfile
+  # ...should see ----C--- /swap/swapfile
+  # sudo btrfs property get /swap/swapfile
+  # ...should see compression=none or nothing
+  # swapon --show
+  # ...should see name of file and size allocated
+
+  swapDevices = [{
+    device = "/swap/swapfile"; 
+  }];
+
+  boot.resumeDevice = "/dev/disk/by-uuid/8d6b3957-edb0-4ff5-8334-4e0c14e7252f";
+  boot.kernelParams = [ "resume_offset=34490193" ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
