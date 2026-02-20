@@ -50,10 +50,17 @@
   fileSystems."/swap" =
     { device = "/dev/disk/by-uuid/47c6f308-2398-46e3-98a2-ba5b993500f4";
       fsType = "btrfs";
-      options = [ "subvol=swap" ];
+      options = [ "subvol=swap" "noatime" ];
     };
 
-  swapDevices = [ ];
+  # swapDevices = [ ];
+
+  swapDevices = [{
+    device = "/swap/swapfile"; 
+  }];
+
+  boot.resumeDevice = "/dev/disk/by-uuid/47c6f308-2398-46e3-98a2-ba5b993500f4";
+  boot.kernelParams = [ "resume_offset=11035451" ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
