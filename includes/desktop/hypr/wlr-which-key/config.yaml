@@ -1,0 +1,36 @@
+font: "Sans 12"
+
+menu:
+  - key: t
+    desc: "hyprctl dispatch togglegroup"
+    cmd: "hyprctl dispatch togglegroup"
+  # - key: tab
+  #   desc: "hyprctl dispatch changegroupactive"
+  #   cmd: "hyprctl dispatch changegroupactive"
+  - key: c
+    desc: "hyprctl dispatch changegroupactive"
+    cmd: "hyprctl dispatch changegroupactive"
+  - key: j
+    desc: "join"
+    submenu:
+      - key: h
+        desc: "left"
+        cmd: "hyprctl dispatch moveintogroup l"
+      - key: l
+        desc: "right"
+        cmd: "hyprctl dispatch moveintogroup r"
+      - key: k
+        desc: "up"
+        cmd: "hyprctl dispatch moveintogroup u"
+      - key: j
+        desc: "down"
+        cmd: "hyprctl dispatch moveintogroup d"
+  - key: s
+    desc: "System..."
+    submenu:
+      - key: r
+        desc: "Reboot"
+        cmd: "echo reboot"
+      - key: p
+        desc: "Power Off"
+        cmd: "echo poweroff"

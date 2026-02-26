@@ -84,6 +84,7 @@ in
       hyprshot
       # hyprshell # TODO add this to repo
       cosmic-files
+      wlr-which-key
 
       # move dispalys and change settings # make wraper to use specific file
       (pkgs.writeShellScriptBin "nwg-displays" ''
