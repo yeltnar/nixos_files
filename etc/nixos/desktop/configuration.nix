@@ -182,6 +182,7 @@ in
       kdePackages.kdenlive
       spotify
       vscodium-fhs
+      ungoogled-chromium
     ];
   };
 
