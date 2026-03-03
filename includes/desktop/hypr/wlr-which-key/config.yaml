@@ -4,9 +4,9 @@ menu:
   - key: t
     desc: "hyprctl dispatch togglegroup"
     cmd: "hyprctl dispatch togglegroup"
-  # - key: tab
-  #   desc: "hyprctl dispatch changegroupactive"
-  #   cmd: "hyprctl dispatch changegroupactive"
+  - key: m
+    desc: "hyprctl dispatch moveoutofgroup"
+    cmd: "hyprctl dispatch moveoutofgroup"
   - key: c
     desc: "hyprctl dispatch changegroupactive"
     cmd: "hyprctl dispatch changegroupactive"
