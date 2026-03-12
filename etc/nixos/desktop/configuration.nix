@@ -43,7 +43,7 @@ in
       ../../../includes/element-desktop-wrapper.nix
       ../../../includes/notify_boot/notify_boot.nix
 
-      ../../../includes/webapp/teams.nix
+      ../../../includes/webapp/work-chromium.nix
     ] 
     ++
     lib.fileset.toList (

@@ -25,5 +25,7 @@
     libreoffice-qt
     hunspell
     hunspellDicts.en_US
+
+    opentofu
   ];
 }

@@ -10,6 +10,9 @@ menu:
   - key: c
     desc: "hyprctl dispatch changegroupactive"
     cmd: "hyprctl dispatch changegroupactive"
+  - key: C
+    desc: "hyprctl dispatch changegroupactive prev"
+    cmd: "hyprctl dispatch changegroupactive prev"
   - key: j
     desc: "join"
     submenu:

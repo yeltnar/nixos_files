@@ -46,6 +46,8 @@ in
     # we need a keyring for some app login to work
     services.gnome.gnome-keyring.enable = true;
 
+    programs.thunar.enable = true;
+
     environment.systemPackages = with pkgs; [
       wayland-pipewire-idle-inhibit
       hyprlandPlugins.hyprspace
@@ -83,7 +85,6 @@ in
       adwaita-icon-theme
       hyprshot
       # hyprshell # TODO add this to repo
-      cosmic-files
       wlr-which-key
 
       # move dispalys and change settings # make wraper to use specific file

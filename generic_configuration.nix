@@ -2,19 +2,19 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 args@{
-  config,
+  # config,
   pkgs,
   leUser,
   ...
 }: 
 let
-  unstable = import
-    (builtins.fetchTarball {
-      url = "https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable";
-      sha256 = "0fxl020s1fmxygvi5bj8w30jq1bwynrn2xclwm5ahynw0nv9v6pv";
-    })
-    # reuse the current configuration
-    { config = config.nixpkgs.config; };
+  # unstable = import
+  #   (builtins.fetchTarball {
+  #     url = "https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable";
+  #     sha256 = "0fxl020s1fmxygvi5bj8w30jq1bwynrn2xclwm5ahynw0nv9v6pv";
+  #   })
+  #   # reuse the current configuration
+  #   { config = config.nixpkgs.config; };
 in {
   imports = [
     ( import ./includes/sops/sops_make_age_key.nix (args // { leUser = leUser; }))

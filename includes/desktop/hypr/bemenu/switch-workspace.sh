@@ -21,7 +21,8 @@ else
 fi
 
 smart_workspaces=$(
-  smart_workspaces_arr=("fisms" "element" "slack" "doom" "ff")
+  # smart_workspaces_arr=("fisms" "element" "slack" "doom" "ff")
+  smart_workspaces_arr=("fisms" "element" "slack")
   IFS=$'\n'
   echo "${smart_workspaces_arr[*]}"
   unset IFS
