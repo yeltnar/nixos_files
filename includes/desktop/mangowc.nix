@@ -40,7 +40,17 @@ in
     };
 
     services.gnome.gnome-keyring.enable = true;
-    programs.thunar.enable = true;
+
+    # Enable the thumbnailer service
+    services.tumbler.enable = true;
+    # Ensure Thunar and its plugins are installed
+    programs.thunar = {
+      enable = true;
+      plugins = with pkgs.xfce; [
+        thunar-archive-plugin
+        thunar-volman
+      ];
+    };
 
     environment.systemPackages = with pkgs; [
       mango # The core compositor
