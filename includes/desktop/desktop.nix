@@ -13,6 +13,7 @@
       "gnome"
       "cosmic"
       "hyprland"
+      "mangowc"
       "none"
     ];
     default = "none";
@@ -24,6 +25,7 @@
     ./gnome.nix
     ./cosmic.nix
     ./hyprland.nix
+    ./mangowc.nix
     ./generic.nix 
   ];
 }
