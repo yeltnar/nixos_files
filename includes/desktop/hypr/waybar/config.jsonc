@@ -35,7 +35,7 @@
         "format": " 󰐊 {}",
         "return-type": "json",
         "max-length": 40,
-        "exec": "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{artist}} - {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
+        "exec": "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{artist}} - {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\", \"player\":\"{{playerName}}\"}' -F | jq -rcM --unbuffered '(. | select(.alt == \"Paused\")) |= (.text = .player)'",
         "on-click": "playerctl play-pause",
         "on-click-right": "playerctl next",
     },
