@@ -7,3 +7,6 @@ menu:
   - key: t
     desc: "Triliumnotes"
     cmd: "~/.config/hypr/wlr-which-key/add-tab-or-new-window.sh https://triliumnotes.h.lan"
+  - key: w
+    desc: "Work Chromium"
+    cmd: "work-chromium"
