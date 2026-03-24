@@ -1,0 +1,9 @@
+font: "Sans 12"
+
+menu:
+  - key: g
+    desc: "Gemini"
+    cmd: "~/.config/hypr/wlr-which-key/add-tab-or-new-window.sh https://gemini.google.com"
+  - key: t
+    desc: "Triliumnotes"
+    cmd: "~/.config/hypr/wlr-which-key/add-tab-or-new-window.sh https://triliumnotes.h.lan"
