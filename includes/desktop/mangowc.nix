@@ -71,11 +71,6 @@ in
       # hyprshell # TODO add this to repo
       wlr-which-key
 
-      # move dispalys and change settings # make wraper to use specific file
-      (pkgs.writeShellScriptBin "nwg-displays" ''
-        ${nwg-displays}/bin/nwg-displays -m ${monitor_file}
-      '')
-
       # fix audio breaking up in games... need to auto do this with rtkit somehow
       (pkgs.writeShellScriptBin "fix-audio-pipewire-pulse" ''
         sudo renice -n -11 `pgrep pipewire; pgrep wireplumber`
