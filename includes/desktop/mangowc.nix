@@ -6,32 +6,23 @@
 }:
 let
   desktop_environment = config.services.desktop_environment.selection;
-  
-  # Note: Hyprland-specific plugins (hyprspace/hyprexpo) are not compatible with Mango.
-  # I've removed them from the config to prevent build failures.
-  
   wallpaper = pkgs.fetchurl {
     url = "https://hot.andbrant.com/milkyway+C&H-nix.jpg";
     sha256 = "sha256-Xzlv420zq3SOcjDJU0mc7Cew9dNql0IvhQcSvTVbziM=";
   };
-
-  # Mango specific paths
-  monitor_file = "~/.config/mango/monitors.${config.networking.hostName}.conf";
 in
 {
-  # Only trigger if the selection is 'mango' (assuming you update your selection logic)
-  config = lib.mkIf ( "mango" == desktop_environment ) {
+
+  config = lib.mkIf ( "mangowc" == desktop_environment ) {
 
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-    # Mango doesn't have a dedicated 'programs.mango' in nixpkgs yet, 
-    # so we enable generic Wayland support and install the package manually.
-    services.xserver.displayManager.sessionPackages = [ pkgs.mango ];
-
+    # screensharing from nixos site # TODO verify
     xdg.portal = {
       enable = true;
-      # Use the generic wlr portal as it's most compatible with Mango
-      extraPortals = with pkgs; [ xdg-desktop-portal-wlr ];
+      # extraPortals = with pkgs; [ 
+      #   xdg-desktop-portal-hyprland 
+      # ];
     };
 
     hardware = {
@@ -39,21 +30,14 @@ in
       nvidia.modesetting.enable = true;
     };
 
+    # we need a keyring for some app login to work
     services.gnome.gnome-keyring.enable = true;
 
-    # Enable the thumbnailer service
-    services.tumbler.enable = true;
-    # Ensure Thunar and its plugins are installed
-    programs.thunar = {
-      enable = true;
-      plugins = with pkgs.xfce; [
-        thunar-archive-plugin
-        thunar-volman
-      ];
-    };
+    programs.thunar.enable = true;
 
     environment.systemPackages = with pkgs; [
-      mango # The core compositor
+      mangowc
+
       wayland-pipewire-idle-inhibit
       waybar
       wofi
@@ -74,58 +58,87 @@ in
           --selection-match-color 8fbcbbff \
           --border-color 88c0d0ff "$@"
       '')
+      bemenu
       swaynotificationcenter
-      hyprpaper # Works fine on Mango (Wayland generic)
-      hypridle
       playerctl
       brightnessctl
       wl-clipboard
+      uwsm
       networkmanagerapplet
-      blueman
-      pavucontrol
+      blueman # start GUI with blueman-manager
+      pavucontrol # audio control
       adwaita-icon-theme
-      
+      # hyprshell # TODO add this to repo
+      wlr-which-key
+
+      # move dispalys and change settings # make wraper to use specific file
+      (pkgs.writeShellScriptBin "nwg-displays" ''
+        ${nwg-displays}/bin/nwg-displays -m ${monitor_file}
+      '')
+
+      # fix audio breaking up in games... need to auto do this with rtkit somehow
       (pkgs.writeShellScriptBin "fix-audio-pipewire-pulse" ''
         sudo renice -n -11 `pgrep pipewire; pgrep wireplumber`
       '')
+
     ];
 
-    # Greeting / Session Handling
     services.greetd = {
       enable = true;
       settings = {
         default_session = {
-          # Launching Mango directly via tuigreet
-          command = "${pkgs.tuigreet}/bin/tuigreet --remember --time --time-format \"%b %-d %I:%M:%S\" --cmd \"mango\"";
+          # 'command' tells greetd which greeter to use and what to launch afterwards.
+          command = "${pkgs.tuigreet}/bin/tuigreet --remember --time --time-format \"%b %-d %I:%M:%S\" --cmd \"${pkgs.mangowc}/bin/mango\"";
+          _command = "${pkgs.regreet}/bin/regreet";
           user = "greeter";
         };
       };
     };
 
-    system.activationScripts.link_mango_dir = {
-      text = ''
-        # if it is a directory, replace with link
-        link_file="/home/drew/.config/mango"
-        if [ -d "$link_file" ] && [ ! -L "$link_file" ]; then
-          rm -rf "$link_file"
-          /run/wrappers/bin/su - drew -s /bin/sh -c "ln -s /home/drew/playin/nixos_files/includes/desktop/mango $link_file";
-        fi
-      '';
+    # this failed at least once
+    # try to fix showing startup logs on tuigreet
+    systemd.services.greetd = {
+      serviceConfig = {
+        Type = "idle";
+      };
     };
 
+  security.pam.services.greetd.enableGnomeKeyring = true;
 
-    system.activationScripts.mango_ln = {
-      text = ''
-        # if it exsists, and is not a link, dont do anything
-        link_file="/home/drew/.config/mango"
-        if [ ! -e "$link_file" ]; then
-          /run/wrappers/bin/su - drew -s /bin/sh -c "ln -s ~/playin/nixos_files/includes/desktop/mango $link_file";
-        fi
-      '';
-    };
+  environment.etc."greetd/environments".text = ''
+    bash
+    hyprland
+  '';
+  
+  # this should be the first mangoland activationScripts
+  system.activationScripts.link_mangoland_dir = {
+    text = ''
+      # if it is a directory, replace with link
+      link_file="/home/drew/.config/mango"
+      if [ -d "$link_file" ] && [ ! -L "$link_file" ]; then
+        rm -rf "$link_file"
+        /run/wrappers/bin/su - drew -s /bin/sh -c "ln -s /home/drew/playin/nixos_files/includes/desktop/mango $link_file";
+      fi
+    '';
+  };
 
-    # Exporting wallpaper to a consistent location
-    environment.etc."mango/wallpaper.jpg".source = "${wallpaper}";
+  system.activationScripts.mango_ln = {
+    text = ''
+      # if it exsists, and is not a link, dont do anything
+      link_file="/home/drew/.config/mango"
+      if [ ! -e "$link_file" ]; then
+        /run/wrappers/bin/su - drew -s /bin/sh -c "ln -s ~/playin/nixos_files/includes/desktop/mango $link_file";
+      fi
+    '';
+  };
+
+  # system.activationScripts.wallpaper = {
+  #   text = ''
+  #     link_file="/home/drew/.config/hypr/hyprpaper/wallpaper.jpg"
+  #     toss=$(rm -rf $link_file; true)
+  #     /run/wrappers/bin/su - drew -s /bin/sh -c "ln -s /etc/hypr/wallpaper.jpg $link_file";
+  #   '';
+  # };
+
   };
 }
-
