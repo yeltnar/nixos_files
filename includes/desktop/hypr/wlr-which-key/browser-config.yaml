@@ -10,3 +10,6 @@ menu:
   - key: w
     desc: "Work Chromium"
     cmd: "work-chromium"
+  - key: f
+    desc: "Firefox"
+    cmd: "~/.config/hypr/wlr-which-key/add-tab-or-new-window.sh"
