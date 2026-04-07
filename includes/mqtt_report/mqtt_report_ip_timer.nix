@@ -31,6 +31,7 @@
       nettools
       mosquitto
       nebula
+      jq
     ];
 
     script = ''
