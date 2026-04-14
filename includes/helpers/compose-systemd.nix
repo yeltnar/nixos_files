@@ -225,26 +225,7 @@ let
     repo_dir = lib.mkOption { type=lib.types.str; default=""; };
   };
 
-in {
-
-  # use like
-  # custom.compose.user.testme2 = {};
-  # custom.compose.system.testme2 = {};
-  # need example of service which needs to monitor output
-
-  options.custom.compose = lib.mkOption {
-    type = lib.types.attrsOf (lib.types.submodule composeSystemdOption);
-    default = null;
-  };
-
-  # TODO this should be an option that is selected... also need to change within the service spec
-  imports = [ ../nm-online.service.nix ];
-
-  # config.custom.compose.user
-
-  # builtins.listToAttrs ( ( lib.flatten ( lib.mapAttrsToList ( generateSops ) config.custom.compose.user ) ) )
-  
-  config.systemd = lib.foldl' lib.recursiveUpdate {} ( lib.mapAttrsToList ( name: value: let 
+  getSystemdConfig = lib.mapAttrsToList ( name: value: let 
 
       send_push_code=pkgs.writeShellScript "${name}_send_json_push" ''
 
@@ -492,7 +473,28 @@ in {
 
     timers."${backup_timer_name}" = lib.mkIf (value.super_user_backup) backup_timer_service;
 
-  } ) config.custom.compose );
+  } ) config.custom.compose;
+
+in {
+
+  # use like
+  # custom.compose.user.testme2 = {};
+  # custom.compose.system.testme2 = {};
+  # need example of service which needs to monitor output
+
+  options.custom.compose = lib.mkOption {
+    type = lib.types.attrsOf (lib.types.submodule composeSystemdOption);
+    default = null;
+  };
+
+  # TODO this should be an option that is selected... also need to change within the service spec
+  imports = [ ../nm-online.service.nix ];
+
+  # config.custom.compose.user
+
+  # builtins.listToAttrs ( ( lib.flatten ( lib.mapAttrsToList ( generateSops ) config.custom.compose.user ) ) )
+  
+  config.systemd = lib.foldl' lib.recursiveUpdate {} ( getSystemdConfig );
 
   # TODO find a way to have sops not need, for when it is not brought in by the flake?
   config.sops.secrets = lib.mkIf ( config.custom.compose != null && config.custom.compose != {} ) 
