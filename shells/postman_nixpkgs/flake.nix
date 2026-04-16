@@ -3,13 +3,13 @@
   description = "postman";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
   };
 
   outputs = { self, nixpkgs }:
     let
       system = "x86_64-linux"; # Adjust to "aarch64-linux" or "aarch64-darwin" if needed
-      pkgs = import nixpkgs { 
+      pkgs = import nixpkgs {
         inherit system;
         config = {
           allowUnfree = true;
@@ -32,32 +32,14 @@
         };
       };
 
-      custom_postman = let 
-        newVersion = "12.6.3";
-        newHash = "sha256-9yUhKDX2uOpYJrVgaNH0uepk53Ebmu6mVxvZBjT//Ac=";
-      in 
-      (pkgs.postman.overrideAttrs (oldAttrs: {
-        version = newVersion;
-        src = pkgs.fetchurl {
-          name = "postman-${newVersion}.tar.gz";
-          url = "https://dl.pstmn.io/download/version/${newVersion}/linux64";
-          hash = newHash;
-        };
-        meta = oldAttrs.meta // {
-          changelog = "https://www.postman.com/release-notes/postman-app/#${
-            pkgs.lib.replaceStrings [ "." ] [ "-" ] newVersion
-          }";
-        };
-      }));
-
       lib = nixpkgs.lib;
 
       my_packages = with pkgs; [
-        custom_postman
+        postman
         newman
       ];
 
-      data_parent_dir="$HOME/tmp/postman_data/custom";
+      data_parent_dir="$HOME/tmp/postman_data/nixpkgs";
       postmanApp = {
         type = "app";
         program = "${pkgs.writeShellApplication {
@@ -78,7 +60,7 @@
           name = "shell";
           runtimeInputs = my_packages;
           text = ''
-            custom_postman
+            exec bash
           '';
         }}/bin/shell";
       };
