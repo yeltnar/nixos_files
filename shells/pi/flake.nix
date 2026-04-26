@@ -80,80 +80,87 @@
         ];
       };
 
+      piApp = {
+          type = "app";
+          program = "${pkgs.writeScript "run-container" ''
+            #!${pkgs.bash}/bin/bash
+            # Define a unique identifier for the built image based on its Nix store path hash
+            # This hash will be stable for the same image content
+            imageHash="$(nix-store -q --hash '${myContainerImage}' | sed 's/^sha256://')";
+
+            echo "Building and running the container with tag: $imageHash"
+            
+            # Check if the image with the hash as its repository name already exists locally
+            # We check for the repository name being exactly the hash, and any tag.
+            if ! podman images --format "{{.Repository}}" | grep -q "$imageHash$"; then
+              podman rmi -f "${image_name}:latest"
+              echo "Image with repository '$imageHash' not found, loading and retagging..."
+              # Load the image; it will be named "${image_name}:latest" as per buildImage config
+              podman load < "${myContainerImage}" || exit 1
+              # Tag the newly loaded image with just the hash as its repository name
+              # We explicitly tag it with ':latest' to ensure it's runnable without explicit tag
+              podman tag "${image_name}:latest" "$imageHash:latest" || exit 1
+              # Remove the original "${image_name}:latest" tag
+              podman rmi "${image_name}:latest"
+            else
+              echo "Image '$imageHash:latest' already loaded."
+            fi
+
+            command="pi"
+            if [ "$1" == "bash" ]; then
+              command="bash"
+            fi
+
+            pi_dir="$HOME/playin/pi_agent/pi"
+            pi_npm="$HOME/playin/pi_agent/npm"
+            pi_host="$HOME/playin/pi_agent/host"
+
+            mkdir -p "$pi_dir"
+            mkdir -p "$pi_npm"
+            mkdir -p "$pi_host"
+
+            inspect_exit_code=$(podman inspect ${container_name} >/dev/null 2>&1 ; echo $?)
+
+            # if it is running, attach to it, if not, create it
+            if [ "$inspect_exit_code" -eq 0 ]; then
+
+              echo exec
+              podman exec \
+                -it \
+                ${container_name} \
+                /bin/container_script "$command"
+
+            else
+
+              echo run
+              podman run \
+                --rm \
+                --name ${container_name}\
+                -it \
+                -v "$pi_dir":/.pi \
+                -v "$pi_npm":/npm \
+                -v "$pi_host":/host \
+                "$imageHash:latest" \
+                /bin/container_script "$command"
+
+            fi
+
+          ''}";
+        };
+
     in
     {
-      devShells.${system}.default = pkgs.mkShell {
-        packages = with pkgs; [
-          podman
-        ];
-        shellHook = ''
-          echo "Welcome to the container flake devShell!"
-          echo "You can run the container with 'nix run .'"
-        '';
-      };
+      # devShells.${system}.default = pkgs.mkShell {
+      #   packages = with pkgs; [
+      #     podman
+      #   ];
+      #   shellHook = ''
+      #     echo "Welcome to the container flake devShell!"
+      #     echo "You can run the container with 'nix run .'"
+      #   '';
+      #
+      # };
 
-      apps.${system}.default = {
-        type = "app";
-        program = "${pkgs.writeScript "run-container" ''
-          #!${pkgs.bash}/bin/bash
-          # Define a unique identifier for the built image based on its Nix store path hash
-          # This hash will be stable for the same image content
-          imageHash="$(nix-store -q --hash '${myContainerImage}' | sed 's/^sha256://')";
-
-          echo "Building and running the container with tag: $imageHash"
-          
-          # Check if the image with the hash as its repository name already exists locally
-          # We check for the repository name being exactly the hash, and any tag.
-          if ! podman images --format "{{.Repository}}" | grep -q "$imageHash$"; then
-            podman rmi -f "${image_name}:latest"
-            echo "Image with repository '$imageHash' not found, loading and retagging..."
-            # Load the image; it will be named "${image_name}:latest" as per buildImage config
-            podman load < "${myContainerImage}" || exit 1
-            # Tag the newly loaded image with just the hash as its repository name
-            # We explicitly tag it with ':latest' to ensure it's runnable without explicit tag
-            podman tag "${image_name}:latest" "$imageHash:latest" || exit 1
-            # Remove the original "${image_name}:latest" tag
-            podman rmi "${image_name}:latest"
-          else
-            echo "Image '$imageHash:latest' already loaded."
-          fi
-
-          command="pi"
-          if [ $1 == "bash" ]; then
-            command="bash"
-          fi
-
-          mkdir -p ./pi
-          mkdir -p ./npm
-          mkdir -p ./host
-
-          inspect_exit_code=$(podman inspect ${container_name} >/dev/null 2>&1 ; echo $?)
-
-          # if it is running, attach to it, if not, create it
-          if [ "$inspect_exit_code" -eq 0 ]; then
-
-            echo exec
-            podman exec \
-              -it \
-              ${container_name} \
-              /bin/container_script "$command"
-
-          else
-
-            echo run
-            podman run \
-              --rm \
-              --name ${container_name}\
-              -it \
-              -v  ~/playin/pi_agent/pi:/.pi \
-              -v ~/playin/pi_agent/npm:/npm \
-              -v ~/playin/pi_agent/host:/host \
-              "$imageHash:latest" \
-              /bin/container_script "$command"
-
-          fi
-
-        ''}";
-      };
+      apps.${system}.default = piApp;
     };
 }
