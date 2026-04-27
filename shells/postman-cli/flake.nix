@@ -45,35 +45,12 @@
         program = "${postman-app}/bin/postman-wrapper";
       };
 
-      worx_tests-app = pkgs.writeShellApplication {
-        name = "test";
-        runtimeInputs = with pkgs; [
-          nodejs
-          steam-run
-          coreutils
-        ];
-        text = ''
-          ${setup_env}
-          # exec vim run_postman.env 
-          # shellcheck disable=SC1091
-          # shellcheck disable=SC1090
-          source ~/worx-ai/playin/run_postman.env 
-          export POSTMAN_ENV=dev-production
-          exec steam-run bash ~/worx-ai/playin/run_postman.sh 
-        '';
-      };
-
-      worx_tests = {
-        type = "app";
-        program = "${worx_tests-app}/bin/test";
-      };
 
     in
     {
       apps.${system} = {
         default = postman_cli;
         postman_cli = postman_cli;
-        worx_tests = worx_tests;
       };
     };
 }
