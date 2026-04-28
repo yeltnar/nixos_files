@@ -13,10 +13,18 @@
 
       lib = nixpkgs.lib;
 
+      use_docker = false;
+
+      runner_command = if use_docker then "docker-compose" else "podman-compose";
+      # runner_command = "podman-compose";
+
+      runner_packages = with pkgs;
+        if use_docker
+        then [ docker docker-compose ]
+        else [ podman podman-compose ];
+
       my_packages = with pkgs; [
-        podman-compose
-        podman # these need to be properly set up in the system for this to work
-      ];
+      ] ++ runner_packages;
 
       container_data_dir = "/home/drew/playin/rustfs/data";
       
@@ -50,7 +58,7 @@
         text = ''
           mkdir -p ${container_data_dir}
           chmod 777 ${container_data_dir}
-          podman-compose -f ${compose_file} up
+          ${runner_command} -f ${compose_file} up
         '';
       };
 
