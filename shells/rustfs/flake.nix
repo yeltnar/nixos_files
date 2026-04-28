@@ -20,6 +20,8 @@
       let
         runner_command = if use_docker then "docker-compose" else "podman-compose";
 
+        restart_str = if use_docker then "unless-stopped" else "never";
+
         detach_arg = if detach then "-d" else "";
 
         full_runner_command = "${runner_command} -f ${compose_file} up ${detach_arg}";
@@ -38,6 +40,7 @@
           # default login rustfsadmin/rustfsadmin
           services:
             rustfs:
+              restart: ${restart_str}
               image: rustfs/rustfs:latest
               container_name: rustfs
               ports:
