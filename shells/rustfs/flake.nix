@@ -74,6 +74,11 @@
 
       # Generate the default versions for this flake
       defaultOutput = mkRustfs {};
+      miniOutput = mkRustfs { 
+        use_docker=true;
+        storage_port="9002";
+        ui_port="9003";
+      };
 
       pwd = {
         type = "app";
@@ -90,6 +95,7 @@
       apps.${system} = {
         default = defaultOutput.app;
         rustfs = defaultOutput.app;
+        mini = miniOutput.app;
         pwd = pwd;
       };
 
