@@ -12,13 +12,17 @@
 
       # This function holds your logic and accepts overrides
       mkRustfs = { 
-        use_docker ? false, 
-        storage_port ? "9000", 
-        ui_port ? "9001" 
+        use_docker ? false,
+        storage_port ? "9000",
+        ui_port ? "9001",
+        detach ? false,
       }: 
       let
         runner_command = if use_docker then "docker-compose" else "podman-compose";
-        # runner_command = "podman-compose";
+
+        detach_arg = if detach then "-d" else "";
+
+        full_runner_command = "${runner_command} -f ${compose_file} up ${detach_arg}";
 
         runner_packages = with pkgs;
           if use_docker
@@ -43,8 +47,8 @@
                 # - rustfs-data:/data
                 - ${container_data_dir}:/data
               environment:
-                - RUSTFS_ACCESS_KEY=user
-                - RUSTFS_SECRET_KEY=pass
+                - RUSTFS_ACCESS_KEY=$\{RUSTFS_ACCESS_KEY:-user\}
+                - RUSTFS_SECRET_KEY=$\{RUSTFS_SECRET_KEY:-pass\}
               stdin_open: true # Corresponds to -i
               tty: true        # Corresponds to -t
 
@@ -59,9 +63,10 @@
             echo "use_docker: ${if use_docker then "true" else "false"}"
             echo "storage_port: ${storage_port}"
             echo "ui_port: ${ui_port}"
+            echo "detach: ${if detach then "true" else "false"}"
             mkdir -p ${container_data_dir}
             chmod 777 ${container_data_dir}
-            ${runner_command} -f ${compose_file} up
+            ${full_runner_command}
           '';
         };
       in {
@@ -78,6 +83,7 @@
         use_docker=true;
         storage_port="9002";
         ui_port="9003";
+        detach=true;
       };
 
       pwd = {
