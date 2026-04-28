@@ -14,6 +14,8 @@
       lib = nixpkgs.lib;
 
       use_docker = false;
+      storage_port = "9000";
+      ui_port = "9001";
 
       runner_command = if use_docker then "docker-compose" else "podman-compose";
       # runner_command = "podman-compose";
@@ -35,8 +37,8 @@
             image: rustfs/rustfs:latest
             container_name: rustfs
             ports:
-              - "9000:9000"
-              - "9001:9001"
+              - "${storage_port}:9000"
+              - "${ui_port}:9001"
             volumes:
               # - rustfs-data:/data
               - ${container_data_dir}:/data
@@ -67,17 +69,17 @@
         program = "${rustfsPkg}/bin/my_app";
       };
 
-      shell = {
-        type = "app";
-        program = "${pkgs.writeShellApplication {
-          name = "shell";
-          runtimeInputs = my_packages;
-          text = ''
-            exec bash
-          '';
-        }}/bin/shell";
-      };
-
+      # shell = {
+      #   type = "app";
+      #   program = "${pkgs.writeShellApplication {
+      #     name = "shell";
+      #     runtimeInputs = my_packages;
+      #     text = ''
+      #       exec bash
+      #     '';
+      #   }}/bin/shell";
+      # };
+      #
       print = {
         type = "app";
         program = "${pkgs.writeShellScript "s" ''
@@ -101,8 +103,13 @@
       apps.${system} = {
         default = rustfsApp;
         rustfs = rustfsApp;
-        shell = shell;
+        # shell = shell;
         pwd = pwd;
+      };
+
+      packages.${system} = {
+        default = rustfsPkg;
+        rustfsPkg = rustfsPkg;
       };
     };
 }
