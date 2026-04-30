@@ -61,6 +61,8 @@ in
         thunar-volman
       ];
     };
+    services.gvfs.enable = true; # Helps with metadata and remote files
+    environment.pathsToLink = [ "/share/thumbnailers" ]; # Links the actual thumbnailer logic
 
     environment.systemPackages = with pkgs; [
       wayland-pipewire-idle-inhibit
