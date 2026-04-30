@@ -19,6 +19,11 @@ let
   monitor_file = "~/.config/hypr/monitors.${config.networking.hostName}.conf";
   extra_file_start = "~/.config/hypr/${config.networking.hostName}.extra.start.conf";
   extra_file_end = "~/.config/hypr/${config.networking.hostName}.extra.end.conf";
+
+  watch_locks = pkgs.writeShellScriptBin "watch_locks" ''
+    journalctl --user -u hypridle.service -b | awk "/(Wayland session got|Started Hyprland's idle daemon)/"
+    journalctl --user -n 0 -fu hypridle.service -b | awk "/(Wayland session got|Started Hyprland's idle daemon)/"
+  '';
 in
 {
 
@@ -96,6 +101,7 @@ in
       # hyprshell # TODO add this to repo
       wlr-which-key
 
+      watch_locks
       # move dispalys and change settings # make wraper to use specific file
       (pkgs.writeShellScriptBin "nwg-displays" ''
         ${nwg-displays}/bin/nwg-displays -m ${monitor_file}
