@@ -34,6 +34,8 @@ in
       ../../../includes/flatpak/flatpak.nix
 
       ../../../includes/rclone_mounts/mini-minio.nix
+      ../../../includes/rclone_mounts/mini-rustfs_s3.nix
+      ../../../includes/rclone_mounts/mini-rustfs_s3-enc.nix
       # ../../../includes/makemkv/makemkv.nix
 
       # ../../../includes/jellyfin/jellyfin.nix
