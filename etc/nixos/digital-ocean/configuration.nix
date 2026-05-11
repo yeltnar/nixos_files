@@ -43,7 +43,7 @@ in {
     linger = true;
     use_run_env = false;
     test_string = "All tunnels are now active";
-    backup_restore = false; 
+    backup_restore = true; 
 
     super_user_clone = true;
     super_user_start = true;
