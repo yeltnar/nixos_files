@@ -38,7 +38,7 @@ creation_rules:
       - age:
           - *drew-lin-laptop
           - *backup-key
-  - path_regex: etc/nixos/do-nixos/*
+  - path_regex: etc/nixos/digital-ocean/*
     key_groups:
       - age:
           - *do-nixos
