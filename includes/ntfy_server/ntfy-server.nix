@@ -19,6 +19,7 @@ in {
     linger = true;
     use_run_env = false;
     test_string = "Listening on";
+    backup_restore = true; 
   };
 
 }
