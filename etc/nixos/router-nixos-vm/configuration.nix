@@ -16,7 +16,9 @@ in
   # boot.supportedFilesystems = [ "bcachefs" ];
 
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      ../security_fix.nix
+      # Include the results of the hardware scan.
       # ./hardware-configuration.nix
       ./hardware-configuration.nix
       (import ../../../generic_configuration.nix ( args // {leUser = leUser;}))

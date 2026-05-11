@@ -8,7 +8,9 @@ let
   leUser = "drew";
 in {
   imports =
-    [ # Include the results of the hardware scan.
+    [ 
+      ../security_fix.nix
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ( import ../../../includes/nebula/nebula.nix ( args // { user = leUser; SECONDARY_HOST="hot.andbrant.com"; SECONDARY_CURL_OPTIONS=""; } ) )
       ( import ../../../includes/sops/sops_make_age_key.nix (args // { leUser = leUser; }))
