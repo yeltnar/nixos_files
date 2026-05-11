@@ -22,7 +22,7 @@ let
         if [[ $(hyprctl activeworkspace -j | jq '.windows') -gt 0 ]]; then
             break
         fi
-        sleep 0.1
+        sleep 1
     done
     hyprctl dispatch workspace name:w1
     bash -c '${teams-webapp}/bin/teams-webapp &' >/dev/null 2>&1
