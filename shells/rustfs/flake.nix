@@ -50,8 +50,8 @@
                 # - rustfs-data:/data
                 - ${container_data_dir}:/data
               environment:
-                - RUSTFS_ACCESS_KEY=$\{RUSTFS_ACCESS_KEY:-user\}
-                - RUSTFS_SECRET_KEY=$\{RUSTFS_SECRET_KEY:-pass\}
+                - RUSTFS_ACCESS_KEY=''${RUSTFS_ACCESS_KEY:-user}
+                - RUSTFS_SECRET_KEY=''${RUSTFS_SECRET_KEY:-pass}
               stdin_open: true # Corresponds to -i
               tty: true        # Corresponds to -t
 
