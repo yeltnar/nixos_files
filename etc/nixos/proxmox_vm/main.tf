@@ -45,6 +45,15 @@ resource "proxmox_virtual_environment_file" "nixos_qcow2" {
   }
 }
 
+import {
+  to = proxmox_virtual_environment_vm.my_existing_vm
+  id = "pve/100" # The actual ID from your cloud provider
+}
+
+# resource "proxmox_virtual_environment_vm" "my_existing_vm" {
+#   node_name = "pve"
+# }
+
 resource "proxmox_virtual_environment_vm" "my_vm" {
   name      = "opentofu-vm-${var.image_proxmox_name}"
   node_name = "pve"
