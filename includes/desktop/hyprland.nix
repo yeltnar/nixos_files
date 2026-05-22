@@ -125,14 +125,18 @@ in
     programs.hyprlock.enable = true;
     security.pam.services.hyprlock = {};
 
-    services.greetd = {
+    services.greetd = let 
+      tuigreet_command = "${pkgs.uwsm}/bin/uwsm start hyprland-uwsm.desktop";
+      command = ''
+        ${pkgs.tuigreet}/bin/tuigreet --remember --time --time-format "%b %-d %I:%M:%S" --cmd "${tuigreet_command}"
+      '';
+    in {
       enable = true;
       settings = {
         default_session = {
           # 'command' tells greetd which greeter to use and what to launch afterwards.
           # We're using agreety, and telling it to execute Hyprland directly.
-          command = "${pkgs.tuigreet}/bin/tuigreet --remember --time --time-format \"%b %-d %I:%M:%S\" --cmd \"${pkgs.uwsm}/bin/uwsm start hyprland-uwsm.desktop\"";
-          _command = "${pkgs.regreet}/bin/regreet";
+          inherit command;
           user = "greeter";
         };
       };
