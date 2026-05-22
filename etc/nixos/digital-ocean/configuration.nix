@@ -18,6 +18,7 @@ in {
       ../../../includes/nixos_files.nix
 
       ../../../includes/rclone_mounts/mini-minio.nix
+      ../../../includes/rclone_mounts/mini-rustfs_s3.nix
 
       ../../../includes/caddy-server/do-nixos-caddy-server.nix
       ../../../includes/caddy-server/backup_restore.timer.nix
