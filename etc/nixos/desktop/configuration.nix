@@ -185,7 +185,7 @@ in
       discord
     #  thunderbird
       kdePackages.kdenlive
-      spotify
+      # spotify
       vscodium-fhs
       ungoogled-chromium
     ];
