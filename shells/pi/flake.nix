@@ -58,6 +58,7 @@
           nix
           nodejs_24
           container_script
+          pandoc
         ];
         pathsToLink = [ "/bin" ];
       };
@@ -161,6 +162,10 @@
       #
       # };
 
-      apps.${system}.default = piApp;
+      apps.${system} = {
+        default = piApp;
+        piApp = piApp;
+        # bash = bash;
+      };
     };
 }
