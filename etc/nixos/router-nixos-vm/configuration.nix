@@ -29,6 +29,7 @@ in
       ../../../includes/router_wireguard_server/wireguard_server_router.nix
       ../../../includes/technitium/technitium.nix
       ../../../includes/rclone_mounts/mini-minio.nix
+      ../../../includes/rclone_mounts/mini-rustfs_s3.nix
 
       ../../../includes/ntfy_report/ntfy_report_ip_timer.nix
       

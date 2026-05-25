@@ -55,6 +55,7 @@ in {
     # ../../../includes/vm/vm.nix
     ../../../includes/nbdkit/nbdkit.entry.nix
     ../../../includes/rclone_mounts/mini-minio.nix
+    ../../../includes/rclone_mounts/mini-rustfs_s3.nix
 
     ../../../includes/helpers/compose-systemd.nix
 
@@ -74,7 +75,8 @@ in {
     super_user_restore = true; 
     super_user_backup = true; 
     # the non numbered one broke 
-    BORG_REPO = "/mnt/minio/backups/babybuddy_backup2";
+    # BORG_REPO = "/mnt/minio/backups/babybuddy_backup2";
+    BORG_REPO = "/mnt/rustfs/backups/babybuddy_backup2";
     backup_interval = "1h";
   };
 

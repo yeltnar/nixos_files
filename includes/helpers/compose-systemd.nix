@@ -282,7 +282,7 @@ let
 
       backup_WORKDIR=shared_vars.code_dir;
       backup_FILES_TO_BACKUP=value.files_to_backup;
-      backup_BORG_REPO=if value ? BORG_REPO  && value.BORG_REPO != "" then value.BORG_REPO else "/mnt/minio/backups/${name}_backup";
+      backup_BORG_REPO=if value ? BORG_REPO  && value.BORG_REPO != "" then value.BORG_REPO else "/mnt/rustfs/backups/${name}_backup";
       backup_ENCRYPTION="repokey";
 
       # for backup this is needed (provided from sops)
