@@ -379,6 +379,7 @@ let
         }
 
         borg prune -v --list ${backups_to_keep}
+        borg compact
       '';
       # TODO need to validate the repo... this was a pain to identify
       restore_script = ''
