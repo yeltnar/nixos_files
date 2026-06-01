@@ -166,8 +166,6 @@ in
   #   #media-session.enable = true;
   # };
 
-  programs.adb.enable = true;
-
   # users.mutableUsers = false;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -211,7 +209,7 @@ in
     powerManagement.finegrained = false;
     open = false; # use non-free drivers
     nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable; 
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_580; 
   };
 
   # List packages installed in system profile. To search, run:
@@ -253,6 +251,7 @@ in
     # lima
     ulauncher 
     finamp
+    android-tools
   ];
 
 
