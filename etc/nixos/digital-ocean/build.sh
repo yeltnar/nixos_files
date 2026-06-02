@@ -1,6 +1,4 @@
 command="build"
-export NIX_SSHOPTS='-t'
-flake="do-nixos"
-host="do-nixos"
-NIX_SSHOPTS='-t'
-nixos-rebuild "$command" --flake .#"$flake" --target-host "$host" --use-remote-sudo
+export flake="do-nixos"
+export host="do-nixos"
+./.nixos-rebuild_wrapper.sh "$command"
