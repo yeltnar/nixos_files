@@ -1,4 +1,42 @@
 [
+  // laptop
+  {
+    "layer": "top",
+    "output":"eDP-1",
+    "position": "top",
+    "height": 30,
+    "spacing": 1,
+    "margin": 0,
+    "modules-left": [
+      // "custom/weather",
+      "hyprland/workspaces",
+      "hyprland/window" // Shows the title of the active window
+    ],
+
+    "modules-center": [
+      "clock"
+    ],
+
+    "include":["~/.config/hypr/waybar/modules.jsonc"],
+
+    "modules-right": [
+      "custom/playerctl",
+      "privacy",
+      "pulseaudio",
+      // "backlight",
+      "network",
+      "cpu",
+      "memory",
+      "temperature",
+      "battery",
+      "disk",
+      "bluetooth",
+      "tray",
+      "custom/endpad"
+    ]
+  },
+
+  // desktop
   {
     "layer": "top",
     "output":"DP-1",

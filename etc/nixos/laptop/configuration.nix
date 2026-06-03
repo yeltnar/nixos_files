@@ -118,6 +118,8 @@ in
     betaflight-configurator
 
     obs-studio
+
+    ungoogled-chromium
   ];
 
   # TLS certificates to install as system certs 
