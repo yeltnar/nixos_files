@@ -38,6 +38,11 @@ in
     ../../../includes/fix-trackpad.nix 
 
     ../../../includes/element-desktop-wrapper.nix
+
+    ../../../includes/notify_boot/notify_boot.nix
+
+    ../../../includes/webapp/work-chromium.nix
+    ../../../includes/start_work.nix
   ];
 
   services.desktop_environment.selection = "hyprland";
