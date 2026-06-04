@@ -210,7 +210,7 @@ in
     open = false; # use non-free drivers
     nvidiaSettings = true;
     # TODO add back when moving to 26.05
-    # package = config.boot.kernelPackages.nvidiaPackages.legacy_580; 
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_580; 
   };
 
   # List packages installed in system profile. To search, run:
