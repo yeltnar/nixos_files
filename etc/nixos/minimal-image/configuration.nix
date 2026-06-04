@@ -26,7 +26,15 @@ in
       # ../../../includes/custom_bashrc.nix
       # ../../../includes/nixos_files.nix
       ../../../includes/ssh/ssh_cert.nix
+
+
+      # ({...}:{
+      #   imports = [ ./hyprland.nix ];
+      # })
+
     ];
+
+
 
   users.users."${leUser}" = {
     initialHashedPassword = "$y$j9T$Hoqb64htLdKUgZuVI1QK31$6O2aevVdmXqDMrU6Tm2vbAF1/vTZUlwEEFjkEB8ftIA";
