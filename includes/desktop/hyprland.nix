@@ -6,12 +6,12 @@
 }:
 let 
   desktop_environment = config.services.desktop_environment.selection;
-  # hyprspaceConfig =''
-  #   plugin = ${pkgs.hyprlandPlugins.hyprspace}/lib/libhyprspace.so
-  # '';
-  # hyprexpoConfig =''
-  #   plugin = ${pkgs.hyprlandPlugins.hyprexpo}/lib/libhyprexpo.so
-  # '';
+  hyprspaceConfig =''
+    plugin = ${pkgs.hyprlandPlugins.hyprspace}/lib/libhyprspace.so
+  '';
+  hyprexpoConfig =''
+    plugin = ${pkgs.hyprlandPlugins.hyprexpo}/lib/libhyprexpo.so
+  '';
   wallpaper = pkgs.fetchurl {
     url = "https://hot.andbrant.com/milkyway+C&H-nix.jpg";
     sha256 = "sha256-Xzlv420zq3SOcjDJU0mc7Cew9dNql0IvhQcSvTVbziM=";
@@ -80,8 +80,8 @@ in
 
     environment.systemPackages = with pkgs; [
       wayland-pipewire-idle-inhibit
-      # hyprlandPlugins.hyprspace
-      # hyprlandPlugins.hyprexpo
+      hyprlandPlugins.hyprspace
+      hyprlandPlugins.hyprexpo
       waybar
       wofi
       fuzzel
@@ -171,13 +171,13 @@ in
     hyprland
   '';
   
-  # environment.etc."hypr/hyprspace".source = "${pkgs.hyprlandPlugins.hyprspace}/lib/libhyprspace.so";
-  # environment.etc."hypr/hyprexpo".source = "${pkgs.hyprlandPlugins.hyprexpo}/hyprexpo/lib/libhyprexpo.so";
+  environment.etc."hypr/hyprspace".source = "${pkgs.hyprlandPlugins.hyprspace}/lib/libhyprspace.so";
+  environment.etc."hypr/hyprexpo".source = "${pkgs.hyprlandPlugins.hyprexpo}/hyprexpo/lib/libhyprexpo.so";
   environment.etc."hypr/wallpaper.jpg".source = "${wallpaper}";
 
   # Mount the Hyprland configuration file
-  # environment.etc."hypr/hyprspace.conf".text = hyprspaceConfig;
-  # environment.etc."hypr/hyprexpo.conf".text = hyprexpoConfig;
+  environment.etc."hypr/hyprspace.conf".text = hyprspaceConfig;
+  environment.etc."hypr/hyprexpo.conf".text = hyprexpoConfig;
 
    
   # this should be the first hyprland activationScripts
