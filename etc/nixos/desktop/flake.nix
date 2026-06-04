@@ -13,8 +13,9 @@
     };
   };
 
-  outputs = { self, nixpkgs, sops-nix, ... } @ inputs: 
+  outputs = { self, nixpkgs, nixpkgs_25_11, sops-nix, ... } @ inputs: 
   let
+    nixpkgs = nixpkgs_25_11;
     system = "x86_64-linux";
     config = self.config;
 
