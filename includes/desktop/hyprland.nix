@@ -40,7 +40,21 @@ in
     # screensharing from nixos site # TODO verify
     xdg.portal = {
       enable = true;
-      extraPortals = with pkgs; [ xdg-desktop-portal-hyprland ];
+      extraPortals = [ 
+        pkgs.xdg-desktop-portal-hyprland
+        pkgs.xdg-desktop-portal-gtk 
+      ];
+      config = {
+        common = {
+          default = [ "hyprland" "gtk" ];
+        };
+        # Explicitly enforce routing for Hyprland sessions
+        hyprland = {
+          default = [ "hyprland" "gtk" ];
+          "org.freedesktop.impl.portal.ScreenCast" = [ "hyprland" ];
+          "org.freedesktop.impl.portal.Screenshot" = [ "hyprland" ];
+        };
+      };
     };
 
     hardware = {
