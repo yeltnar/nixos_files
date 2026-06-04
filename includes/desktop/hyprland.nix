@@ -2,6 +2,7 @@
   config,
     pkgs,
     lib, 
+    inputs,
     ...
 }:
 let 
@@ -33,14 +34,38 @@ in
 
     programs.hyprland = {
       enable = true;
-      withUWSM = true;
+      # withUWSM = true;
       xwayland.enable = true;
+
+      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+
     };
 
     # screensharing from nixos site # TODO verify
     xdg.portal = {
       enable = true;
-      extraPortals = with pkgs; [ xdg-desktop-portal-hyprland ];
+      extraPortals = [ 
+        # pkgs.xdg-desktop-portal-hyprland
+        inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland
+        pkgs.xdg-desktop-portal-gtk 
+      ];
+      config = {
+        common = {
+          # Use hyprland as the primary portal, fallback to gtk if hyprland doesn't implement a interface
+          default = [ "hyprland" "gtk" ];
+        };
+        hyprland = {
+          default = [ "hyprland" "gtk" ];
+        };
+      };
+    };
+
+    environment.sessionVariables = {
+      # This helps apps find the desktop portals
+      XDG_CURRENT_DESKTOP = "Hyprland";
+      XDG_SESSION_TYPE = "wayland";
+      XDG_SESSION_DESKTOP = "Hyprland";
     };
 
     hardware = {
@@ -126,7 +151,7 @@ in
     security.pam.services.hyprlock = {};
 
     services.greetd = let 
-      tuigreet_command = "${pkgs.uwsm}/bin/uwsm start hyprland-uwsm.desktop";
+      tuigreet_command = "${pkgs.uwsm}/bin/uwsm start start-hyprland";
       command = ''
         ${pkgs.tuigreet}/bin/tuigreet --remember --time --time-format "%b %-d %I:%M:%S" --cmd "${tuigreet_command}"
       '';
