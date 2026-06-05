@@ -209,8 +209,20 @@ in
     powerManagement.finegrained = false;
     open = false; # use non-free drivers
     nvidiaSettings = true;
-    # TODO add back when moving to 26.05
     package = config.boot.kernelPackages.nvidiaPackages.legacy_580; 
+  };
+
+  systemd.tmpfiles.settings = {
+    "10-clean-tmp" = {
+      "/tmp" = {
+        "D" = {
+          mode = "1777";
+          user = "root";
+          group = "root";
+          age = "7d";
+        };
+      };
+    };
   };
 
   # List packages installed in system profile. To search, run:
