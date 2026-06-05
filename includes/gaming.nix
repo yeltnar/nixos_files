@@ -31,7 +31,8 @@
   programs.steam.gamescopeSession.enable = true;
   programs.gamescope = {
     enable = true; 
-    capSysNice = true; 
+    # TODO remove this when nixpkgs has a fix
+    # capSysNice = true; 
   };
 
   # TODO move this to a nvidia file? 
