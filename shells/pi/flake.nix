@@ -59,6 +59,7 @@
           nodejs_24
           container_script
           pandoc
+          findutils
         ];
         pathsToLink = [ "/bin" ];
       };
