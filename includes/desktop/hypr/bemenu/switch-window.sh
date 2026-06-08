@@ -46,5 +46,5 @@ if [[ "movetoworkspacesilent" = "$action" ]]; then
   hyprctl dispatch "$action" "$workspace_number"
 fi
 
-hyprctl dispatch workspace "$workspace_number"
+hyprctl dispatch "hl.dsp.focus({ workspace = '$workspace_number' })"
 

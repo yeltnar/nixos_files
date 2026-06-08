@@ -1,39 +1,34 @@
 font: "Sans 12"
 
 menu:
-  - key: t
-    desc: "hyprctl dispatch togglegroup"
-    cmd: "hyprctl dispatch togglegroup"
-  - key: m
-    desc: "hyprctl dispatch moveoutofgroup"
-    cmd: "hyprctl dispatch moveoutofgroup"
-  - key: c
-    desc: "hyprctl dispatch changegroupactive"
-    cmd: "hyprctl dispatch changegroupactive"
-  - key: C
-    desc: "hyprctl dispatch changegroupactive prev"
-    cmd: "hyprctl dispatch changegroupactive prev"
-  - key: j
-    desc: "join"
-    submenu:
-      - key: h
-        desc: "left"
-        cmd: "hyprctl dispatch moveintogroup l"
-      - key: l
-        desc: "right"
-        cmd: "hyprctl dispatch moveintogroup r"
-      - key: k
-        desc: "up"
-        cmd: "hyprctl dispatch moveintogroup u"
-      - key: j
-        desc: "down"
-        cmd: "hyprctl dispatch moveintogroup d"
-  - key: s
-    desc: "System..."
-    submenu:
-      - key: r
-        desc: "Reboot"
-        cmd: "echo reboot"
-      - key: p
-        desc: "Power Off"
-        cmd: "echo poweroff"
+ - key: t
+   desc: "toggle group"
+   cmd: "hyprctl dispatch 'hl.dsp.group.toggle()'"
+
+ - key: m
+   desc: "move out of group"
+   cmd: "hyprctl dispatch 'hl.dsp.window.move({ out_of_group = true })'"
+
+ - key: c
+   desc: "change group active next"
+   cmd: "hyprctl dispatch 'hl.dsp.group.next()'"
+
+ - key: C
+   desc: "change group active prev"
+   cmd: "hyprctl dispatch 'hl.dsp.group.prev()'"
+
+ - key: j
+   desc: "join"
+   submenu:
+     - key: h
+       desc: "left"
+       cmd: "hyprctl dispatch 'hl.dsp.window.move({ into_group = \"l\" })'"
+     - key: l
+       desc: "right"
+       cmd: "hyprctl dispatch 'hl.dsp.window.move({ into_group = \"r\" })'"
+     - key: k
+       desc: "up"
+       cmd: "hyprctl dispatch 'hl.dsp.window.move({ into_group = \"u\" })'"
+     - key: j
+       desc: "down"
+       cmd: "hyprctl dispatch 'hl.dsp.window.move({ into_group = \"d\" })'"

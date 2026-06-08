@@ -32,4 +32,4 @@ elif [[ "$1" == "prev" ]]; then
 fi
 
 # 5. Dispatch the command
-hyprctl dispatch workspace "name:${workspaces[$next_index]}"
+hyprctl dispatch "hl.dsp.focus({ workspace = '${workspaces[$next_index]}' })"

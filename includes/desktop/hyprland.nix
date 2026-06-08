@@ -89,11 +89,28 @@ in
     services.gvfs.enable = true; # Helps with metadata and remote files
     environment.pathsToLink = [ "/share/thumbnailers" ]; # Links the actual thumbnailer logic
 
+    # TODO switch this back to the regular environment.systemPackages when you can
+    programs.waybar = {
+      enable = true;
+      package = pkgs.waybar.overrideAttrs (oldAttrs: {
+        version = "v0.15.0";
+        src = pkgs.fetchFromGitHub {
+          owner = "Alexays";
+          repo = "Waybar";
+          # rev = "master"; 
+          rev = "05945748dccce28bf96d26d8f64a9e69a8dd49ba"; 
+          hash = "sha256-51R3mIt8cLNvh/X5qe9vOqeJCj0U9KRyemVE5y+OhiU="; # Replace with your actual hash once Nix gives it to you
+        };
+        # Add this line to tell Meson to skip building with CAVA support
+        mesonFlags = (oldAttrs.mesonFlags or []) ++ [ "-Dcava=disabled" ];
+      });
+    };
+
     environment.systemPackages = with pkgs; [
       wayland-pipewire-idle-inhibit
       # hyprlandPlugins.hyprspace
       # hyprlandPlugins.hyprexpo
-      waybar
+      # waybar # using programs.waybar now
       wofi
       fuzzel
       (pkgs.writeShellScriptBin "dfuzzel" ''
