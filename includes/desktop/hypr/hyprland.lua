@@ -1,5 +1,16 @@
 -- Ported from hyprland.conf using the Hyprland 0.55+ Lua configuration API.
 
+--- Safely requires a module only if it exists, bypassing global error loggers.
+-- @param module_name string: The name of the module to load.
+-- @return table|nil: The loaded module, or nil if not found.
+local function silent_require(module_name)
+    -- package.searchpath returns the file path if found, or nil + error message
+    if package.searchpath(module_name, package.path) then
+        return require(module_name)
+    end
+    return nil
+end
+
 local terminal = "~/.config/hypr/start_ghostty.sh"
 local terminal_floating = "ghostty --class=com.mitchellh.ghostty.floating"
 local browser = "firefox"
@@ -12,9 +23,16 @@ local border_color_2 = "rgba(00ff99ee)"
 local border_color_3 = "rgba(c864faee)"
 local hyprshot = "mkdir -p ~/hyprshot; hyprshot -o ~/hyprshot"
 
+-- local hostname = 'drew-lin-desktop'
+-- local hostname = os.getenv("HOSTNAME") or 'drew-lin-desktop'
+local file = io.open("/proc/sys/kernel/hostname", "r")
+local hostname = file:read("*l") -- Read the first line
+file:close()
+
 -- MONITORS
 hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
-require('monitors')
+silent_require('monitors_'..hostname)
+silent_require(hostname..'_extra_start')
 -- pcall(require, "extra_start")
 
 -- WORKSPACES
@@ -203,4 +221,4 @@ bind("XF86AudioPause", exec("playerctl play-pause"), { locked = true })
 bind("XF86AudioPlay", exec("playerctl play-pause"), { locked = true })
 bind("XF86AudioPrev", exec("playerctl previous"), { locked = true })
 
--- pcall(require, "extra_end")
+silent_require(hostname .. '_extra_end')

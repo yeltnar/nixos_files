@@ -1,0 +1,9 @@
+
+hl.config({
+  render = {
+    -- Enables direct scanout for fullscreen windows.
+    -- The default value is false.
+    -- see if this helps with game/sound
+    direct_scanout = true
+  }
+})
