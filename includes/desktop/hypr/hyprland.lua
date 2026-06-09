@@ -14,7 +14,7 @@ local hyprshot = "mkdir -p ~/hyprshot; hyprshot -o ~/hyprshot"
 
 -- MONITORS
 hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
--- pcall(require, "monitors")
+require('monitors')
 -- pcall(require, "extra_start")
 
 -- WORKSPACES
