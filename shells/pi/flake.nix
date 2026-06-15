@@ -60,6 +60,7 @@
           container_script
           pandoc
           findutils
+          neovim
         ];
         pathsToLink = [ "/bin" ];
       };
