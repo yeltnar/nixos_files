@@ -167,22 +167,47 @@ in
     programs.hyprlock.enable = true;
     security.pam.services.hyprlock = {};
 
-    services.greetd = let 
-      tuigreet_command = "${pkgs.uwsm}/bin/uwsm start start-hyprland";
-      command = ''
-        ${pkgs.tuigreet}/bin/tuigreet --remember --time --time-format "%b %-d %I:%M:%S" --cmd "${tuigreet_command}"
-      '';
-    in {
+    services.displayManager.defaultSession = "hyprland";
+
+    programs.regreet = {
+      cageArgs = [ "-m" "last" ]; # Forces cage onto a single connected display
       enable = true;
+      # 1. Force Dark Mode via GTK Settings
       settings = {
-        default_session = {
-          # 'command' tells greetd which greeter to use and what to launch afterwards.
-          # We're using agreety, and telling it to execute Hyprland directly.
-          inherit command;
-          user = "greeter";
+        GTK = {
+          application_prefer_dark_theme = true;
         };
+        skip_selection = true;
+      };
+      # 2. Pick a Dark-friendly GTK theme (Adwaita is built-in and works great)
+      theme = {
+        name = "Adwaita-dark";
+        package = pkgs.gnome-themes-extra;
+      };
+      font = {
+        name = "Cantarell";
+        size = 16;
       };
     };
+
+    # services.greetd = let 
+    #   # tuigreet_command = "${pkgs.uwsm}/bin/uwsm start start-hyprland";
+    #   # command = ''
+    #   #   ${pkgs.tuigreet}/bin/tuigreet --remember --time --time-format "%b %-d %I:%M:%S" --cmd "${tuigreet_command}"
+    #   # '';
+    #   # command = "${pkgs.tuigreet}/bin/tuigreet --remember --time --time-format \"%b %-d %I:%M:%S\" --cmd \"${pkgs.mangowc}/bin/mango\"";
+    #   command = "${pkgs.regreet}/bin/regreet";
+    # in {
+    #   enable = true;
+    #   settings = {
+    #     default_session = {
+    #       # 'command' tells greetd which greeter to use and what to launch afterwards.
+    #       # We're using agreety, and telling it to execute Hyprland directly.
+    #       inherit command;
+    #       user = "greeter";
+    #     };
+    #   };
+    # };
 
     # this failed at least once
     # try to fix showing startup logs on tuigreet
