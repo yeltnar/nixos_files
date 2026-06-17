@@ -255,7 +255,7 @@ in
 
     audacity
 
-    superTuxKart
+    supertuxkart
 
     nix-output-monitor
 
