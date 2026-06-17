@@ -22,6 +22,8 @@
         export SSL_CERT_FILE="${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
         export NODE_EXTRA_CA_CERTS="${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
         export PATH="/npm/bin:$PATH"
+        export EDITOR=nvim
+        export VISUAL=nvim
 
         mkdir -p /usr
         ln -s /bin /usr/bin
@@ -61,6 +63,7 @@
           pandoc
           findutils
           neovim
+          iputils
         ];
         pathsToLink = [ "/bin" ];
       };
