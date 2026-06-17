@@ -146,6 +146,7 @@
                 -v "$pi_dir":/.pi \
                 -v "$pi_npm":/npm \
                 -v "$pi_host":/host \
+                -v "/mnt/rustfs/pi-agent/":/rustfs/ \
                 "$imageHash:latest" \
                 /bin/container_script "$command"
 
