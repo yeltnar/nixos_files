@@ -11,6 +11,8 @@ local function silent_require(module_name)
     return nil
 end
 
+silent_require('switch-window-workspace')
+
 local terminal = "~/.config/hypr/start_ghostty.sh"
 local terminal_floating = "ghostty --class=com.mitchellh.ghostty.floating"
 local browser = "firefox"
@@ -211,7 +213,7 @@ do
 
   hl.bind("CTRL + ALT + T", hl.dsp.exec_cmd(terminal))
   hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(terminal))
-  hl.bind(mainMod .. " + U", hl.dsp.exec_cmd(terminal))
+  -- hl.bind(mainMod .. " + U", hl.dsp.exec_cmd(terminal))
   hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("~/.config/hypr/wlr-which-key/add-tab-or-new-window.sh \"https://gemini.google.com\""))
   hl.bind("CTRL + ALT + SHIFT + T", hl.dsp.exec_cmd(terminal_floating))
   hl.bind(shiftMod .. " + T", hl.dsp.exec_cmd(terminal_floating))
