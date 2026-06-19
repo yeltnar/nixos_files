@@ -17,6 +17,8 @@ in
       ../security_fix.nix
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../../includes/nixos_files.nix
+      ../../../includes/custom_bashrc.nix
       ( import ../../../generic_configuration.nix (args // { leUser = leUser; }))
       ../../../includes/desktop/desktop.nix
       ../../../includes/gaming.nix
