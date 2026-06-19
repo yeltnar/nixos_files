@@ -18,6 +18,9 @@
     #   ref = "main";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
+    hyprland = {
+      url = "github:hyprwm/Hyprland?ref=main";
+    };
   };
 
   outputs = { self, nixpkgs, sops-nix, ... } @ inputs: 
@@ -36,7 +39,7 @@
   {
     nixosConfigurations = {
       nixos-testing = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit system; };
+        specialArgs = { inherit system inputs; };
 
         modules = [
           ./configuration.nix
