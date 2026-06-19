@@ -19,10 +19,27 @@
     serviceConfig = { 
       Type = "oneshot";
     };
-    script =''
-      mkdir -p /home/drew/playin
-      cd /home/drew/playin
-      ${pkgs.git}/bin/git clone https://github.com/yeltnar/nixos_files
+    path = with pkgs; [
+      git
+    ];
+    script = ''
+      set -euo pipefail
+
+      REPO="git@github.com:yeltnar/nixos_files"
+      NAME="nixos_files"
+
+      BARE_DIR="$HOME/playin/worktree_$NAME"
+      WORKTREE_DIR="$HOME/playin/$NAME"
+
+      mkdir -p "$HOME/playin"
+
+      if [ ! -d "$BARE_DIR" ]; then
+        git clone --bare "$REPO" "$BARE_DIR"
+      fi
+
+      if [ ! -d "$WORKTREE_DIR" ]; then
+        git --git-dir="$BARE_DIR" worktree add "$WORKTREE_DIR" main
+      fi
     '';
   };
 
