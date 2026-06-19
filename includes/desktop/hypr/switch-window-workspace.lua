@@ -28,14 +28,14 @@ hl.bind(mainMod .. " + U", function()
   -- get the list of window titles
   for i, v in ipairs(merged_arr) do
     if v.workspace ~= nil then
-      table.insert( arr, "wn: "..v.title )
+      table.insert( arr, "wn: "..v.class..": "..v.title )
     else
       table.insert( arr, "ws: "..v.name )
     end
   end
 
   -- create callback which will be called after dfuzzel selection
-  local subcommand = "echo -e \'" .. table.concat(arr,"\\n") .. "\' | dfuzzel --dmenu --index | xargs -I {} hyprctl eval 'CallbackWrapper(\""..k.."\", {})'"
+  local subcommand = "echo -e \'" .. table.concat(arr,"\\n") .. "\' | dfuzzel --width 60 --dmenu --index | xargs -I {} hyprctl eval 'CallbackWrapper(\""..k.."\", {})'"
 
   callback_functions[k] = function( index )
 
