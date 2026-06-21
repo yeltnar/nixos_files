@@ -1,5 +1,5 @@
 # A Nix expression that evaluates to a function taking an attribute set of environment variables.
-{ pkgs, REPO ? "", BASE_HOSTNAME ? "", USERNAME ? "", REPO_NAME ? "", USE_WORKTREE ? "", ... }:
+{ pkgs, REPO ? "", BASE_HOSTNAME ? "", USERNAME ? "", REPO_NAME ? "", USE_WORKTREE ? "default", ... }:
 
 let
   # pkgs = import <nixpkgs> { };

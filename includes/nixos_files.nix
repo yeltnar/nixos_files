@@ -27,10 +27,10 @@ in {
     path = with pkgs; [
       git
     ];
-    script = "${bareCloneWorktree args // {
+    script = "${bareCloneWorktree (args // {
       REPO_NAME = "nixos_files";
       USE_WORKTREE = "true";
-    }}/bin/env-git-clone";
+    })}/bin/env-git-clone";
   };
 
   systemd.user.services.run-home-manager = {
