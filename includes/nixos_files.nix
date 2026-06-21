@@ -1,10 +1,15 @@
 # THIS SHOULD NOT BE USED... USE HOME MANAGER INSTEAD
-{
+args@{
   config,
   pkgs,
   ...
-}: {
-  imports = [ ./nm-online.service.nix ];
+}: let 
+  bareCloneWorktree = import ./bare-clone-worktree.nix;
+in {
+  imports = [ 
+    ./nm-online.service.nix 
+  ];
+
 
   systemd.user.services.nixos_files-git-repo = {
     description = "nixos_files-git-repo";
@@ -22,25 +27,10 @@
     path = with pkgs; [
       git
     ];
-    script = ''
-      set -euo pipefail
-
-      REPO="git@github.com:yeltnar/nixos_files"
-      NAME="nixos_files"
-
-      BARE_DIR="$HOME/playin/worktree_$NAME"
-      WORKTREE_DIR="$HOME/playin/$NAME"
-
-      mkdir -p "$HOME/playin"
-
-      if [ ! -d "$BARE_DIR" ]; then
-        git clone --bare "$REPO" "$BARE_DIR"
-      fi
-
-      if [ ! -d "$WORKTREE_DIR" ]; then
-        git --git-dir="$BARE_DIR" worktree add "$WORKTREE_DIR" main
-      fi
-    '';
+    script = "${bareCloneWorktree args // {
+      REPO_NAME = "nixos_files";
+      USE_WORKTREE = "true";
+    }}/bin/env-git-clone";
   };
 
   systemd.user.services.run-home-manager = {
