@@ -7,7 +7,7 @@ let
     set -euo pipefail
 
     if [ -z "''${REPO:-}" ]; then
-      BASE_HOSTNAME="''${BASE_HOSTNAME:-git@github.com:}"
+      BASE_HOSTNAME="''${BASE_HOSTNAME:-https://github.com/}"
       USERNAME="''${USERNAME:-yeltnar}"
       REPO_NAME="''${REPO_NAME:-nixos_files}"
       REPO="$BASE_HOSTNAME$USERNAME/$REPO_NAME"
