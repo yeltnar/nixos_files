@@ -1,9 +1,11 @@
 # THIS SHOULD NOT BE USED... USE HOME MANAGER INSTEAD
-{
+args@{
   config,
   pkgs,
   ...
-}: {
+}: let
+  bareCloneWorktree = import ./bare-clone-worktree.nix;
+in {
   imports = [ ./nm-online.service.nix ];
 
   systemd.user.services.custom_bashrc-git-repo = {
@@ -19,11 +21,14 @@
     serviceConfig = {
       SyslogIdentifier = "custom_bashrc";
     };
+    path = with pkgs; [
+      git
+    ];
     script =''
-      mkdir -p /home/drew/playin
-      cd /home/drew/playin
-
-      ${pkgs.git}/bin/git clone https://github.com/yeltnar/custom_bashrc
+      ${bareCloneWorktree (args // {
+        REPO_NAME = "custom_bashrc";
+        USE_WORKTREE = "true";
+      })}/bin/env-git-clone
 
       PATH="$PATH:${pkgs.git}/bin:${pkgs.curl}/bin"
       /home/drew/playin/custom_bashrc/setup.sh
