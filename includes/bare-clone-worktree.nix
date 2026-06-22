@@ -31,7 +31,8 @@ let
       fi
 
       if [ ! -d "$WORKTREE_DIR" ]; then
-        git --git-dir="$BARE_DIR" worktree add "$WORKTREE_DIR" main
+        DEFAULT_BRANCH="$(git --git-dir="$BARE_DIR" symbolic-ref --short HEAD)"
+        git --git-dir="$BARE_DIR" worktree add "$WORKTREE_DIR" "$DEFAULT_BRANCH"
       fi
     fi
   '';
