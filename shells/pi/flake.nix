@@ -64,6 +64,7 @@
           findutils
           neovim
           iputils
+          jq
         ];
         pathsToLink = [ "/bin" ];
       };
