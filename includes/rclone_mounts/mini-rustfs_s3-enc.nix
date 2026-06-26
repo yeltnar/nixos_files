@@ -42,15 +42,17 @@ in {
 
   systemd.mounts = with pkgs.lib.strings; [{
     description = "Rclone Crypt Mount";
-    wantedBy = [ "multi-user.target" ];
-    before = [ "remote-fs.target" ];
+    wants = [ "network-online.target" ];
+    after = [ "network-online.target" ];
+    unitConfig = {
+      RequiresMountsFor = "/mnt/rustfs";
+    };
     what = ":crypt:";
     where = "/mnt/rustfs_crypt";
     type = "rclone";
     options = concatStrings (intersperse "," [ 
       "allow-other=true"
       "vfs-cache-mode=full"
-      "nofail"
       "crypt-remote=/mnt/rustfs/crypt"
       "crypt-filename_encryption=standard"
       "crypt-directory_name_encryption=true"
@@ -59,6 +61,16 @@ in {
       # Ensure the EnvironmentFile contains RCLONE_CONFIG_CRYPT_PASSWORD
       # Must be obscured with `rclone obscure your_password
       EnvironmentFile = config.sops.secrets."mnt-rustfs_crypt.env".path;
+      TimeoutSec = 30;
+    };
+  }];
+
+  systemd.automounts = [{
+    description = "Automount Rclone Crypt Mount";
+    wantedBy = [ "multi-user.target" ];
+    where = "/mnt/rustfs_crypt";
+    automountConfig = {
+      TimeoutIdleSec = "10min";
     };
   }];
 
