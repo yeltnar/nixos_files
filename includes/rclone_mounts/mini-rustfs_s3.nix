@@ -21,9 +21,17 @@ in {
 
   sops.secrets."mnt-rustfs.env" = {};
 
-  systemd.mounts = with pkgs.lib.strings; [{
-    requires = [ "network-online.target" ];
+  systemd.automounts = [{
     wantedBy = [ "multi-user.target" ];
+    where = "/mnt/rustfs";
+    automountConfig = {
+      TimeoutIdleSec = "10min";
+    };
+  }];
+
+  systemd.mounts = with pkgs.lib.strings; [{
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
     what = ":s3:";
     where = "/mnt/rustfs";
     type = "rclone";
@@ -31,10 +39,10 @@ in {
       "allow-other=true"
       "vfs-cache-mode=full"
       "s3-provider=Other"
-      "nofail"
     ]);
     mountConfig = {
       EnvironmentFile = config.sops.secrets."mnt-rustfs.env".path;
+      TimeoutSec = 30;
     };
   }];
 }
