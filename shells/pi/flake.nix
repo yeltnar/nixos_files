@@ -65,6 +65,9 @@
           neovim
           iputils
           jq
+          yq-go
+          less
+          lazygit
         ];
         pathsToLink = [ "/bin" ];
       };
