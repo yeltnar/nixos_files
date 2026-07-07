@@ -25,7 +25,7 @@ in {
     wantedBy = [ "multi-user.target" ];
     where = "/mnt/rustfs";
     automountConfig = {
-      TimeoutIdleSec = "10min";
+      TimeoutIdleSec = "0";
     };
   }];
 

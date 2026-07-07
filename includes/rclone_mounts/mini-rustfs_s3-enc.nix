@@ -70,7 +70,7 @@ in {
     wantedBy = [ "multi-user.target" ];
     where = "/mnt/rustfs_crypt";
     automountConfig = {
-      TimeoutIdleSec = "10min";
+      TimeoutIdleSec = "0";
     };
   }];
 
