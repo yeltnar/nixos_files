@@ -64,6 +64,7 @@ in {
     ../../../includes/notify_boot/notify_boot.nix
 
     ../../../includes/season_images/season_images.nix
+    ../../../includes/agent-api-wrapper/agent-api-wrapper.nix
   ];
 
   custom.compose.babybuddy = {
