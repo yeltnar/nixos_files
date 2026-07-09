@@ -62,6 +62,8 @@ in {
     ../../../includes/ship_check/ship_check.nix 
 
     ../../../includes/notify_boot/notify_boot.nix
+
+    ../../../includes/season_images/season_images.nix
   ];
 
   custom.compose.babybuddy = {
