@@ -223,6 +223,8 @@ let
     backups_to_keep = lib.mkOption { type=lib.types.str; default=""; };
     enable_clone_service = lib.mkOption { type=lib.types.bool; default=true; };
     repo_dir = lib.mkOption { type=lib.types.str; default=""; };
+    git_user = lib.mkOption { type=lib.types.str; default="yeltnar"; };
+    git_server_uri = lib.mkOption { type=lib.types.str; default="https://github.com"; };
   };
 
   getSystemdConfig = lib.mapAttrsToList ( name: value: let 
@@ -440,8 +442,8 @@ let
 
         borg extract "$BORG_REPO::$archive_name"
       '';
-      git_user = "yeltnar";
-      git_server_uri = "https://github.com";
+      git_user = value.git_user;
+      git_server_uri = value.git_server_uri;
     };
 
     # TODO allow for these to be set from module
