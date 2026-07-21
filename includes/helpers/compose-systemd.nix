@@ -12,6 +12,7 @@ let
   default_backups_to_keep="--keep-within=1d --keep-daily=7 --keep-weekly=\"5\" --keep-monthly=\"12\" --keep-yearly=\"2\"";
 
   isActivationEnabled = value: value.activation != null;
+  hasComposeFile = value: value.compose_file != null;
 
   # this returns a list which needs to all be merged together
   generateStartService = name: value: shared_vars:
@@ -30,13 +31,13 @@ let
     script = if ( value.test_string != "" ) then 
     ''
       PATH="$PATH:${pkgs.podman}/bin";
-      ${pkgs.podman-compose}/bin/podman-compose down
+      ${pkgs.podman-compose}/bin/podman-compose ${shared_vars.compose_file_arg} down
       # ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_${name}_podman.pid --gpus=all" up --no-recreate -d
-      ${pkgs.podman-compose}/bin/podman-compose up  -d
+      ${pkgs.podman-compose}/bin/podman-compose ${shared_vars.compose_file_arg} up  -d
 
       str="${value.test_string}";
 
-      podman-compose logs -f 2>&1 | while IFS= read -r line; do
+      podman-compose ${shared_vars.compose_file_arg} logs -f 2>&1 | while IFS= read -r line; do
         # Process the line
         if [[ "$line" == *"$str"* ]]; then
           echo "Found a match: $line"
@@ -51,10 +52,10 @@ let
     '' else 
     ''
       PATH="$PATH:${pkgs.podman}/bin";
-      ${pkgs.podman-compose}/bin/podman-compose down
+      ${pkgs.podman-compose}/bin/podman-compose ${shared_vars.compose_file_arg} down
       # ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/${name}.podman.pid" up --no-recreate -d
       # ${pkgs.podman-compose}/bin/podman-compose up -d
-      ${pkgs.podman-compose}/bin/podman-compose --env-file ${shared_vars.run_env_file} --verbose up --build -d |& tee log.txt
+      ${pkgs.podman-compose}/bin/podman-compose ${shared_vars.compose_file_arg} --env-file ${shared_vars.run_env_file} --verbose up --build -d |& tee log.txt
     '';
     unitConfig = {
       StartLimitInterval = 30;
@@ -72,7 +73,7 @@ let
       PIDFile = "/tmp/${name}.podman.pid"; # TODO change pid location 
       ExecStop = pkgs.writeShellScript "stop-${name}" ''
         PATH="$PATH:${pkgs.podman}/bin";
-        ${pkgs.podman-compose}/bin/podman-compose down
+        ${pkgs.podman-compose}/bin/podman-compose ${shared_vars.compose_file_arg} down
       '';
     };
   };
@@ -103,8 +104,32 @@ let
     };
   };
 
+  generateInstantiateService = name: value: shared_vars:
+  lib.mkIf (hasComposeFile value) {
+    path = with pkgs; [
+      coreutils
+    ];
+    description = "${name}-compose-dir";
+    wantedBy = [
+      "default.target"
+      "multi-user.target"
+    ];
+    after = ["nm-online.service"];
+    script = ''
+      mkdir -p ${shared_vars.code_dir}
+      rm -f ${shared_vars.compose_file_path}
+      ln -s ${shared_vars.compose_file_store} ${shared_vars.compose_file_path}
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      SyslogIdentifier = "${name}";
+      WorkingDirectory = "${shared_vars.code_parent_dir}";
+    };
+    onSuccess = if (value.backup_restore == true) then ["${name}_restore.service"] else lib.optionals (!isActivationEnabled value) ["${name}_start.service"] ;
+  };
+
   generateCloneService = name: value: shared_vars: 
-  lib.mkIf ( !(value ? enable_clone_service) || value.enable_clone_service == true ) {
+  lib.mkIf ( (!(value ? enable_clone_service) || value.enable_clone_service == true) && !(hasComposeFile value) ) {
     path = with pkgs; [
       git
     ];
@@ -238,6 +263,7 @@ let
 
   composeSystemdOption.options = {
     super_user_clone = lib.mkOption { type=lib.types.bool; default=false; };
+    super_user_instantiate = lib.mkOption { type=lib.types.bool; default=false; };
     super_user_restore = lib.mkOption { type=lib.types.bool; default=false; };
     super_user_start = lib.mkOption { type=lib.types.bool; default=false; };
     super_user_backup_timer = lib.mkOption { type=lib.types.bool; default=false; };
@@ -256,6 +282,7 @@ let
     repo_dir = lib.mkOption { type=lib.types.str; default=""; };
     git_user = lib.mkOption { type=lib.types.str; default="yeltnar"; };
     git_server_uri = lib.mkOption { type=lib.types.str; default="https://github.com"; };
+    compose_file = lib.mkOption { type=lib.types.nullOr lib.types.lines; default=null; };
     activation = lib.mkOption {
       type = lib.types.nullOr (lib.types.submodule {
         options = {
@@ -321,6 +348,9 @@ let
     shared_vars = {
       code_parent_dir="/home/${user}/playin";
       code_dir="${shared_vars.code_parent_dir}/${ if (value.repo_dir == "") then (name) else (value.repo_dir) }";  
+      compose_file_store = if hasComposeFile value then pkgs.writeText "${name}-compose.yaml" value.compose_file else null;
+      compose_file_path = "${shared_vars.code_dir}/compose.yaml";
+      compose_file_arg = if hasComposeFile value then "-f ${shared_vars.compose_file_path}" else "";
       run_env_file = get_run_env_file name;
       backup_env_file = get_backup_env_file name;
 
@@ -491,6 +521,7 @@ let
     # TODO allow for these to be set from module
 
     clone_name = "${name}_clone";
+    instantiate_name = "${name}_instantiate";
     restore_name = "${name}_restore";
     start_name = "${name}_start";
     backup_timer_name = "${name}_backup";
@@ -498,6 +529,7 @@ let
     activation_name = "${name}_activation";
 
     clone_service = generateCloneService name value shared_vars;
+    instantiate_service = generateInstantiateService name value shared_vars;
     restore_service = generateRestoreService name value shared_vars;
     start_service = generateStartService name value shared_vars;
     backup_timer_service = generateBackupTimerService name value;
@@ -508,6 +540,7 @@ let
   in {
 
     user.services."${clone_name}" = lib.mkIf (!value.super_user_clone) clone_service;
+    user.services."${instantiate_name}" = lib.mkIf (!value.super_user_instantiate) instantiate_service;
     user.services."${restore_name}" = lib.mkIf (!value.super_user_restore) restore_service;
     user.services."${start_name}" = lib.mkIf (!value.super_user_start) start_service;
     user.services."${backup_name}" = lib.mkIf (!value.super_user_backup) backup_service;
@@ -517,6 +550,7 @@ let
     user.sockets."${activation_name}" = lib.mkIf (!value.super_user_start) activation_socket;
 
     services."${clone_name}" = lib.mkIf (value.super_user_clone) clone_service;
+    services."${instantiate_name}" = lib.mkIf (value.super_user_instantiate) instantiate_service;
     services."${restore_name}" = lib.mkIf (value.super_user_restore) restore_service;
     services."${start_name}" = lib.mkIf (value.super_user_start) start_service;
     services."${backup_name}" = lib.mkIf (value.super_user_backup) backup_service;
