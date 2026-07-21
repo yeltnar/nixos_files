@@ -1,0 +1,10 @@
+services:
+  silverbullet:
+    image: zefhemel/silverbullet
+    container_name: silverbullet
+    restart: always
+    ports:
+      - "3009:3000"
+    volumes:
+      # - ./space:/space
+      - /mnt/rustfs/pi-agent/explain/:/space
