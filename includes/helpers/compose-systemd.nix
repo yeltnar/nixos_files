@@ -31,13 +31,13 @@ let
     script = if ( value.test_string != "" ) then 
     ''
       PATH="$PATH:${pkgs.podman}/bin";
-      ${pkgs.podman-compose}/bin/podman-compose down
+      ${pkgs.podman-compose}/bin/podman-compose ${shared_vars.compose_file_arg} down
       # ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/systemd_${name}_podman.pid --gpus=all" up --no-recreate -d
-      ${pkgs.podman-compose}/bin/podman-compose up  -d
+      ${pkgs.podman-compose}/bin/podman-compose ${shared_vars.compose_file_arg} up  -d
 
       str="${value.test_string}";
 
-      podman-compose logs -f 2>&1 | while IFS= read -r line; do
+      podman-compose ${shared_vars.compose_file_arg} logs -f 2>&1 | while IFS= read -r line; do
         # Process the line
         if [[ "$line" == *"$str"* ]]; then
           echo "Found a match: $line"
@@ -52,10 +52,10 @@ let
     '' else 
     ''
       PATH="$PATH:${pkgs.podman}/bin";
-      ${pkgs.podman-compose}/bin/podman-compose down
+      ${pkgs.podman-compose}/bin/podman-compose ${shared_vars.compose_file_arg} down
       # ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/${name}.podman.pid" up --no-recreate -d
       # ${pkgs.podman-compose}/bin/podman-compose up -d
-      ${pkgs.podman-compose}/bin/podman-compose ${shared_vars.run_env_file_arg} --verbose up --build -d |& tee log.txt
+      ${pkgs.podman-compose}/bin/podman-compose ${shared_vars.compose_file_arg} ${shared_vars.run_env_file_arg} --verbose up --build -d |& tee log.txt
     '';
     unitConfig = {
       StartLimitInterval = 30;
@@ -73,7 +73,7 @@ let
       PIDFile = "/tmp/${name}.podman.pid"; # TODO change pid location 
       ExecStop = pkgs.writeShellScript "stop-${name}" ''
         PATH="$PATH:${pkgs.podman}/bin";
-        ${pkgs.podman-compose}/bin/podman-compose down
+        ${pkgs.podman-compose}/bin/podman-compose ${shared_vars.compose_file_arg} down
       '';
     };
   };
@@ -350,6 +350,7 @@ let
       code_dir="${shared_vars.code_parent_dir}/${ if (value.repo_dir == "") then (name) else (value.repo_dir) }";  
       compose_file_store = if hasComposeFile value then pkgs.writeText "${name}-compose.yaml" value.compose_file else null;
       compose_file_path = "${shared_vars.code_dir}/compose.yaml";
+      compose_file_arg = if hasComposeFile value then "-f ${shared_vars.compose_file_path}" else "";
       run_env_file = get_run_env_file name;
       run_env_file_arg = if value.use_run_env then "--env-file ${shared_vars.run_env_file}" else "";
       backup_env_file = get_backup_env_file name;
