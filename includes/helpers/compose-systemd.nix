@@ -55,7 +55,7 @@ let
       ${pkgs.podman-compose}/bin/podman-compose ${shared_vars.compose_file_arg} down
       # ${pkgs.podman-compose}/bin/podman-compose --podman-run-args="--replace --sdnotify=container --pidfile=/tmp/${name}.podman.pid" up --no-recreate -d
       # ${pkgs.podman-compose}/bin/podman-compose up -d
-      ${pkgs.podman-compose}/bin/podman-compose ${shared_vars.compose_file_arg} --env-file ${shared_vars.run_env_file} --verbose up --build -d |& tee log.txt
+      ${pkgs.podman-compose}/bin/podman-compose ${shared_vars.compose_file_arg} ${shared_vars.run_env_file_arg} --verbose up --build -d |& tee log.txt
     '';
     unitConfig = {
       StartLimitInterval = 30;
@@ -352,6 +352,7 @@ let
       compose_file_path = "${shared_vars.code_dir}/compose.yaml";
       compose_file_arg = if hasComposeFile value then "-f ${shared_vars.compose_file_path}" else "";
       run_env_file = get_run_env_file name;
+      run_env_file_arg = if value.use_run_env then "--env-file ${shared_vars.run_env_file}" else "";
       backup_env_file = get_backup_env_file name;
 
       backup_WORKDIR=shared_vars.code_dir;
