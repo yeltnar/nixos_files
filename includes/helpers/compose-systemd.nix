@@ -11,6 +11,8 @@ let
 
   default_backups_to_keep="--keep-within=1d --keep-daily=7 --keep-weekly=\"5\" --keep-monthly=\"12\" --keep-yearly=\"2\"";
 
+  isActivationEnabled = value: value.activation != null;
+
   # this returns a list which needs to all be merged together
   generateStartService = name: value: shared_vars:
   lib.mkIf ( !(value ? enable_start_service) || value.enable_start_service == false ) {
@@ -18,7 +20,7 @@ let
       podman
       podman-compose
     ];
-    wantedBy = [
+    wantedBy = lib.mkIf (!isActivationEnabled value) [
       "default.target"
       "multi-user.target"
     ];
@@ -59,11 +61,13 @@ let
       StartLimitBurst = 3;
       ConditionPathExists = "${shared_vars.code_dir}";
       RequiresMountsFor = "/run/user/1000/containers";
+    } // lib.optionalAttrs (isActivationEnabled value) {
+      StopWhenUnneeded = "yes";
     };
     serviceConfig = {
       Type = "notify"; # TODO does this needs to be swapped when using systemd-notify?
       WorkingDirectory = "${shared_vars.code_dir}";
-      Restart = "always";
+      Restart = if (isActivationEnabled value) then "on-failure" else "always";
       NotifyAccess = "all";
       PIDFile = "/tmp/${name}.podman.pid"; # TODO change pid location 
       ExecStop = pkgs.writeShellScript "stop-${name}" ''
@@ -72,6 +76,33 @@ let
       '';
     };
   };
+  generateActivationSocket = name: value:
+  lib.mkIf (isActivationEnabled value) {
+    wantedBy = [
+      "default.target"
+      "sockets.target"
+    ];
+    listenStreams = [
+      (builtins.toString value.activation.activation_port)
+    ];
+  };
+
+  generateActivationService = name: value:
+  lib.mkIf (isActivationEnabled value) {
+    requires = [
+      "${name}_start.service"
+      "${name}_activation.socket"
+    ];
+    after = [
+      "${name}_start.service"
+      "${name}_activation.socket"
+    ];
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=${value.activation.exit_idle_time} ${value.activation.target_host}:${builtins.toString value.activation.target_port}";
+    };
+  };
+
   generateCloneService = name: value: shared_vars: 
   lib.mkIf ( !(value ? enable_clone_service) || value.enable_clone_service == true ) {
     path = with pkgs; [
@@ -103,7 +134,7 @@ let
       SyslogIdentifier = "${name}";
       WorkingDirectory = "${shared_vars.code_parent_dir}";
     };
-    onSuccess = if (value.backup_restore == true) then ["${name}_restore.service"] else ["${name}_start.service"] ;
+    onSuccess = if (value.backup_restore == true) then ["${name}_restore.service"] else lib.optionals (!isActivationEnabled value) ["${name}_start.service"] ;
   };
   # TODO this needs to not happen if we have backup_restore off
   generateBackupTimerService = name: value:
@@ -168,14 +199,14 @@ let
 
       # TODO this user shiz is wack
       # if super user, use ExecStartPost hook to start the 'start' service
-      ExecStartPost = lib.mkIf (value.super_user_restore) ( pkgs.writeShellScript "poststart" "chown -R 100910:100910 config; systemctl --user -M ${user}@ start ${name}_start.service" );
+      ExecStartPost = lib.mkIf (value.super_user_restore && !(isActivationEnabled value)) ( pkgs.writeShellScript "poststart" "chown -R 100910:100910 config; systemctl --user -M ${user}@ start ${name}_start.service" );
     };
     # unitConfig = {
     #   ConditionPathExists = "/home/${user}/playin/${unit_id}";
     # };
     onSuccess = 
       # if not super user, use on success hook to start the 'start' service
-      lib.mkIf (!value.super_user_restore) [ "${name}_start.service" ]
+      lib.mkIf (!value.super_user_restore && !(isActivationEnabled value)) [ "${name}_start.service" ]
     ;
   };
 
@@ -225,6 +256,17 @@ let
     repo_dir = lib.mkOption { type=lib.types.str; default=""; };
     git_user = lib.mkOption { type=lib.types.str; default="yeltnar"; };
     git_server_uri = lib.mkOption { type=lib.types.str; default="https://github.com"; };
+    activation = lib.mkOption {
+      type = lib.types.nullOr (lib.types.submodule {
+        options = {
+          activation_port = lib.mkOption { type=lib.types.int; };
+          target_port = lib.mkOption { type=lib.types.int; };
+          target_host = lib.mkOption { type=lib.types.str; default="127.0.0.1"; };
+          exit_idle_time = lib.mkOption { type=lib.types.str; default="30s"; };
+        };
+      });
+      default = null;
+    };
   };
 
   getSystemdConfig = lib.mapAttrsToList ( name: value: let 
@@ -453,12 +495,15 @@ let
     start_name = "${name}_start";
     backup_timer_name = "${name}_backup";
     backup_name = "${name}_backup";
+    activation_name = "${name}_activation";
 
     clone_service = generateCloneService name value shared_vars;
     restore_service = generateRestoreService name value shared_vars;
     start_service = generateStartService name value shared_vars;
     backup_timer_service = generateBackupTimerService name value;
     backup_service = generateBackupService name value shared_vars;
+    activation_socket = generateActivationSocket name value;
+    activation_service = generateActivationService name value;
 
   in {
 
@@ -466,15 +511,19 @@ let
     user.services."${restore_name}" = lib.mkIf (!value.super_user_restore) restore_service;
     user.services."${start_name}" = lib.mkIf (!value.super_user_start) start_service;
     user.services."${backup_name}" = lib.mkIf (!value.super_user_backup) backup_service;
+    user.services."${activation_name}" = lib.mkIf (!value.super_user_start) activation_service;
 
     user.timers."${backup_timer_name}" = lib.mkIf (!value.super_user_backup) backup_timer_service;
+    user.sockets."${activation_name}" = lib.mkIf (!value.super_user_start) activation_socket;
 
     services."${clone_name}" = lib.mkIf (value.super_user_clone) clone_service;
     services."${restore_name}" = lib.mkIf (value.super_user_restore) restore_service;
     services."${start_name}" = lib.mkIf (value.super_user_start) start_service;
     services."${backup_name}" = lib.mkIf (value.super_user_backup) backup_service;
+    services."${activation_name}" = lib.mkIf (value.super_user_start) activation_service;
 
     timers."${backup_timer_name}" = lib.mkIf (value.super_user_backup) backup_timer_service;
+    sockets."${activation_name}" = lib.mkIf (value.super_user_start) activation_socket;
 
   } ) config.custom.compose;
 
@@ -484,6 +533,14 @@ in {
   # custom.compose.user.testme2 = {};
   # custom.compose.system.testme2 = {};
   # need example of service which needs to monitor output
+  #
+  # systemd socket activation example:
+  # custom.compose.jellyfin = {
+  #   activation = {
+  #     activation_port = 8097;
+  #     target_port = 8096;
+  #   };
+  # };
 
   options.custom.compose = lib.mkOption {
     type = lib.types.attrsOf (lib.types.submodule composeSystemdOption);
@@ -498,6 +555,17 @@ in {
   # builtins.listToAttrs ( ( lib.flatten ( lib.mapAttrsToList ( generateSops ) config.custom.compose.user ) ) )
   
   config.systemd = lib.foldl' lib.recursiveUpdate {} ( getSystemdConfig );
+
+  config.assertions = lib.optionals ( config.custom.compose != null && config.custom.compose != {} ) (
+    lib.flatten (lib.mapAttrsToList (name: value:
+      lib.optionals (isActivationEnabled value) [
+        {
+          assertion = value.activation.activation_port != value.activation.target_port;
+          message = "custom.compose.${name}.activation.activation_port must differ from target_port";
+        }
+      ]
+    ) config.custom.compose)
+  );
 
   # TODO find a way to have sops not need, for when it is not brought in by the flake?
   config.sops.secrets = lib.mkIf ( config.custom.compose != null && config.custom.compose != {} ) 
