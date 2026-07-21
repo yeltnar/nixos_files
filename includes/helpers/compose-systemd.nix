@@ -575,6 +575,11 @@ in {
   #     target_port = 8096;
   #   };
   # };
+  #
+  # inline/readFile compose file example:
+  # custom.compose.example = {
+  #   compose_file = builtins.readFile ./compose.yaml;
+  # };
 
   options.custom.compose = lib.mkOption {
     type = lib.types.attrsOf (lib.types.submodule composeSystemdOption);
