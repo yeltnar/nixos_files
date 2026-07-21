@@ -263,7 +263,7 @@ let
 
   composeSystemdOption.options = {
     super_user_clone = lib.mkOption { type=lib.types.bool; default=false; };
-    super_user_instantiate = lib.mkOption { type=lib.types.bool; default=false; };
+    system_instantiate = lib.mkOption { type=lib.types.bool; default=false; };
     super_user_restore = lib.mkOption { type=lib.types.bool; default=false; };
     super_user_start = lib.mkOption { type=lib.types.bool; default=false; };
     super_user_backup_timer = lib.mkOption { type=lib.types.bool; default=false; };
@@ -540,7 +540,7 @@ let
   in {
 
     user.services."${clone_name}" = lib.mkIf (!value.super_user_clone) clone_service;
-    user.services."${instantiate_name}" = lib.mkIf (!value.super_user_instantiate) instantiate_service;
+    user.services."${instantiate_name}" = lib.mkIf (!value.system_instantiate) instantiate_service;
     user.services."${restore_name}" = lib.mkIf (!value.super_user_restore) restore_service;
     user.services."${start_name}" = lib.mkIf (!value.super_user_start) start_service;
     user.services."${backup_name}" = lib.mkIf (!value.super_user_backup) backup_service;
@@ -550,7 +550,7 @@ let
     user.sockets."${activation_name}" = lib.mkIf (!value.super_user_start) activation_socket;
 
     services."${clone_name}" = lib.mkIf (value.super_user_clone) clone_service;
-    services."${instantiate_name}" = lib.mkIf (value.super_user_instantiate) instantiate_service;
+    services."${instantiate_name}" = lib.mkIf (value.system_instantiate) instantiate_service;
     services."${restore_name}" = lib.mkIf (value.super_user_restore) restore_service;
     services."${start_name}" = lib.mkIf (value.super_user_start) start_service;
     services."${backup_name}" = lib.mkIf (value.super_user_backup) backup_service;
