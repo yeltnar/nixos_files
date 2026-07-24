@@ -25,7 +25,7 @@
 
             FORGEJO__database__DB_TYPE: sqlite3
             FORGEJO__server__DOMAIN: localhost
-            FORGEJO__server__ROOT_URL: http://localhost:3630/
+            FORGEJO__server__ROOT_URL: https://forgejo.h.lan/
             FORGEJO__server__HTTP_PORT: "3630"
             FORGEJO__server__SSH_DOMAIN: localhost
             FORGEJO__server__SSH_PORT: "2222"
