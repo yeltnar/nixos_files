@@ -79,6 +79,7 @@ in {
   system.activationScripts.git_default_branch = {
     text = ''
       ${pkgs.git}/bin/git config --file /home/drew/.gitconfig init.defaultBranch main
+      ${pkgs.git}/bin/git config --file /home/drew/.gitconfig worktree.useRelativePaths true
     '';
   };
 

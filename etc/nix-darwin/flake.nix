@@ -106,6 +106,7 @@
         text = ''
           echo "hi $(date)" > /tmp/plz.fmd.log
           git config --file /Users/drew/.gitconfig init.defaultBranch main
+          git config --file /Users/drew/.gitconfig worktree.useRelativePaths true
           echo "hi $(date)" >> /tmp/plz.fmd.log
         '';
         enable = true;
