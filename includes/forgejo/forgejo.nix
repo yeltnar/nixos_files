@@ -8,7 +8,7 @@
 
   custom.compose.forgejo = {
     allowedTCPPorts = [
-      3000
+      3630
       2222
     ];
     compose_file = ''
@@ -25,12 +25,13 @@
 
             FORGEJO__database__DB_TYPE: sqlite3
             FORGEJO__server__DOMAIN: localhost
-            FORGEJO__server__ROOT_URL: http://localhost:3000/
+            FORGEJO__server__ROOT_URL: http://localhost:3630/
+            FORGEJO__server__HTTP_PORT: "3630"
             FORGEJO__server__SSH_DOMAIN: localhost
             FORGEJO__server__SSH_PORT: "2222"
 
           ports:
-            - "3000:3000"
+            - "3630:3630"
             - "2222:22"
 
           volumes:
